@@ -39,8 +39,9 @@ const Login = () => {
   return (
     <>
       {
-        <Row justify='center' className='login'>
+        <Row justify='center'  className='login'>
           <Col span={ 8 }>
+            <div>
             <Form
               name='login-form'
               className='login-form'
@@ -102,6 +103,7 @@ const Login = () => {
                 <div>Soy nuevo, <Link to={ Routes.REGISTER }>registrarme</Link></div>
               </Form.Item>
             </Form>
+            </div>
           </Col>
         </Row>
       }

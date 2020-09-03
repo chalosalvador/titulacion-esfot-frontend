@@ -15,7 +15,7 @@ body {
 }
 
 .header-wrapper {
-    background: #001529;
+    background: #E5E5E5;
 }
 
 .ant-menu {
@@ -46,7 +46,7 @@ body {
 }
 
 .header {
-    background: transparent;
+    background: #E5E5E5;
     padding: 0;
     /*position: fixed;*/
     z-index: 1;
@@ -110,7 +110,7 @@ body {
 
 .content {
     overflow: initial;
-    padding: 50px 0;
+    padding:  0;
     background: transparent;
     min-height: 300px;
     display: flex;
@@ -135,14 +135,14 @@ code {
 .footer {
     /*text-align: center;*/
     padding: 30px 20px;
-    min-height: 200px;
-    background-color: #2e2a25ee;
+    min-height: 100px;
+    background-color: #034C70;
     color: #ffffff;
 }
 
 .footer a {
     color: #ffffff;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .logo-blanco {
@@ -150,14 +150,22 @@ code {
     text-align: center;
 }
 
-.logo-menta {
+.footer-text {
     text-align: center;
     margin-top: 40px;
+    /*font-family: Montserrat;*/
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 22px;
+    color: #FFFFFF;
 }
 
 .contact-links {
     text-align: center;
     margin-top: 40px;
+    /*width: 180px;*/
+    /*height: 80px;*/
 }
 
 .logos-social {
@@ -212,7 +220,7 @@ code {
     .footer {
         padding: 30px 100px;
         min-height: 200px;
-        background-color: #2e2a25ee;
+        background-color: #034C70;
         color: #ffffff;
     }
 
@@ -227,7 +235,9 @@ code {
 
     .contact-links {
         text-align: left;
-        margin-top: 0;
+        margin-top: 50px;
+        max-width: 100%;
+
     }
 
     .logos-social {

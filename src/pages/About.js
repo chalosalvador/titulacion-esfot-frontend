@@ -1,9 +1,9 @@
 import React from 'react';
+import HomePage from '../components/Home'
 const AboutPage = () => (
   <>
-    <h1 className='title'>
-      About Page
-    </h1>
+
+    <HomePage/>
   </>
 );
 
