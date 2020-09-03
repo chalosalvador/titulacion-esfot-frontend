@@ -100,7 +100,13 @@ const HomeStudent = () => {
                 <Button>Ver temas</Button>
               </Card>
             </Col>
-            <Col span={6}/>
+            <Col span={6}>
+              <Card className={'options-resources'} bordered={ false }>
+                <br />
+                Mira los formatos de titulación de la EPN<br /><br />
+                <Button>Ver formatos</Button>
+              </Card>
+            </Col>
           </Row>
         </Col>
       </Row>
