@@ -7,6 +7,9 @@ import Navigation from './Navigation';
 import { Layout, Row, Col, Button, Popover } from 'antd';
 import { FacebookOutlined, InstagramOutlined, GithubOutlined, MailOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import logo from '../images/logo-menta.png';
+
+import logoEPN from '../images/EPN 1.png';
+import logoESFOT from '../images/ESFOT 1.png';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
@@ -33,8 +36,8 @@ const MainLayout = props => {
             <Header className='header'>
               <Row type='flex' justify='space-between' align='bottom'>
                 <Col xs={ 24 } md={ 6 } className='logo-wrapper'>
-                  <a href={ process.env.REACT_APP_DOMAIN }>
-                    <img className='logo' src={ logo } alt='Grupo Menta' /></a>
+                  <a href="https://www.epn.edu.ec/">
+                    <img className='logo' src={ logoEPN } alt='' /></a>
                 </Col>
 
                 <Col md={ 14 } align='right' className='main-menu'>
@@ -62,19 +65,8 @@ const MainLayout = props => {
                 </Col>
 
                 <Col xs={ 22 } md={ 4 } className='logos-social-header' align='right'>
-                  <a href='https://www.facebook.com'
-                     target='_blank'
-                     rel='noopener noreferrer'
-                     style={ {
-                       marginLeft: 30,
-                       marginRight: 30
-                     } }>
-                    <FacebookOutlined />
-                  </a>
-
-                  <a href='https://www.instagram.com' target='_blank' rel='noopener noreferrer'>
-                    <InstagramOutlined />
-                  </a>
+                  <a href="https://esfot.epn.edu.ec/">
+                    <img className='logo' src={ logoESFOT } alt='' /></a>
                 </Col>
               </Row>
             </Header>
@@ -84,7 +76,7 @@ const MainLayout = props => {
 
         <Content className='content'>
           <Row type='flex' justify='center' style={ { flex: 'auto' } }>
-            <Col xs={ 22 } md={ 20 }>
+            <Col span={24}>
               { props.children }
             </Col>
           </Row>
@@ -92,8 +84,8 @@ const MainLayout = props => {
 
         <Footer className='footer'>
           <Row>
-            <Col xs={ { span: 24 } } md={ 8 } className='logo-blanco'>
-              LOGO
+            <Col xs={ { span: 24 } } md={ 6 } className='logo-blanco'>
+
             </Col>
 
             <Col xs={ {
@@ -104,11 +96,11 @@ const MainLayout = props => {
                    span: 5,
                    offset: 3
                  } }
-                 className='logo-menta'>
-              Elaborado por: <br />
-              <a href='https://grupomenta.com' rel='noopener noreferrer' target='_blank'>
-                <img src={ logo } alt='Profe a Tiempo' height={ 50 } />
-              </a>
+                 className='footer-text'>
+              © Escuela de Formación de Tecnólogos
+              https://esfot.epn.edu.ec/<br />
+              diresfot@epn.edu.ec<br />
+
             </Col>
 
             <Col xs={ {
@@ -120,46 +112,21 @@ const MainLayout = props => {
                    offset: 4
                  } }
                  className='contact-links'>
-              <p><strong>Contáctanos</strong></p>
-              <p><MailOutlined /> <a href='mailto:chalo.salvador@grupomenta.com'>chalo.salvador@grupomenta.com</a></p>
-              <p><WhatsAppOutlined /> <a href='https://wa.me/593984794808' target='_blank' rel='noopener noreferrer'>+593
-                9-8479-4808</a></p>
-              <p><GithubOutlined /> <a href='https://github.com/chalosalvador'
-                                       target='_blank'
-                                       rel='noopener noreferrer'>@chalosalvador</a>
-              </p>
-            </Col>
-          </Row>
-
-          <Row type='flex' justify='space-between' align='bottom'>
-            <Col xs={ 24 } md={ 8 }>
-              { moment().format( 'YYYY' ) } - Para uso libre.
-            </Col>
-
-            <Col xs={ 24 } md={ 4 } className='footer-links'>
-              <Link to={ Routes.ABOUT } style={ { marginRight: 20 } }>Preguntas frecuentes</Link>
-            </Col>
-            <Col xs={ 24 } md={ 4 } className='footer-links'>
-              <Link to={ Routes.ABOUT }>Términos y condiciones</Link>
-            </Col>
-
-            <Col xs={ 24 } md={ 8 } className='logos-social'>
-              <strong>Síguenos en:</strong>
-              <a href='https://www.facebook.com'
+              <a href='https://www.facebook.com/ESFOT-EPN-UIO-163137570522102/?ref=bookmarks'
                  target='_blank'
                  rel='noopener noreferrer'
                  style={ {
                    marginLeft: 30,
-                   marginRight: 30
+                   marginRight: 30,
+
                  } }>
-                <FacebookOutlined />
+                <FacebookOutlined className={"big-icon"}/>
               </a>
 
-              <a href='https://www.instagram.com' target='_blank' rel='noopener noreferrer'>
-                <InstagramOutlined />
-              </a>
             </Col>
           </Row>
+
+
         </Footer>
       </Layout>
     </div>
