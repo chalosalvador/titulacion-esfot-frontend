@@ -1,7 +1,7 @@
 import React from 'react';
 import HomeStudent from '../components/HomeStudent';
 
-const HomePage = () => {
+const HomeStudentPage = () => {
 
   return (
     <>
@@ -11,4 +11,4 @@ const HomePage = () => {
 
 };
 
-export default HomePage;
+export default HomeStudentPage;

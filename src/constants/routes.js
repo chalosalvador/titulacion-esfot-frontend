@@ -6,6 +6,7 @@ const publicRoutes = {
   LOGIN: '/ingreso',
   REGISTER: '/registro',
   HOMESTUDENT: '/menu-estudiante',
+  HOMETEACHER: '/menu-profesor',
   USERS: '/usuarios',
   USERS_ID: `/usuario/:id`,
   HOME: '/',
