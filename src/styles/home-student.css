@@ -50,7 +50,6 @@
 .principal {
   position: absolute;
   width: 100%;
-  height: 338px;
   left: 150px;
   top: 165px;
 }
@@ -79,6 +78,10 @@
   width: 210px;
   height: 275px;
 
+}
+
+.col {
+  height: 1007px;
 }
 
 .principal-options {
