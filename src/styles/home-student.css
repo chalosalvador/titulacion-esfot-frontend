@@ -1,0 +1,142 @@
+.title {
+  position: absolute;
+  left: 200px;
+  color: #034c70;
+}
+
+.logout {
+  position: absolute;
+  width: 111px;
+  height: 22px;
+  right: 45px;
+  top: 65px;
+  color: #034c70;
+}
+
+.notification {
+  position: absolute;
+  height: 36px;
+  right: 165px;
+  top: 68px;
+  color: #034c70;
+}
+
+.states {
+  position: absolute;
+  width: 250px;
+  height: 1007px;
+  left: 0;
+  top: 0;
+  background-color: #dddddd;
+}
+
+.titles {
+  position: absolute;
+  width: 175px;
+  height: 32px;
+  left: 35px;
+  top: 120px;
+  color: #034c70;
+}
+
+.steps {
+  position: absolute;
+  width: 176px;
+  height: 24px;
+  left: 36px;
+  top: 170px;
+}
+
+.principal {
+  position: absolute;
+  width: 100%;
+  left: 150px;
+  top: 165px;
+}
+
+.big-icon {
+  font-size: 30px;
+}
+
+.options {
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0 50px;
+  padding: 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+
+  font-feature-settings: 'tnum', "tnum";
+  position: relative;
+  background: #034c70;
+  border-radius: 25px;
+  backdrop-filter: blur(5px);
+  width: 210px;
+  height: 275px;
+
+}
+
+.col {
+  height: 1007px;
+}
+
+.principal-options {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.ant-card-head {
+  min-height: 48px;
+  margin-bottom: -1px;
+  padding: 0 24px;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 16px;
+  background: transparent;
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+}
+
+.ant-btn {
+  background-color: #ffffff;
+  color: #034c70;
+}
+
+.title2 {
+  position: absolute;
+  left: 200px;
+  color: #034c70;
+}
+
+.resources {
+  position: absolute;
+  width: 100%;
+  height: 240px;
+  left: 150px;
+  top: 631px;
+}
+
+.options-resources {
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0 50px;
+  padding: 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+
+  font-feature-settings: 'tnum', "tnum";
+  position: relative;
+  background: #407088;
+  border-radius: 25px;
+  backdrop-filter: blur(5px);
+  width: 210px;
+  height: 175px;
+}

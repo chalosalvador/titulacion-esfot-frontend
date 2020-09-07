@@ -48,7 +48,7 @@ const HomePage = () => {
                   <LoginOutlined className={"big-icon"}/>
                   </div>
                   <br/>
-                  Empieza tu proceso de titulación.<br/><br/>
+                  Empieza tu proceso de titulación<br/><br/>
                   <Button type="primary" href={Routes.LOGIN}>Empezar</Button>
                 </Card>
               </Col>
@@ -90,7 +90,7 @@ const HomePage = () => {
                   <LoginOutlined className={"big-icon"}/>
                   </div>
                   <br/>
-                  Ingresa al sistema.<br/><br/><br/>
+                  Ingresa al sistema<br/><br/><br/>
                   <Button type="primary" href={Routes.LOGIN}>Empezar</Button>
                 </Card>
               </Col>
