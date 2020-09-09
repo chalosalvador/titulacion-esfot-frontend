@@ -1,23 +1,26 @@
 .title {
   position: absolute;
-  left: 200px;
+  left: 150px;
   color: #034c70;
 }
 
 .logout {
   position: absolute;
-  width: 111px;
-  height: 22px;
-  right: 45px;
+  font-size: 35px;
+  right: 90px;
   top: 65px;
   color: #034c70;
 }
 
 .notification {
-  position: absolute;
-  height: 36px;
-  right: 165px;
-  top: 68px;
+  size: 100px;
+}
+
+.menus {
+  border-bottom: none;
+  float: right;
+  margin-right: 30px;
+  margin-top: 50px;
   color: #034c70;
 }
 
@@ -49,8 +52,8 @@
 
 .principal {
   position: absolute;
-  width: 100%;
-  left: 150px;
+  width: 85%;
+  left: 200px;
   top: 165px;
 }
 
@@ -108,15 +111,15 @@
 
 .title2 {
   position: absolute;
-  left: 200px;
+  left: 150px;
   color: #034c70;
 }
 
 .resources {
   position: absolute;
-  width: 100%;
+  width: 85%;
   height: 240px;
-  left: 150px;
+  left: 200px;
   top: 631px;
 }
 
@@ -139,134 +142,4 @@
   backdrop-filter: blur(5px);
   width: 210px;
   height: 175px;
-}
-
-.statistics {
-  position: absolute;
-  width: 250px;
-  height: 1500px;
-  left: 0;
-  top: 0;
-  background-color: #dddddd;
-}
-
-
-.statistics-content {
-
-  text-align: center;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  margin-top: 142px;
-  margin-left: -5px;
-  padding: 0;
-  color: #034c70;
-  font-size: 14px;
-  font-variant: tabular-nums;
-  line-height: 1.5715;
-  list-style: none;
-
-  font-feature-settings: 'tnum', "tnum";
-  position: relative;
-  background: #EDEDEE;
-  border-radius: 25px;
-  backdrop-filter: blur(5px);
-  width: 210px;
-  height: 150px;
-}
-
-.statistics-content2 {
-
-  text-align: center;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  margin-top: 35px;
-  margin-left: -5px;
-  padding: 0;
-  color: #034c70;
-  font-size: 14px;
-  font-variant: tabular-nums;
-  line-height: 1.5715;
-  list-style: none;
-
-  font-feature-settings: 'tnum', "tnum";
-  position: relative;
-  background: #EDEDEE;
-  border-radius: 25px;
-  backdrop-filter: blur(5px);
-  width: 210px;
-  height: 150px;
-}
-
-.numbers {
-  font-size: 50px;
-  margin-top: -25px;
-  color: #000000;
-}
-
-.jury {
-  position: absolute;
-  width: 175px;
-  height: 32px;
-  left: 35px;
-  top: 705px;
-  color: #034c70;
-}
-
-.jury-statistics {
-
-  text-align: center;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  margin-top: 70px;
-  margin-left: -5px;
-  padding: 0;
-  color: #034c70;
-  font-size: 14px;
-  font-variant: tabular-nums;
-  line-height: 1.5715;
-  list-style: none;
-
-  font-feature-settings: 'tnum', "tnum";
-  position: relative;
-  background: #EDEDEE;
-  border-radius: 25px;
-  backdrop-filter: blur(5px);
-  width: 210px;
-  height: 150px;
-}
-
-.title3 {
-  position: absolute;
-  left: 201px;
-  top: 0;
-  color: #034C70;
-}
-
-.commission {
-  position: absolute;
-  width: 100%;
-  height: 240px;
-  left: 150px;
-  top: 970px;
-}
-
-.options-commission {
-  text-align: center;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0 50px;
-  padding: 0;
-  color: #ffffff;
-  font-size: 14px;
-  font-variant: tabular-nums;
-  line-height: 1.5715;
-  list-style: none;
-
-  font-feature-settings: 'tnum', "tnum";
-  position: relative;
-  background: #034C70;
-  border-radius: 25px;
-  backdrop-filter: blur(5px);
-  width: 210px;
-  height: 275px;
 }
