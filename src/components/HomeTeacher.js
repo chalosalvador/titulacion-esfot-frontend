@@ -20,7 +20,7 @@ const HomeTeacher = () => {
       </Menu>
       <Card className={ 'statistics' }>
         <h1 className={ 'titles' }>Director</h1>
-        <Card className={ 'statistics-content' } title='Tésis dirigidas' bordered={ false }>
+        <Card className={ 'statistics-content' } title='Tesis dirigidas' bordered={ false }>
           <p className={ 'numbers' }>10</p>
         </Card>
 
