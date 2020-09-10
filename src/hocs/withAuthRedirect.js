@@ -29,6 +29,7 @@ export default function withAuthRedirect( {
   const WithAuthRedirectWrapper = props => {
 
     const { isCheckingAuth, isAuthenticated } = useAuth();
+
     if( isCheckingAuth ) {
       return <LoadingComponent />;
     }
