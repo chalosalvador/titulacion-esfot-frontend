@@ -1,20 +1,24 @@
-import { Comment, Row, Card, Steps, Col, Button } from 'antd';
+import { Comment, Row, Card, Steps, Col, Button, Menu } from 'antd';
 import React, { useState } from 'react';
 import '../styles/home-student.css';
-import { BellOutlined, CopyOutlined, FundProjectionScreenOutlined } from '@ant-design/icons';
+import { BellOutlined, CopyOutlined, FundProjectionScreenOutlined, UserOutlined } from '@ant-design/icons';
 import {
   FileTextOutlined
 } from '@ant-design/icons';
 
 const { Step } = Steps;
+const { SubMenu } = Menu;
 
 const HomeStudent = () => (
 
-  <div style={{height:1007}}>
-    <BellOutlined className={ 'notification' } />
-    <a href={ '#' } className={ 'logout' }>
-      Cerrar Sesión
-    </a>
+  <div style={ { height: 1007 } }>
+    <Menu mode='horizontal' className={ 'menus' }>
+      <Menu.Item key='notification' icon={ <BellOutlined /> } />
+      <SubMenu icon={ <UserOutlined /> }>
+        <Menu.Item key='password'>Cambiar clave</Menu.Item>
+        <Menu.Item key='logout'>Cerrar sesión</Menu.Item>
+      </SubMenu>
+    </Menu>
     <Card className={ 'states' }>
       <h1 className={ 'titles' }>Progreso</h1>
       <Steps className={ 'steps' } direction='vertical'>

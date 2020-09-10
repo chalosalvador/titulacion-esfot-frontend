@@ -1,0 +1,314 @@
+.title {
+  position: absolute;
+  left: 150px;
+  color: #034c70;
+}
+
+.logout {
+  position: absolute;
+  font-size: 35px;
+  right: 90px;
+  top: 65px;
+  color: #034c70;
+}
+
+.menus {
+  border-bottom: none;
+  float: right;
+  margin-right: 30px;
+  margin-top: 50px;
+  color: #034c70;
+}
+
+.menus .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+  font-size: 35px;
+}
+
+.states {
+  position: absolute;
+  width: 250px;
+  height: 1007px;
+  left: 0;
+  top: 0;
+  background-color: #dddddd;
+}
+
+.titles {
+  position: absolute;
+  width: 175px;
+  height: 32px;
+  left: 35px;
+  top: 120px;
+  color: #034c70;
+}
+
+.steps {
+  position: absolute;
+  width: 176px;
+  height: 24px;
+  left: 36px;
+  top: 170px;
+}
+
+.principal {
+  position: absolute;
+  width: 85%;
+  left: 200px;
+  top: 165px;
+}
+
+.big-icon {
+  font-size: 30px;
+}
+
+.options {
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0 50px;
+  padding: 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+
+  font-feature-settings: 'tnum', "tnum";
+  position: relative;
+  background: #034c70;
+  border-radius: 25px;
+  backdrop-filter: blur(5px);
+  width: 210px;
+  height: 275px;
+
+}
+
+.principal-options {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.ant-card-head {
+  min-height: 48px;
+  margin-bottom: -1px;
+  padding: 0 24px;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 16px;
+  background: transparent;
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+}
+
+.ant-btn {
+  background-color: #ffffff;
+  color: #034c70;
+}
+
+.title2 {
+  position: absolute;
+  left: 150px;
+  color: #034c70;
+}
+
+.resources {
+  position: absolute;
+  width: 85%;
+  height: 240px;
+  left: 200px;
+  top: 631px;
+}
+
+.options-resources {
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0 50px;
+  padding: 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+
+  font-feature-settings: 'tnum', "tnum";
+  position: relative;
+  background: #407088;
+  border-radius: 25px;
+  backdrop-filter: blur(5px);
+  width: 210px;
+  height: 175px;
+}
+
+.statistics {
+  position: absolute;
+  width: 250px;
+  height: 1500px;
+  left: 0;
+  top: 0;
+  background-color: #dddddd;
+}
+
+
+.statistics-content {
+
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-top: 142px;
+  margin-left: -5px;
+  padding: 0;
+  color: #034c70;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+
+  font-feature-settings: 'tnum', "tnum";
+  position: relative;
+  background: #ededee;
+  border-radius: 25px;
+  backdrop-filter: blur(5px);
+  width: 210px;
+  height: 150px;
+}
+
+.statistics-content .ant-card-head {
+
+    min-height: 48px;
+    margin-bottom: -1px;
+    padding: 0 24px;
+    color: #034c70;
+    font-weight: 500;
+    font-size: 16px;
+    background: transparent;
+    border-bottom: none;
+    border-radius: 2px 2px 0 0;
+
+}
+
+.statistics-content2 .ant-card-head {
+
+  min-height: 48px;
+  margin-bottom: -1px;
+  padding: 0 24px;
+  color: #034c70;
+  font-weight: 500;
+  font-size: 16px;
+  background: transparent;
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+
+}
+
+.statistics-content2 {
+
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-top: 35px;
+  margin-left: -5px;
+  padding: 0;
+  color: #034c70;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+
+  font-feature-settings: 'tnum', "tnum";
+  position: relative;
+  background: #ededee;
+  border-radius: 25px;
+  backdrop-filter: blur(5px);
+  width: 210px;
+  height: 150px;
+}
+
+.numbers {
+  font-size: 50px;
+  margin-top: -25px;
+  color: #000000;
+}
+
+.jury {
+  position: absolute;
+  width: 175px;
+  height: 32px;
+  left: 35px;
+  top: 705px;
+  color: #034c70;
+}
+
+
+.jury-statistics {
+
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-top: 70px;
+  margin-left: -5px;
+  padding: 0;
+  color: #034c70;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+
+  font-feature-settings: 'tnum', "tnum";
+  position: relative;
+  background: #ededee;
+  border-radius: 25px;
+  backdrop-filter: blur(5px);
+  width: 210px;
+  height: 150px;
+}
+
+.jury-statistics .ant-card-head {
+
+  min-height: 48px;
+  margin-bottom: -1px;
+  padding: 0 24px;
+  color: #034c70;
+  font-weight: 500;
+  font-size: 16px;
+  background: transparent;
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+
+}
+
+.title3 {
+  position: absolute;
+  left: 150px;
+  top: 0;
+  color: #034c70;
+}
+
+.commission {
+  position: absolute;
+  width: 85%;
+  height: 240px;
+  left: 200px;
+  top: 970px;
+}
+
+.options-commission {
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0 50px;
+  padding: 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+
+  font-feature-settings: 'tnum', "tnum";
+  position: relative;
+  background: #034c70;
+  border-radius: 25px;
+  backdrop-filter: blur(5px);
+  width: 210px;
+  height: 275px;
+}

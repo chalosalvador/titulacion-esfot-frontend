@@ -1,24 +1,31 @@
 .title {
   position: absolute;
-  left: 200px;
+  left: 150px;
   color: #034c70;
 }
 
 .logout {
   position: absolute;
-  width: 111px;
-  height: 22px;
-  right: 45px;
+  font-size: 35px;
+  right: 90px;
   top: 65px;
   color: #034c70;
 }
 
 .notification {
-  position: absolute;
-  height: 36px;
-  right: 165px;
-  top: 68px;
+  size: 100px;
+}
+
+.menus {
+  border-bottom: none;
+  float: right;
+  margin-right: 30px;
+  margin-top: 50px;
   color: #034c70;
+}
+
+.menus .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+  font-size: 35px;
 }
 
 .states {
@@ -49,8 +56,8 @@
 
 .principal {
   position: absolute;
-  width: 100%;
-  left: 150px;
+  width: 85%;
+  left: 200px;
   top: 165px;
 }
 
@@ -108,15 +115,15 @@
 
 .title2 {
   position: absolute;
-  left: 200px;
+  left: 150px;
   color: #034c70;
 }
 
 .resources {
   position: absolute;
-  width: 100%;
+  width: 85%;
   height: 240px;
-  left: 150px;
+  left: 200px;
   top: 631px;
 }
 

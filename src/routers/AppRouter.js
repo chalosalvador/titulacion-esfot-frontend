@@ -25,6 +25,7 @@ const AsyncLogin = loadable( () => import( '../pages/Login' ), loadableOptions )
 const AsyncRegister = loadable( () => import( '../pages/Register' ), loadableOptions );
 const AsyncPrivate = loadable( () => import( '../pages/Private' ), loadableOptions );
 const AsyncHomeStudent = loadable( () => import( '../pages/HomeStudentPage' ), loadableOptions );
+const AsyncHomeTeacher = loadable( () => import( '../pages/HomeTeacherPage' ), loadableOptions );
 const AsyncAbout = loadable( () => import( '../pages/About' ), loadableOptions );
 const AsyncLogout = loadable( () => import( '../pages/Logout' ), loadableOptions );
 
@@ -46,10 +47,11 @@ const AppRouter = () => (
     <PublicRoute path={ Routes.LOGIN } component={ AsyncLogin } />
     <PublicRoute path={ Routes.REGISTER } component={ AsyncRegister } />
     <PublicRoute path={ Routes.HOMESTUDENT } component={ AsyncHomeStudent } />
+    <PublicRoute path={ Routes.HOMETEACHER } component={ AsyncHomeTeacher } />
     <PublicRoute path={ Routes.ABOUT } component={ AsyncAbout } />
 
     <PrivateRoute path={ Routes.PRIVATE } component={ AsyncPrivate } />
-    {/*//<PrivateRoute path={ Routes.ARTICLE_ID } component={ AsyncHomeStudent } />*/}
+    {/*//<PrivateRoute path={ Routes.ARTICLE_ID } component={ AsyncHomeStudent } />*/ }
     <PrivateRoute path={ Routes.LOGOUT } component={ AsyncLogout } />
 
     <Route component={ NotFoundPage } />
