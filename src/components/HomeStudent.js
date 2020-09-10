@@ -93,21 +93,21 @@ const HomeStudent = () => (
           <Col span={ 6 }>
             <Card className={ 'options-resources' } bordered={ false }>
               Mira posibles temas de titulación propuestos por los docentes de la ESFOT<br /><br />
-              <Button>Ver normativas</Button>
-            </Card>
-          </Col>
-          <Col span={ 6 }>
-            <Card className={ 'options-resources' } bordered={ false }>
-              <br />
-              Mira las normativas de titulación de la EPN<br /><br />
               <Button>Ver temas</Button>
             </Card>
           </Col>
           <Col span={ 6 }>
             <Card className={ 'options-resources' } bordered={ false }>
               <br />
+              Mira las normativas de titulación de la EPN<br /><br />
+              <Button href={'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion'}>Ver normativas</Button>
+            </Card>
+          </Col>
+          <Col span={ 6 }>
+            <Card className={ 'options-resources' } bordered={ false }>
+              <br />
               Mira los formatos de titulación de la EPN<br /><br />
-              <Button>Ver formatos</Button>
+              <Button href={'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes'}>Ver formatos</Button>
             </Card>
           </Col>
         </Row>

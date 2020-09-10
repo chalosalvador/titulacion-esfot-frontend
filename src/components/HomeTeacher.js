@@ -95,14 +95,14 @@ const HomeTeacher = () => {
               <Card className={ 'options-resources' } bordered={ false }>
                 <br />
                 Mira las normativas de titulación de la EPN<br /><br />
-                <Button>Ver normativas</Button>
+                <Button href={'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion'}>Ver normativas</Button>
               </Card>
             </Col>
             <Col span={ 6 }>
               <Card className={ 'options-resources' } bordered={ false }>
                 <br />
                 Mira los formatos de titulación de la EPN<br /><br />
-                <Button>Ver formatos</Button>
+                <Button href={'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes'}>Ver formatos</Button>
               </Card>
             </Col>
             <Col span={ 6 } />
