@@ -24,6 +24,10 @@
   color: #034c70;
 }
 
+.menus .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+  font-size: 35px;
+}
+
 .states {
   position: absolute;
   width: 250px;

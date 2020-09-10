@@ -20,6 +20,10 @@
   color: #034c70;
 }
 
+.menus .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+  font-size: 35px;
+}
+
 .states {
   position: absolute;
   width: 250px;
@@ -169,6 +173,34 @@
   height: 150px;
 }
 
+.statistics-content .ant-card-head {
+
+    min-height: 48px;
+    margin-bottom: -1px;
+    padding: 0 24px;
+    color: #034c70;
+    font-weight: 500;
+    font-size: 16px;
+    background: transparent;
+    border-bottom: none;
+    border-radius: 2px 2px 0 0;
+
+}
+
+.statistics-content2 .ant-card-head {
+
+  min-height: 48px;
+  margin-bottom: -1px;
+  padding: 0 24px;
+  color: #034c70;
+  font-weight: 500;
+  font-size: 16px;
+  background: transparent;
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+
+}
+
 .statistics-content2 {
 
   text-align: center;
@@ -207,6 +239,7 @@
   color: #034c70;
 }
 
+
 .jury-statistics {
 
   text-align: center;
@@ -228,6 +261,20 @@
   backdrop-filter: blur(5px);
   width: 210px;
   height: 150px;
+}
+
+.jury-statistics .ant-card-head {
+
+  min-height: 48px;
+  margin-bottom: -1px;
+  padding: 0 24px;
+  color: #034c70;
+  font-weight: 500;
+  font-size: 16px;
+  background: transparent;
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+
 }
 
 .title3 {
