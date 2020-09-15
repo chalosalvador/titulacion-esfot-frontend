@@ -26,6 +26,7 @@ const AsyncRegister = loadable( () => import( '../pages/Register' ), loadableOpt
 const AsyncPrivate = loadable( () => import( '../pages/Private' ), loadableOptions );
 const AsyncHomeStudent = loadable( () => import( '../pages/HomeStudentPage' ), loadableOptions );
 const AsyncHomeTeacher = loadable( () => import( '../pages/HomeTeacherPage' ), loadableOptions );
+const AsyncPlanForm = loadable(()=>import('../pages/PlanFormPage'), loadableOptions);
 const AsyncAbout = loadable( () => import( '../pages/About' ), loadableOptions );
 const AsyncLogout = loadable( () => import( '../pages/Logout' ), loadableOptions );
 
@@ -48,6 +49,7 @@ const AppRouter = () => (
     <PublicRoute path={ Routes.REGISTER } component={ AsyncRegister } />
     <PrivateRoute path={ Routes.HOMESTUDENT } component={ AsyncHomeStudent } />
     <PrivateRoute path={ Routes.HOMETEACHER } component={ AsyncHomeTeacher } />
+    <PrivateRoute path={ Routes.PLANFORM } component={ AsyncPlanForm } />
     <PublicRoute path={ Routes.ABOUT } component={ AsyncAbout } />
 
     <PrivateRoute path={ Routes.PRIVATE } component={ AsyncPrivate } />

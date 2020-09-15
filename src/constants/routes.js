@@ -17,7 +17,8 @@ const privateRoutes = {
   PRIVATE: '/privada',
   HOMESTUDENT: '/menu-estudiante',
   HOMETEACHER: '/menu-profesor',
-  ARTICLE_ID: '/articulo/:id'
+  ARTICLE_ID: '/articulo/:id',
+  PLANFORM: '/plan-titulacion'
 };
 
 const Routes = {

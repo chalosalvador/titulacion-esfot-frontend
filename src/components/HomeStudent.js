@@ -107,7 +107,9 @@ const HomeStudent = () => {
                 </div>
                 <br />
                 Registra tu plan de titulación<br /><br />
-                <Button>Registrar plan</Button>
+                <Button>
+                  <Link to={Routes.PLANFORM}>Registrar plan</Link>
+                </Button>
               </Card>
             </Col>
             <Col span={ 6 }>
