@@ -22,10 +22,7 @@ const loadableOptions = { fallback: <Loading /> };
 
 const AsyncHome = loadable( () => import( '../pages/Index' ), loadableOptions );
 const AsyncLogin = loadable( () => import( '../pages/Login' ), loadableOptions );
-const AsyncRegister = loadable( () => import( '../pages/Register' ), loadableOptions );
-const AsyncPrivate = loadable( () => import( '../pages/Private' ), loadableOptions );
-const AsyncHomeStudent = loadable( () => import( '../pages/HomeStudentPage' ), loadableOptions );
-const AsyncHomeTeacher = loadable( () => import( '../pages/HomeTeacherPage' ), loadableOptions );
+const AsyncHomeTeacher = loadable( () => import( '../pages/HomePage' ), loadableOptions );
 const AsyncAbout = loadable( () => import( '../pages/About' ), loadableOptions );
 const AsyncLogout = loadable( () => import( '../pages/Logout' ), loadableOptions );
 
@@ -43,15 +40,11 @@ const AsyncLogout = loadable( () => import( '../pages/Logout' ), loadableOptions
  */
 const AppRouter = () => (
   <Switch>
-    <PublicRoute exact path={ Routes.HOME } component={ AsyncHome } />
+    <PublicRoute exact path={ Routes.INDEX } component={ AsyncHome } />
     <PublicRoute path={ Routes.LOGIN } component={ AsyncLogin } />
-    <PublicRoute path={ Routes.REGISTER } component={ AsyncRegister } />
-    <PrivateRoute path={ Routes.HOMESTUDENT } component={ AsyncHomeStudent } />
-    <PrivateRoute path={ Routes.HOMETEACHER } component={ AsyncHomeTeacher } />
-    <PublicRoute path={ Routes.ABOUT } component={ AsyncAbout } />
 
-    <PrivateRoute path={ Routes.PRIVATE } component={ AsyncPrivate } />
-    {/*//<PrivateRoute path={ Routes.ARTICLE_ID } component={ AsyncHomeStudent } />*/ }
+    <PrivateRoute path={ Routes.HOME } component={ AsyncHomeTeacher } />
+    <PublicRoute path={ Routes.ABOUT } component={ AsyncAbout } />
     <PrivateRoute path={ Routes.LOGOUT } component={ AsyncLogout } />
 
     <Route component={ NotFoundPage } />

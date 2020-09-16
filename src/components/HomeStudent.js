@@ -1,19 +1,19 @@
-import { Comment, Row, Card, Steps, Col, Button, Menu } from 'antd';
 import React, { useState } from 'react';
-import '../styles/home-student.css';
+import { Row, Card, Steps, Col, Button, Menu, PageHeader, Dropdown, Typography, Layout, Space } from 'antd';
 import {
-  BellOutlined, CopyOutlined, FundProjectionScreenOutlined, LoadingOutlined, LoginOutlined, LogoutOutlined, UserOutlined
-} from '@ant-design/icons';
-import {
+  BellOutlined, CopyOutlined, FundProjectionScreenOutlined, LoadingOutlined, LogoutOutlined, UserOutlined,
   FileTextOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../providers/Auth';
 import withAuth from '../hocs/withAuth';
+import '../styles/home-student.css';
 
 const { Step } = Steps;
-const { SubMenu } = Menu;
+const { Title } = Typography;
+const { Content, Sider } = Layout;
+
 
 const HomeStudent = () => {
 
@@ -42,133 +42,155 @@ const HomeStudent = () => {
     } );
   }, [ location, isAuthenticated ] );
 
-  return (
-    <div style={ { height: 1007 } }>
-      <Menu mode='horizontal' className={ 'menus' } onClick={ handleClick }>
-        <Menu.Item key='notification' icon={ <BellOutlined /> } />
+  const userMenu = <Menu onClick={ handleClick }>
+    <Menu.Item key='password'>Cambiar clave</Menu.Item>
+    <Menu.Item key={ Routes.LOGIN }>
+      <Link to={ Routes.LOGOUT } className='logout-link'>
         {
-          isAuthenticated
-            ? <SubMenu icon={ <UserOutlined /> } title={ currentUser && currentUser.name }>
-              <Menu.Item key='password'>Cambiar clave</Menu.Item>
-
-              <Menu.Item key={ Routes.LOGIN }>
-                <Link to={ Routes.LOGOUT } className='logout-link'>
-                  {
-                    isCheckingAuth
-                      ? <LoadingOutlined />
-                      : <><LogoutOutlined /> Cerrar sesión </>
-                  }
-                </Link>
-              </Menu.Item>
-            </SubMenu>
-            : <Menu.Item key={ Routes.LOGIN }>
-              <Link to={ Routes.LOGIN }>
-                {
-                  isCheckingAuth
-                    ? <LoadingOutlined />
-                    : <><LoginOutlined /> Ingresar</>
-                }
-              </Link>
-            </Menu.Item>
+          isCheckingAuth
+            ? <LoadingOutlined />
+            : <><LogoutOutlined /> Cerrar sesión </>
         }
-      </Menu>
-      <Card className={ 'states' }>
-        <h1 className={ 'titles' }>Progreso</h1>
-        <Steps className={ 'steps' } direction='vertical'>
-          <Step description='Plan enviado' />
-          <Step description='Plan aprobado por director' />
-          <Step description='Curriculum saneado 1' />
-          <Step description='Plan revisado por comisión' />
-          <Step description='Plan aprobado por comisión' />
-          <Step description='Proyecto de titulación subido' />
-          <Step description='Proyecto aprobado por director' />
-          <Step description='Curriculum saneado 2' />
-          <Step description='Tribunal asignado' />
-          <Step description='Proyecto de titulación calificado (documento)' />
-          <Step description='Declarado apto para defensa oral' />
-          <Step description='Fecha de defensa asignada' />
-          <Step description='¡Proyecto completado!' />
-        </Steps>
-      </Card>
+      </Link>
+    </Menu.Item>
+  </Menu>;
 
-      <Row className='principal'>
+  return (
+    <>
+      <Layout>
+        <Sider theme='light'
+               width={ 300 }
+               style={ {
+                 backgroundColor: '#dddddd',
+                 padding: 40
+               } }>
+          <Title level={ 3 }>Progreso</Title>
+          <Steps direction='vertical'>
+            <Step description='Plan enviado' />
+            <Step description='Plan aprobado por director' />
+            <Step description='Curriculum saneado 1' />
+            <Step description='Plan revisado por comisión' />
+            <Step description='Plan aprobado por comisión' />
+            <Step description='Proyecto de titulación subido' />
+            <Step description='Proyecto aprobado por director' />
+            <Step description='Curriculum saneado 2' />
+            <Step description='Tribunal asignado' />
+            <Step description='Proyecto de titulación calificado (documento)' />
+            <Step description='Declarado apto para defensa oral' />
+            <Step description='Fecha de defensa asignada' />
+            <Step description='¡Proyecto completado!' />
+          </Steps>
+        </Sider>
 
-        <h1 className={ 'title' }>
-          Panel Principal:
-        </h1>
+        <Layout>
+          <PageHeader className='inner-menu'
+                      title={ <Title level={ 3 }>Panel Principal:</Title> }
+                      extra={ [
+                        <Button key='notifications' type='text' icon={ <BellOutlined /> } />,
+                        <Dropdown key='user-menu' overlay={ userMenu } placement='bottomLeft'>
+                          <Button type='text' icon={ <UserOutlined /> }>{ currentUser && currentUser.name }</Button>
+                        </Dropdown>,
+                      ] }
+          />
 
-        <Col span={ 24 }>
+          <Content style={ { padding: 50 } }>
+            <Row>
+              <Col span={ 24 }>
+                <Row justify='center'>
+                  <Col span={ 6 }>
+                    <Card className='options main-options' title='Plan de titulación' bordered={ false }>
+                      <Space direction='vertical' size='large'>
+                        <div>
+                          <FileTextOutlined className={ 'big-icon' } />
+                        </div>
+                        <div>
+                          Registra tu plan de titulación
+                        </div>
+                        <div>
+                          <Button>Registrar plan</Button>
+                        </div>
+                      </Space>
+                    </Card>
+                  </Col>
 
-          <Row justify='center' className={ 'principal-options' }>
-            <Col span={ 6 }>
-              <Card className={ 'options' } title='Plan de titulación' bordered={ false }>
-                <div>
-                  <FileTextOutlined className={ 'big-icon' } />
-                </div>
-                <br />
-                Registra tu plan de titulación<br /><br />
-                <Button>Registrar plan</Button>
-              </Card>
-            </Col>
-            <Col span={ 6 }>
-              <Card className={ 'options' } title='Proyecto de titulación' bordered={ false }>
-                <div>
-                  <CopyOutlined className={ 'big-icon' } />
-                </div>
-                <br />
-                Sube tu proyecto de titulación<br /><br />
-                <Button>Subir proyecto</Button>
-              </Card>
-            </Col>
-            <Col span={ 6 }>
-              <Card className={ 'options' } title='Defensa de grado' bordered={ false }>
-                <div>
-                  <FundProjectionScreenOutlined className={ 'big-icon' } />
-                </div>
-                <br />
-                Mira la fecha de tu defensa de grado<br /><br />
-                <Button>Ver fecha</Button>
-              </Card>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+                  <Col span={ 6 }>
+                    <Card className='options main-options' title='Proyecto de titulación' bordered={ false }>
+                      <Space direction='vertical' size='large'>
+                        <div>
+                          <CopyOutlined className={ 'big-icon' } />
+                        </div>
+                        <div>
+                          Sube tu proyecto de titulación
+                        </div>
+                        <div>
+                          <Button>Subir proyecto</Button>
+                        </div>
+                      </Space>
+                    </Card>
+                  </Col>
+                  <Col span={ 6 }>
+                    <Card className='options main-options' title='Defensa de grado' bordered={ false }>
+                      <Space direction='vertical' size='large'>
+                        <div>
+                          <FundProjectionScreenOutlined className={ 'big-icon' } />
+                        </div>
+                        <div>
+                          Mira la fecha de tu defensa de grado
+                        </div>
+                        <div>
+                          <Button>Ver fecha</Button>
+                        </div>
+                      </Space>
+                    </Card>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
 
-      <Row className='resources'>
 
-        <h1 className={ 'title2' }>
-          Otros recursos:
-        </h1>
-
-        <Col span={ 24 }>
-
-          <Row justify='center' className={ 'principal-options' }>
-            <Col span={ 6 }>
-              <Card className={ 'options-resources' } bordered={ false }>
-                Mira posibles temas de titulación propuestos por los docentes de la ESFOT<br /><br />
-                <Button>Ver temas</Button>
-              </Card>
-            </Col>
-            <Col span={ 6 }>
-              <Card className={ 'options-resources' } bordered={ false }>
-                <br />
-                Mira las normativas de titulación de la EPN<br /><br />
-                <Button href={ 'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion' }>Ver
-                  normativas</Button>
-              </Card>
-            </Col>
-            <Col span={ 6 }>
-              <Card className={ 'options-resources' } bordered={ false }>
-                <br />
-                Mira los formatos de titulación de la EPN<br /><br />
-                <Button href={ 'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes' }>Ver
-                  formatos</Button>
-              </Card>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </div>
+            <Title level={ 3 }>Otros recursos:</Title>
+            <Row>
+              <Col span={ 24 }>
+                <Row justify='center'>
+                  <Col span={ 6 }>
+                    <Card bordered={ false } className='options resources-options'>
+                      <Space direction='vertical' size='large'>
+                        <div>Mira posibles temas de titulación propuestos por los docentes de la ESFOT</div>
+                        <div><Button>Ver temas</Button></div>
+                      </Space>
+                    </Card>
+                  </Col>
+                  <Col span={ 6 }>
+                    <Card bordered={ false } className='options resources-options'>
+                      <Space direction='vertical' size='large'>
+                        <div>Mira las normativas de titulación de la EPN</div>
+                        <div>
+                          <Button href={ 'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion' }>
+                            Ver normativas
+                          </Button>
+                        </div>
+                      </Space>
+                    </Card>
+                  </Col>
+                  <Col span={ 6 }>
+                    <Card bordered={ false } className='options resources-options'>
+                      <Space direction='vertical' size='large'>
+                        <div>Mira los formatos de titulación de la EPN</div>
+                        <div>
+                          <Button href={ 'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes' }>
+                            Ver formatos
+                          </Button>
+                        </div>
+                      </Space>
+                    </Card>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Content>
+        </Layout>
+      </Layout>
+    </>
   );
 };
 

@@ -34,13 +34,13 @@ h1{
   font-family: 'Open Sans', sans-serif;
   font-family: 'Raleway', sans-serif;
 }
-.ant-btn-primary {
-  color: #fff;
-  background: #034C70;
-  border-color: #034C70;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
-}
+/*.ant-btn-primary {*/
+/*  color: #fff;*/
+/*  background: #034C70;*/
+/*  border-color: #034C70;*/
+/*  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);*/
+/*  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);*/
+/*}*/
 
 .second-part{
   background-image: url("../images/lapices.png");
@@ -78,50 +78,50 @@ h1{
 
 }
 
-.card-rows{
-  margin-left: 200px;
-  margin-right: -8px;
-}
+/*.card-rows{*/
+/*  margin-left: 200px;*/
+/*  margin-right: -8px;*/
+/*}*/
 
-.cards{
-  padding-left: 20px;
-  padding-right: 20px;
-}
+/*.cards{*/
+/*  padding-left: 20px;*/
+/*  padding-right: 20px;*/
+/*}*/
 
-.ant-card {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0 auto;
-  padding: 0;
-  color: #034C70;
-  font-size: 14px;
-  font-variant: tabular-nums;
-  line-height: 1.5715;
-  list-style: none;
+/*.ant-card {*/
+/*  -webkit-box-sizing: border-box;*/
+/*  box-sizing: border-box;*/
+/*  margin: 0 auto;*/
+/*  padding: 0;*/
+/*  color: #034C70;*/
+/*  font-size: 14px;*/
+/*  font-variant: tabular-nums;*/
+/*  line-height: 1.5715;*/
+/*  list-style: none;*/
 
-  font-feature-settings: 'tnum', "tnum";
-  position: relative;
-  background: rgba(196, 196, 196, 0.6);;
-  border-radius: 25px;
-  backdrop-filter: blur(5px);
-  width: 191px;
-  height: 275px;
-  /*margin-left: 200px;*/
-  /*left: 270px;*/
-  /*top: 640px;*/
-}
+/*  font-feature-settings: 'tnum', "tnum";*/
+/*  position: relative;*/
+/*  background: rgba(196, 196, 196, 0.6);;*/
+/*  border-radius: 25px;*/
+/*  backdrop-filter: blur(5px);*/
+/*  width: 191px;*/
+/*  height: 275px;*/
+/*  !*margin-left: 200px;*!*/
+/*  !*left: 270px;*!*/
+/*  !*top: 640px;*!*/
+/*}*/
 
-.ant-card-head {
-  min-height: 48px;
-  margin-bottom: -1px;
-  padding: 0 24px;
-  color: rgba(0, 0, 0, 0.85);
-  font-weight: 500;
-  font-size: 16px;
-  background: transparent;
-  border-bottom: none;
-  border-radius: 2px 2px 0 0;
-}
+/*.ant-card-head {*/
+/*  min-height: 48px;*/
+/*  margin-bottom: -1px;*/
+/*  padding: 0 24px;*/
+/*  color: rgba(0, 0, 0, 0.85);*/
+/*  font-weight: 500;*/
+/*  font-size: 16px;*/
+/*  background: transparent;*/
+/*  border-bottom: none;*/
+/*  border-radius: 2px 2px 0 0;*/
+/*}*/
 
 /*.ant-divider {*/
 /*  -webkit-box-sizing: border-box;*/
