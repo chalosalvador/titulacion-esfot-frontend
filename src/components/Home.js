@@ -7,8 +7,7 @@ import {
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
 const {Title} = Typography;
-import lapices from '../images/lapices.png';
-import libros from '../images/fondolibros 1.png';
+
 const DemoBox = props => <p className={`height-${props.value}`}>{props.children}</p>;
 
 const HomePage = () => {
