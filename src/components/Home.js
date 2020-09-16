@@ -16,20 +16,17 @@ const HomePage = () => {
     <>
       <Row className='first-part'>
         <Col span={24}>
-          <h1 className='first-part'>TITULACIÓN <bold>ESFOT</bold></h1>
+          <h1 className='first-part'>TITULACIÓN <strong>ESFOT</strong></h1>
 
           {/*<Divider orientation="left"></Divider>*/}
 
           <p >Todo el proceso de titulación <br/>digitalizado y en un solo lugar</p>
-          {/*<Divider orientation="left"></Divider>*/}
           <Button type="primary" icon={<LoginOutlined  />} href={Routes.LOGIN}>Iniciar sesión</Button>
-          {/*<Divider orientation="left"></Divider>*/}
         </Col>
       </Row>
       <Row justify='center' className='second-part'>
 
         <Col span={24}>
-          <img className='fondo-lapices' src={ lapices } alt='' />
 
           <h1 >ESTUDIANTES</h1>
 
@@ -72,7 +69,6 @@ const HomePage = () => {
         </Col>
       </Row>
       <Row justify={'center'} className='third-part'>
-        <img  className='libros-fondo' src={ libros } alt='' />
         <Col span={24}>
 
           <h1>PROFESORES</h1>
@@ -110,11 +106,6 @@ const HomePage = () => {
 
             </Row>
           <br/>
-          {/*<Divider orientation="left"></Divider>*/}
-          {/*<Divider orientation="left"></Divider>*/}
-          {/*<Divider orientation="left"></Divider>*/}
-
-
 
         </Col>
       </Row>

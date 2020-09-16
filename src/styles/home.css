@@ -43,9 +43,12 @@ h1{
 }
 
 .second-part{
-  /*background-image: url("https://exitoeducativo.net/wp-content/uploads/2020/02/1_cmofspfso.jpg");*/
+  background-image: url("../images/lapices.png");
   text-align: center;
   padding: 50px 20px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 
 }
 .fondo-lapices {
@@ -66,10 +69,12 @@ h1{
 
 }
 .third-part{
-  /*background-image: url("src/images/fondolibros 1.png");*/
+  background-image: url("../images/fondolibros 1.png");
   text-align: center;
-  background: #e5e5e5;
+  /* background: #e5e5e5; */
   padding: 84px 20px;
+  background-position: right bottom;
+  background-repeat: no-repeat;
 
 }
 
