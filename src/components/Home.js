@@ -6,8 +6,9 @@ import {
   BookOutlined, CopyOutlined, LoginOutlined, QuestionCircleOutlined, UnorderedListOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
-
 const {Title} = Typography;
+import lapices from '../images/lapices.png';
+import libros from '../images/fondolibros 1.png';
 const DemoBox = props => <p className={`height-${props.value}`}>{props.children}</p>;
 
 const HomePage = () => {
@@ -22,19 +23,18 @@ const HomePage = () => {
           {/*<Divider orientation="left"></Divider>*/}
 
           <p >Todo el proceso de titulación <br/>digitalizado y en un solo lugar</p>
-          {/*<Divider orientation="left"></Divider>*/}
           <Button type="primary" icon={<LoginOutlined  />} href={Routes.LOGIN}>Iniciar sesión</Button>
-          {/*<Divider orientation="left"></Divider>*/}
         </Col>
       </Row>
       <Row justify='center' className='second-part'>
 
         <Col span={24}>
 
-          <h1>ESTUDIANTES</h1>
+          <h1 >ESTUDIANTES</h1>
 
             <Row justify='center'>
               <Col span={6}>
+
                 <Card title="Listado de temas" bordered={false}>
                   <div>
                   <UnorderedListOutlined className={"big-icon"}/>
@@ -71,7 +71,6 @@ const HomePage = () => {
         </Col>
       </Row>
       <Row justify={'center'} className='third-part'>
-
         <Col span={24}>
 
           <h1>PROFESORES</h1>
@@ -82,8 +81,8 @@ const HomePage = () => {
                   <BookOutlined className={"big-icon"}/>
                  </div>
                   <br/>
-                  Revisa los temas de titulación disponibles<br/><br/>
-                  <Button type="primary" >Ver normativos</Button>
+                  Mira los normativos más importantes<br/><br/>
+                  <Button type="primary" href={'https://www.epn.edu.ec/index/normativos-docencia/'}>Ver normativos</Button>
                 </Card>
               </Col>
               <Col span={6}>
@@ -103,16 +102,12 @@ const HomePage = () => {
                   </div>
                   <br/>
                   Mira los documentos más importantes<br/><br/>
-                  <Button type="primary" >Ver documentos</Button>
+                  <Button type="primary" href={'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes'}>Ver documentos</Button>
                 </Card>
               </Col>
+
             </Row>
           <br/>
-          {/*<Divider orientation="left"></Divider>*/}
-          {/*<Divider orientation="left"></Divider>*/}
-          {/*<Divider orientation="left"></Divider>*/}
-
-
 
         </Col>
       </Row>
