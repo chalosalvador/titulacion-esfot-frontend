@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Card, Steps, Col, Button, Menu, PageHeader, Dropdown, Typography, Layout } from 'antd';
+import { Row, Card, Steps, Col, Button, Menu, PageHeader, Dropdown, Typography, Layout, Space } from 'antd';
 import {
   BellOutlined, CopyOutlined, FundProjectionScreenOutlined, LoadingOutlined, LogoutOutlined, UserOutlined,
   FileTextOutlined
@@ -8,7 +8,7 @@ import Routes from '../constants/routes';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../providers/Auth';
 import withAuth from '../hocs/withAuth';
-// import '../styles/home-student.css';
+import '../styles/home-student.css';
 
 const { Step } = Steps;
 const { Title } = Typography;
@@ -98,34 +98,49 @@ const HomeStudent = () => {
               <Col span={ 24 }>
                 <Row justify='center'>
                   <Col span={ 6 }>
-                    <Card className='options' title='Plan de titulación' bordered={ false }>
-                      <div>
-                        <FileTextOutlined className={ 'big-icon' } />
-                      </div>
-                      <br />
-                      Registra tu plan de titulación<br /><br />
-                      <Button>Registrar plan</Button>
+                    <Card className='options main-options' title='Plan de titulación' bordered={ false }>
+                      <Space direction='vertical' size='large'>
+                        <div>
+                          <FileTextOutlined className={ 'big-icon' } />
+                        </div>
+                        <div>
+                          Registra tu plan de titulación
+                        </div>
+                        <div>
+                          <Button>Registrar plan</Button>
+                        </div>
+                      </Space>
                     </Card>
                   </Col>
 
                   <Col span={ 6 }>
-                    <Card className={ 'options' } title='Proyecto de titulación' bordered={ false }>
-                      <div>
-                        <CopyOutlined className={ 'big-icon' } />
-                      </div>
-                      <br />
-                      Sube tu proyecto de titulación<br /><br />
-                      <Button>Subir proyecto</Button>
+                    <Card className='options main-options' title='Proyecto de titulación' bordered={ false }>
+                      <Space direction='vertical' size='large'>
+                        <div>
+                          <CopyOutlined className={ 'big-icon' } />
+                        </div>
+                        <div>
+                          Sube tu proyecto de titulación
+                        </div>
+                        <div>
+                          <Button>Subir proyecto</Button>
+                        </div>
+                      </Space>
                     </Card>
                   </Col>
                   <Col span={ 6 }>
-                    <Card className={ 'options' } title='Defensa de grado' bordered={ false }>
-                      <div>
-                        <FundProjectionScreenOutlined className={ 'big-icon' } />
-                      </div>
-                      <br />
-                      Mira la fecha de tu defensa de grado<br /><br />
-                      <Button>Ver fecha</Button>
+                    <Card className='options main-options' title='Defensa de grado' bordered={ false }>
+                      <Space direction='vertical' size='large'>
+                        <div>
+                          <FundProjectionScreenOutlined className={ 'big-icon' } />
+                        </div>
+                        <div>
+                          Mira la fecha de tu defensa de grado
+                        </div>
+                        <div>
+                          <Button>Ver fecha</Button>
+                        </div>
+                      </Space>
                     </Card>
                   </Col>
                 </Row>
@@ -136,28 +151,37 @@ const HomeStudent = () => {
             <Title level={ 3 }>Otros recursos:</Title>
             <Row>
               <Col span={ 24 }>
-
-                <Row justify='center' className={ 'principal-options' }>
+                <Row justify='center'>
                   <Col span={ 6 }>
-                    <Card className={ 'options-resources' } bordered={ false }>
-                      Mira posibles temas de titulación propuestos por los docentes de la ESFOT<br /><br />
-                      <Button>Ver temas</Button>
+                    <Card bordered={ false } className='options resources-options'>
+                      <Space direction='vertical' size='large'>
+                        <div>Mira posibles temas de titulación propuestos por los docentes de la ESFOT</div>
+                        <div><Button>Ver temas</Button></div>
+                      </Space>
                     </Card>
                   </Col>
                   <Col span={ 6 }>
-                    <Card className={ 'options-resources' } bordered={ false }>
-                      <br />
-                      Mira las normativas de titulación de la EPN<br /><br />
-                      <Button href={ 'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion' }>Ver
-                        normativas</Button>
+                    <Card bordered={ false } className='options resources-options'>
+                      <Space direction='vertical' size='large'>
+                        <div>Mira las normativas de titulación de la EPN</div>
+                        <div>
+                          <Button href={ 'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion' }>
+                            Ver normativas
+                          </Button>
+                        </div>
+                      </Space>
                     </Card>
                   </Col>
                   <Col span={ 6 }>
-                    <Card className={ 'options-resources' } bordered={ false }>
-                      <br />
-                      Mira los formatos de titulación de la EPN<br /><br />
-                      <Button href={ 'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes' }>Ver
-                        formatos</Button>
+                    <Card bordered={ false } className='options resources-options'>
+                      <Space direction='vertical' size='large'>
+                        <div>Mira los formatos de titulación de la EPN</div>
+                        <div>
+                          <Button href={ 'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes' }>
+                            Ver formatos
+                          </Button>
+                        </div>
+                      </Space>
                     </Card>
                   </Col>
                 </Row>

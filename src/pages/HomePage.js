@@ -1,6 +1,6 @@
 import React from 'react';
-import HomeTeacher from '../components/HomeTeacher';
 import { useAuth } from '../providers/Auth';
+import HomeTeacher from '../components/HomeTeacher';
 import HomeStudent from '../components/HomeStudent';
 
 const HomePage = () => {

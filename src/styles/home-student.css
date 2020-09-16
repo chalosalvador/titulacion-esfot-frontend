@@ -2,54 +2,26 @@
   font-size: 30px;
 }
 
-/*.principal-options {*/
-/*  padding: 50px 20px;*/
-/*  text-align: center;*/
-/*}*/
-
 .options {
   text-align: center;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0 50px;
-  padding: 0;
   color: #ffffff;
   font-size: 14px;
-  font-variant: tabular-nums;
-  line-height: 1.5715;
-  list-style: none;
-
-  font-feature-settings: 'tnum', "tnum";
-  position: relative;
   background: #034c70;
   border-radius: 25px;
   backdrop-filter: blur(5px);
-  width: 210px;
-  height: 275px;
-
+  width: 250px;
+  min-height: 100%;
 }
 
-.resources {
-  height: 240px;
+.main-options {
+  background: #034c70;
 }
 
-.options-resources {
-  text-align: center;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0 50px;
-  padding: 0;
-  color: #ffffff;
-  font-size: 14px;
-  font-variant: tabular-nums;
-  line-height: 1.5715;
-  list-style: none;
-
-  font-feature-settings: 'tnum', "tnum";
-  position: relative;
+.resources-options {
   background: #407088;
-  border-radius: 25px;
-  backdrop-filter: blur(5px);
-  width: 210px;
-  height: 175px;
+}
+
+.options .ant-card-head {
+  border: none;
+  color: #ffffff;
 }
