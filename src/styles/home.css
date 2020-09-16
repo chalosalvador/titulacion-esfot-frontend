@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Raleway&display=swap');
 
 .first-part{
   background: #e5e5e5;
@@ -6,14 +7,18 @@
   font-weight: normal;
   font-size: 48px;
   line-height: 60px;
-  padding: 50px 20px;
+  padding: 20px 20px;
+}
+.fondo-lapices{
+
 }
 .big-icon{
   font-size: 30px;
 }
 
 p{
-  /*font-family: Montserrat;*/
+  font-family: 'Open Sans', sans-serif;
+  font-family: 'Raleway', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 36px;
@@ -25,6 +30,9 @@ h1{
   color: #034C70 !important;
   font-size: 48px;
   font-weight: normal;
+  position:relative;
+  font-family: 'Open Sans', sans-serif;
+  font-family: 'Raleway', sans-serif;
 }
 .ant-btn-primary {
   color: #fff;
@@ -35,16 +43,38 @@ h1{
 }
 
 .second-part{
-  background-image: url("https://exitoeducativo.net/wp-content/uploads/2020/02/1_cmofspfso.jpg");
+  background-image: url("../images/lapices.png");
   text-align: center;
   padding: 50px 20px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+
+}
+.fondo-lapices {
+  width: 1345px;
+  height: 515px;
+  position: absolute;
+  /* margin-top: -1px; */
+  margin-left: -674px;
+  margin-top: -50px;
+}
+.libros-fondo{
+
+  position: absolute;
+  margin-right: -923px;
+  /* margin-bottom: -132px; */
+  margin-top: 201px;
+  display: flex;
 
 }
 .third-part{
-  /*background-image: url("src/images/fondolibros 1.png");*/
+  background-image: url("../images/fondolibros 1.png");
   text-align: center;
-  background: #e5e5e5;
-  padding: 50px 20px;
+  /* background: #e5e5e5; */
+  padding: 84px 20px;
+  background-position: right bottom;
+  background-repeat: no-repeat;
 
 }
 

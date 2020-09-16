@@ -8,8 +8,8 @@ import { Layout, Row, Col, Button, Popover } from 'antd';
 import { FacebookOutlined, InstagramOutlined, GithubOutlined, MailOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import logo from '../images/logo-menta.png';
 
-import logoEPN from '../images/EPN 1.png';
-import logoESFOT from '../images/ESFOT 1.png';
+import logoEPN from '../images/Logotipo-ESFOT.png';
+import logoESFOT from '../images/Logotipo-ESFOT2.png';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
@@ -40,9 +40,9 @@ const MainLayout = props => {
                     <img className='logo' src={ logoEPN } alt='' /></a>
                 </Col>
 
-                <Col md={ 14 } align='right' className='main-menu'>
-                  <Navigation mode='horizontal' />
-                </Col>
+                {/*<Col md={ 14 } align='right' className='main-menu'>*/}
+                {/*  <Navigation mode='horizontal' />*/}
+                {/*</Col>*/}
 
                 <Col xs={ 2 } align='right' className='responsive-menu-button'>
                   <Popover content={ <Navigation mode='vertical' /> }
