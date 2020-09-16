@@ -4,20 +4,15 @@
 
 const publicRoutes = {
   LOGIN: '/ingreso',
-  REGISTER: '/registro',
   USERS: '/usuarios',
   USERS_ID: `/usuario/:id`,
-  HOME: '/',
+  INDEX: '/',
   ABOUT: '/acerca-de',
-  ANTD: '/antd'
 };
 
 const privateRoutes = {
   LOGOUT: '/logout',
-  PRIVATE: '/privada',
-  HOMESTUDENT: '/menu-estudiante',
-  HOMETEACHER: '/menu-profesor',
-  ARTICLE_ID: '/articulo/:id'
+  HOME: '/inicio',
 };
 
 const Routes = {

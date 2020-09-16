@@ -5,8 +5,8 @@ import MainLayout from './Layout';
 import { Router } from 'react-router-dom';
 import AppRouter from '../routers/AppRouter';
 import history from '../utils/history';
-import 'antd/dist/antd.css';
 import '../styles/app.css';
+
 
 /**
  * Show the loading bar on page transition

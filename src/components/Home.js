@@ -1,11 +1,13 @@
 import React from 'react';
-import { Layout, Row, Col, Button, Popover,Divider,Space,Card } from 'antd';
+import { Typography, Row, Col, Button, Popover,Divider,Space,Card } from 'antd';
 import '../styles/home.css'
 import { Link, useLocation } from 'react-router-dom';
 import {
   BookOutlined, CopyOutlined, LoginOutlined, QuestionCircleOutlined, UnorderedListOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
+
+const {Title} = Typography;
 const DemoBox = props => <p className={`height-${props.value}`}>{props.children}</p>;
 
 const HomePage = () => {
@@ -15,7 +17,7 @@ const HomePage = () => {
       <Row className='first-part'>
         <Col span={24}>
           <DemoBox value={120}></DemoBox>
-          <h1 className='first-part'>TITULACIÓN <bold>ESFOT</bold></h1>
+          <Title className='first-part'>TITULACIÓN <strong>ESFOT</strong></Title>
 
           {/*<Divider orientation="left"></Divider>*/}
 

@@ -36,7 +36,7 @@ const MainLayout = props => {
             <Header className='header'>
               <Row type='flex' justify='space-between' align='bottom'>
                 <Col xs={ 24 } md={ 6 } className='logo-wrapper'>
-                  <a href="https://www.epn.edu.ec/">
+                  <a href='https://www.epn.edu.ec/'>
                     <img className='logo' src={ logoEPN } alt='' /></a>
                 </Col>
 
@@ -65,7 +65,7 @@ const MainLayout = props => {
                 </Col>
 
                 <Col xs={ 22 } md={ 4 } className='logos-social-header' align='right'>
-                  <a href="https://esfot.epn.edu.ec/">
+                  <a href='https://esfot.epn.edu.ec/'>
                     <img className='logo' src={ logoESFOT } alt='' /></a>
                 </Col>
               </Row>
@@ -75,8 +75,8 @@ const MainLayout = props => {
 
 
         <Content className='content'>
-          <Row type='flex' justify='center' style={ { flex: 'auto' } }>
-            <Col span={24}>
+          <Row justify='center'>
+            <Col span={ 24 }>
               { props.children }
             </Col>
           </Row>
@@ -120,7 +120,7 @@ const MainLayout = props => {
                    marginRight: 30,
 
                  } }>
-                <FacebookOutlined className={"big-icon"}/>
+                <FacebookOutlined className={ 'big-icon' } />
               </a>
 
             </Col>
