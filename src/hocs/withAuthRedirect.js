@@ -33,19 +33,6 @@ export default function withAuthRedirect( {
       return <LoadingComponent />;
     }
     if( expectedAuth !== isAuthenticated ) {
-      if(isAuthenticated){
-        if(currentUser.role === 'ROLE_STUDENT'){
-          return <Redirect to={ {
-            pathname: Routes.HOMESTUDENT,
-            state: { from: props.location }
-          } } />
-        } else {
-          return <Redirect to={ {
-            pathname: Routes.HOMETEACHER,
-            state: { from: props.location }
-          } } />
-        }
-      }
 
       return <Redirect to={ {
         pathname:location || Routes.LOGIN,
