@@ -1,22 +1,73 @@
 import { Row, Card, Col, Button, Menu } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/home-teacher.css';
 import {
-  BellOutlined, BulbOutlined, BarsOutlined, CheckOutlined, SelectOutlined, UserOutlined
+  BellOutlined, BulbOutlined, BarsOutlined, CheckOutlined, SelectOutlined, UserOutlined, LoadingOutlined,
+  LogoutOutlined, LoginOutlined
 } from '@ant-design/icons';
+import Routes from '../constants/routes';
+import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../providers/Auth';
+import withAuth from '../hocs/withAuth';
 
 const { SubMenu } = Menu;
 
 const HomeTeacher = () => {
 
+  let location = useLocation();
+
+  const [ menuState, setMenuState ] = useState( {
+    current: location.pathname, // set the current selected item in menu, by default the current page
+    collapsed: false,
+    openKeys: []
+  } );
+
+  const handleClick = ( e ) => {
+    console.log( 'click ', e );
+    setMenuState( {
+      ...menuState,
+      current: e.key
+    } );
+  };
+
+  const { isAuthenticated, isCheckingAuth, currentUser } = useAuth();
+
+  React.useEffect( () => {
+    setMenuState( {
+      ...menuState,
+      current: location.pathname
+    } );
+  }, [ location, isAuthenticated ] );
+
   return (
     <div style={ { height: 1500 } }>
-      <Menu mode='horizontal' className={ 'menus' } >
+      <Menu mode='horizontal' className={ 'menus' } onClick={ handleClick }>
         <Menu.Item key='notification' icon={ <BellOutlined /> } />
-        <SubMenu icon={ <UserOutlined /> }>
-          <Menu.Item key='password'>Cambiar clave</Menu.Item>
-          <Menu.Item key='logout'>Cerrar sesión</Menu.Item>
-        </SubMenu>
+        {
+          isAuthenticated
+            ? <SubMenu icon={ <UserOutlined /> } title={ currentUser && currentUser.name }>
+              <Menu.Item key='password'>Cambiar clave</Menu.Item>
+
+              <Menu.Item key={ Routes.LOGIN }>
+                <Link to={ Routes.LOGOUT } className='logout-link'>
+                  {
+                    isCheckingAuth
+                      ? <LoadingOutlined />
+                      : <><LogoutOutlined /> Cerrar sesión </>
+                  }
+                </Link>
+              </Menu.Item>
+            </SubMenu>
+            : <Menu.Item key={ Routes.LOGIN }>
+              <Link to={ Routes.LOGIN }>
+                {
+                  isCheckingAuth
+                    ? <LoadingOutlined />
+                    : <><LoginOutlined /> Ingresar</>
+                }
+              </Link>
+            </Menu.Item>
+        }
       </Menu>
       <Card className={ 'statistics' }>
         <h1 className={ 'titles' }>Director</h1>
@@ -95,14 +146,14 @@ const HomeTeacher = () => {
               <Card className={ 'options-resources' } bordered={ false }>
                 <br />
                 Mira las normativas de titulación de la EPN<br /><br />
-                <Button>Ver normativas</Button>
+                <Button href={'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion'}>Ver normativas</Button>
               </Card>
             </Col>
             <Col span={ 6 }>
               <Card className={ 'options-resources' } bordered={ false }>
                 <br />
                 Mira los formatos de titulación de la EPN<br /><br />
-                <Button>Ver formatos</Button>
+                <Button href={'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes'}>Ver formatos</Button>
               </Card>
             </Col>
             <Col span={ 6 } />
@@ -138,4 +189,4 @@ const HomeTeacher = () => {
   );
 };
 
-export default HomeTeacher;
+export default withAuth(HomeTeacher);
