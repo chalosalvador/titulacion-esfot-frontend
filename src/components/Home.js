@@ -72,7 +72,7 @@ const HomePage = () => {
         </Col>
       </Row>
       <Row justify={'center'} className='third-part'>
-
+        <img  className='libros-fondo' src={ libros } alt='' />
         <Col span={24}>
 
           <h1>PROFESORES</h1>
@@ -107,7 +107,7 @@ const HomePage = () => {
                   <Button type="primary" href={'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes'}>Ver documentos</Button>
                 </Card>
               </Col>
-              <img  className='libros-fondo' src={ libros } alt='' />
+
             </Row>
           <br/>
           {/*<Divider orientation="left"></Divider>*/}
