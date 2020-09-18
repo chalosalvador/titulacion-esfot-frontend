@@ -1,27 +1,47 @@
 import {
-  Col, Row, Card, Steps, Form, Input, Upload, Button, Menu, Select, Layout, PageHeader, Dropdown, Typography
+  Col, Row, Card, Steps, Form, Input, Upload, Button, Menu, Select, Layout, PageHeader, Dropdown, Typography, message
 } from 'antd';
 import React, { useState } from 'react';
 import '../styles/plan-form.css';
 import {
-  BellOutlined, LoadingOutlined, LoginOutlined, LogoutOutlined, UserOutlined, UploadOutlined, SendOutlined
+  BellOutlined, LoadingOutlined, LogoutOutlined, UserOutlined, PlusOutlined, SendOutlined, HomeOutlined
 } from '@ant-design/icons';
 import {} from '@ant-design/icons';
 import Routes from '../constants/routes';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../providers/Auth';
 import withAuth from '../hocs/withAuth';
+import { useProject } from '../data/useProjects';
+import { useTeachers } from '../data/useTeachers';
+import API from '../data';
 
 const { Step } = Steps;
-const { SubMenu } = Menu;
 const { Option } = Select;
 const { TextArea } = Input;
 const { Title } = Typography;
-const { Content, Sider } = Layout;
+const { Sider } = Layout;
 
-const PlanForm = () => {
+const getBase64 = ( file, callback ) => {
+  console.log( 'file', file );
+  const reader = new FileReader();
+  reader.addEventListener( 'load', () => callback( reader.result ) );
+  reader.readAsDataURL( file );
+};
+
+const PlanForm = ( {
+  visible,
+  update,
+} ) => {
 
   let location = useLocation();
+  // const [ form ] = Form.useForm();
+  const { projects, isError, isLoading } = useProject();
+  const { teachers } = useTeachers();
+  const [ imageUrl, setImageUrl ] = useState( null );
+  const [ fileList, setFileList ] = useState( [] );
+  const [ sending, setSending ] = useState( false );
+
+  console.log( projects, isError );
 
   const [ menuState, setMenuState ] = useState( {
     current: location.pathname, // set the current selected item in menu, by default the current page
@@ -30,12 +50,12 @@ const PlanForm = () => {
   } );
 
   const layout = {
-    labelCol: { span: 14 },
-    wrapperCol: { span: 10 },
+    labelCol: { span: 9 },
+    wrapperCol: { span: 15 },
   };
 
   const validateMessages = {
-    required: '${label} is required!',
+    required: '${label} es requerido!',
     types: {
       email: '${label} is not validate email!',
       number: '${label} is not a validate number!',
@@ -45,8 +65,77 @@ const PlanForm = () => {
     },
   };
 
-  const onFinish = values => {
-    console.log( values );
+  const onFinish = async( values ) => {
+
+    console.log( 'Received values of form: ', values );
+    setSending( true );
+
+    // form.validateFields()
+    //   .then( async( values ) => {
+    //
+    //     console.log( 'values', values );
+
+    const data = new FormData();
+    data.append( 'codirector', values.codirector
+      ? values.codirector
+      : '' );
+    data.append( 'partner', values.partner
+      ? values.partner
+      : '' );
+    data.append( 'project_type', values.project_type
+      ? values.project_type
+      : '' );
+    data.append( 'research_line', values.research_line
+      ? values.research_line
+      : '' );
+    data.append( 'knowledge_area', values.knowledge_area
+      ? values.knowledge_area
+      : '' );
+    data.append( 'title', values.title );
+    data.append( 'problem', values.problem
+      ? values.problem
+      : '' );
+    data.append( 'justification', values.justification
+      ? values.justification
+      : '' );
+    data.append( 'hypothesis', values.hypothesis
+      ? values.hypothesis
+      : '' );
+    data.append( 'general_objective', values.general_objective
+      ? values.general_objective
+      : '' );
+    data.append( 'specifics_objectives', values.specifics_objectives
+      ? values.specifics_objectives
+      : '' );
+    data.append( 'methodology', values.methodology
+      ? values.methodology
+      : '' );
+    data.append( 'work_plan', values.work_plan
+      ? values.work_plan
+      : '' );
+    data.append( 'schedule', values.schedule
+      ? values.schedule[ 0 ]
+      : 'https://lorempixel.com/400/300/' );
+    data.append( 'bibliography', values.bibliography
+      ? values.bibliography
+      : '' );
+    data.append( 'teacher_id', values.teacher_id );
+
+    console.log( 'DATOS', values );
+
+    try {
+      await API.post( '/students/projects', data ); // post data to server
+      setImageUrl( null );
+      setSending( false );
+      message.success( 'Cambios guardados correctamente!' );
+    } catch( e ) {
+      console.log( 'ERROR', e );
+      message.error( `No se guardaron los datos:¨${ e }` );
+    }
+
+    //   } ).catch( info => {
+    //   console.log( 'Validate Failed:', info );
+    // } );
   };
 
   const handleClick = ( e ) => {
@@ -55,6 +144,43 @@ const PlanForm = () => {
       ...menuState,
       current: e.key
     } );
+  };
+
+  const normPhotoFile = e => {
+    console.log( 'Upload event:', e );
+    const file = e.file;
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if( !isJpgOrPng ) {
+      message.error( 'La imagen debe tener formato JPG o PNG' );
+      setFileList( [] );
+      setImageUrl( null );
+      return null;
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if( !isLt2M ) {
+      message.error( 'La imagen debe ser menor a 2MB' );
+      setFileList( [] );
+      setImageUrl( null );
+      return null;
+    }
+
+    if( file.status === 'removed' ) {
+      setFileList( [] );
+      setImageUrl( null );
+      return null;
+    }
+
+    getBase64( e.file, imageUrl => setImageUrl( imageUrl ) );
+
+    if( Array.isArray( e ) ) {
+      return e;
+    }
+
+    console.log( 'e.file', e.file );
+    console.log( 'e.fileList', e.fileList );
+    setFileList( [ file ] );
+
+    return e && [ e.file ];
   };
 
   const { isAuthenticated, isCheckingAuth, currentUser } = useAuth();
@@ -78,6 +204,10 @@ const PlanForm = () => {
       </Link>
     </Menu.Item>
   </Menu>;
+
+  if( isLoading ) {
+    return <h1>Cargando...</h1>;
+  }
 
   return (
     <>
@@ -110,197 +240,226 @@ const PlanForm = () => {
           <PageHeader className='inner-menu'
                       title={ <Title level={ 3 }>Plan de titulación:</Title> }
                       extra={ [
+                        <Button key='home' type='text'>
+                          <Link to={ Routes.HOME }>
+                            <HomeOutlined />
+                          </Link>
+                        </Button>,
                         <Button key='notifications' type='text' icon={ <BellOutlined /> } />,
                         <Dropdown key='user-menu' overlay={ userMenu } placement='bottomLeft'>
                           <Button type='text' icon={ <UserOutlined /> }>{ currentUser && currentUser.name }</Button>
                         </Dropdown>,
                       ] }
           />
-          <Title level={4}>Datos Generales</Title>
-          <Row >
-            <Col span={ 18 }>
+          <Title level={ 4 }>Datos Generales</Title>
+          <Row>
+            <Col span={ 24 }>
 
               <Row justify='center'>
-                <Form { ...layout }
-                      name='nest-messages'
-                      onFinish={ onFinish }
-                      validateMessages={ validateMessages }>
-                  <Form.Item name={ [ 'user', 'name' ] }
-                             label='Seleccione su director'
-                             rules={ [ { required: true } ] }>
-                    <Select defaultValue='lucy' style={ { width: 120 } }>
-                      <Option value='jack'>Jack</Option>
-                      <Option value='lucy'>Lucy</Option>
-                      <Option value='disabled' disabled>
-                        Disabled
-                      </Option>
-                      <Option value='Yiminghe'>yiminghe</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'email' ] }
-                             label='Seleccione su co-director'
-                             rules={ [ { type: 'email' } ] }>
-                    <Select defaultValue='lucy' style={ { width: 120 } }>
-                      <Option value='jack'>Jack</Option>
-                      <Option value='lucy'>Lucy</Option>
-                      <Option value='disabled' disabled>
-                        Disabled
-                      </Option>
-                      <Option value='Yiminghe'>yiminghe</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'age' ] } label='Seleccione compañero'>
-                    <Select defaultValue='lucy' style={ { width: 120 } }>
-                      <Option value='jack'>Jack</Option>
-                      <Option value='lucy'>Lucy</Option>
-                      <Option value='disabled' disabled>
-                        Disabled
-                      </Option>
-                      <Option value='Yiminghe'>yiminghe</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'website' ] } label='Tipo de proyecto' rules={ [ { required: true } ] }>
-                    <Select defaultValue='lucy' style={ { width: 120 } }>
-                      <Option value='jack'>Jack</Option>
-                      <Option value='lucy'>Lucy</Option>
-                      <Option value='disabled' disabled>
-                        Disabled
-                      </Option>
-                      <Option value='Yiminghe'>yiminghe</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'introduction' ] }
-                             label='Línea de investigación'
-                             rules={ [ { required: true } ] }>
-                    <Select defaultValue='lucy' style={ { width: 120 } }>
-                      <Option value='jack'>Jack</Option>
-                      <Option value='lucy'>Lucy</Option>
-                      <Option value='disabled' disabled>
-                        Disabled
-                      </Option>
-                      <Option value='Yiminghe'>yiminghe</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'introduction' ] }
-                             label='Área de investigación'
-                             rules={ [ { required: true } ] }>
-                    <Select defaultValue='lucy' style={ { width: 120 } }>
-                      <Option value='jack'>Jack</Option>
-                      <Option value='lucy'>Lucy</Option>
-                      <Option value='disabled' disabled>
-                        Disabled
-                      </Option>
-                      <Option value='Yiminghe'>yiminghe</Option>
-                    </Select>
-                  </Form.Item>
-                </Form>
-              </Row>
+                {
 
-              <Title level={4}>Plan</Title>
+                  <Form { ...layout }
+                        name='nest-messages'
+                        onFinish={ onFinish }
+                        validateMessages={ validateMessages }>
+                    <Form.Item name='teacher_id'
+                               label='Seleccione su director'
+                               rules={ [ { required: true } ] }>
+                      <Select defaultValue='Seleccione' style={ { width: 300 } } loading={ isLoading }>
+                        {
+                          teachers && teachers.map( ( teacher, index ) =>
+                            <Option value={ teacher.id } key={ index }>{ teacher.name }</Option>
+                          )
+                        }
+                      </Select>
+                    </Form.Item>
+                    <Form.Item name='codirector'
+                               label='Seleccione su co-director'>
+                      <Input
+                        style={ { width: 300 } }
+                        placeholder='Nombre del co-director'
+                        defaultValue={ `${ projects[ 0 ].coodirector
+                          ? projects[ 0 ].coodirector
+                          : '' }` }
+                      />
+                    </Form.Item>
+                    <Form.Item name='partner' label='Seleccione su compañero'>
+                      <Select defaultValue={ `${ projects[ 0 ].partner
+                        ? projects[ 0 ].partner
+                        : '' }` }
+                              style={ { width: 300 } }>
+                        <Option value='jack'>Jack</Option>
+                        <Option value='lucy'>Lucy</Option>
+                        <Option value='Yiminghe'>yiminghe</Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item name='project_type' label='Tipo de proyecto'>
+                      <Select defaultValue={ `${ projects[ 0 ].project_type
+                        ? projects[ 0 ].project_type
+                        : '' }` } style={ { width: 300 } }>
+                        <Option value='jack'>Pre-grado</Option>
+                        <Option value='lucy'>Post-grado</Option>>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item name='research_line'
+                               label='Línea de investigación'>
+                      <Select defaultValue='Seleccione' style={ { width: 300 } }>
+                        <Option value='jack'>Jack</Option>
+                        <Option value='lucy'>Lucy</Option>
+                        <Option value='Yiminghe'>yiminghe</Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item name='knowledge_area'
+                               label='Área de investigación'>
+                      <Select defaultValue='Seleccione' style={ { width: 300 } }>
+                        <Option value='jack'>Jack</Option>
+                        <Option value='lucy'>Lucy</Option>
+                        <Option value='Yiminghe'>yiminghe</Option>
+                      </Select>
+                    </Form.Item>
 
-              <Row justify='center'>
-                <Form { ...layout } name='nest-messages' onFinish={ onFinish } validateMessages={ validateMessages }>
-                  <Form.Item name={ [ 'user', 'name' ] } label='Título' rules={ [ { required: true } ] }>
-                    <TextArea
-                      size={ 25 }
-                      placeholder='Máximo 15 palabras'
-                      autoSize={ {
-                        minRows: 1,
-                        maxRows: 4
-                      } }
-                    />
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'email' ] }
-                             label='Planteamiento del problema'
-                             rules={ [ { required: true } ] }>
-                    <TextArea
-                      placeholder='Autosize height with minimum and maximum number of lines'
-                      autoSize={ {
-                        minRows: 2,
-                        maxRows: 6
-                      } }
-                    />
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'age' ] } label='Justificación' rules={ [ { required: true } ] }>
-                    <TextArea
-                      placeholder='Autosize height with minimum and maximum number of lines'
-                      autoSize={ {
-                        minRows: 2,
-                        maxRows: 6
-                      } }
-                    />
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'website' ] } label='Hipótesis' rules={ [ { required: true } ] }>
-                    <TextArea
-                      placeholder='Autosize height with minimum and maximum number of lines'
-                      autoSize={ {
-                        minRows: 2,
-                        maxRows: 6
-                      } }
-                    />
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'introduction' ] }
-                             label='Objetivo General'
-                             rules={ [ { required: true } ] }>
-                    <TextArea
-                      placeholder='Autosize height with minimum and maximum number of lines'
-                      autoSize={ {
-                        minRows: 2,
-                        maxRows: 6
-                      } }
-                    />
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'name' ] } label='Objetivos Específicos' rules={ [ { required: true } ] }>
-                    <TextArea
-                      placeholder='Autosize height with minimum and maximum number of lines'
-                      autoSize={ {
-                        minRows: 2,
-                        maxRows: 6
-                      } }
-                    />
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'name' ] } label='Metodología' rules={ [ { required: true } ] }>
-                    <TextArea
-                      placeholder='Autosize height with minimum and maximum number of lines'
-                      autoSize={ {
-                        minRows: 2,
-                        maxRows: 6
-                      } }
-                    />
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'name' ] } label='Plan de trabajo' rules={ [ { required: true } ] }>
-                    <TextArea
-                      placeholder='Autosize height with minimum and maximum number of lines'
-                      autoSize={ {
-                        minRows: 2,
-                        maxRows: 6
-                      } }
-                    />
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'name' ] } label='Cronograma' rules={ [ { required: true } ] }>
-                    <Upload name='logo' action='/upload.do' listType='picture'>
-                      <Button icon={ <UploadOutlined /> }>Click to upload</Button>
-                    </Upload>
-                  </Form.Item>
-                  <Form.Item name={ [ 'user', 'name' ] } label='Bibliografía' rules={ [ { required: true } ] }>
-                    <TextArea
-                      placeholder='Autosize height with minimum and maximum number of lines'
-                      autoSize={ {
-                        minRows: 2,
-                        maxRows: 6
-                      } }
-                    />
-                  </Form.Item>
-                  <Form.Item wrapperCol={ {
-                    ...layout.wrapperCol,
-                    offset: 8
-                  } }>
-                    <Button className={ 'submit' } htmlType='submit'>
-                      <SendOutlined />
-                      Enviar plan
-                    </Button>
-                  </Form.Item>
-                </Form>
+                    <Title level={ 4 }>Plan</Title>
+
+                    <Form.Item name='title' label='Título' rules={ [ { required: true } ] }>
+                      <TextArea
+                        style={ { width: 300 } }
+                        placeholder='Máximo 15 palabras'
+                        autoSize={ {
+                          minRows: 1,
+                          maxRows: 4
+                        } }
+                        defaultValue={ `${ projects[ 0 ].title
+                          ? projects[ 0 ].title
+                          : '' }` }
+                      />
+                    </Form.Item>
+                    <Form.Item name='problem'
+                               label='Planteamiento del problema'>
+                      <TextArea style={ { width: 300 } }
+                                placeholder='Autosize height with minimum and maximum number of lines'
+                                autoSize={ {
+                                  minRows: 2,
+                                  maxRows: 6
+                                } }
+                                defaultValue={ `${ projects[ 0 ].problem
+                                  ? projects[ 0 ].problem
+                                  : '' }` }
+                      />
+                    </Form.Item>
+                    <Form.Item name='justification' label='Justificación'>
+                      <TextArea style={ { width: 300 } }
+                                placeholder='Autosize height with minimum and maximum number of lines'
+                                autoSize={ {
+                                  minRows: 2,
+                                  maxRows: 6
+                                } }
+                                defaultValue={ `${ projects[ 0 ].justification
+                                  ? projects[ 0 ].justification
+                                  : '' }` }
+                      />
+                    </Form.Item>
+                    <Form.Item name='hypothesis' label='Hipótesis'>
+                      <TextArea style={ { width: 300 } }
+                                placeholder='Autosize height with minimum and maximum number of lines'
+                                autoSize={ {
+                                  minRows: 2,
+                                  maxRows: 6
+                                } }
+                                defaultValue={ `${ projects[ 0 ].hypothesis
+                                  ? projects[ 0 ].hypothesis
+                                  : '' }` }
+                      />
+                    </Form.Item>
+                    <Form.Item name='general_objective'
+                               label='Objetivo General'
+                    >
+                      <TextArea style={ { width: 300 } }
+                                placeholder='Autosize height with minimum and maximum number of lines'
+                                autoSize={ {
+                                  minRows: 2,
+                                  maxRows: 6
+                                } }
+                                defaultValue={ `${ projects[ 0 ].general_objective
+                                  ? projects[ 0 ].general_objective
+                                  : '' }` }
+                      />
+                    </Form.Item>
+                    <Form.Item name='specifics_objectives' label='Objetivos Específicos'>
+                      <TextArea style={ { width: 300 } }
+                                placeholder='Autosize height with minimum and maximum number of lines'
+                                autoSize={ {
+                                  minRows: 2,
+                                  maxRows: 6
+                                } }
+                                defaultValue={ `${ projects[ 0 ].specifics_objectives
+                                  ? projects[ 0 ].specifics_objectives
+                                  : '' }` }
+                      />
+                    </Form.Item>
+                    <Form.Item name='methodology' label='Metodología'>
+                      <TextArea style={ { width: 300 } }
+                                placeholder='Autosize height with minimum and maximum number of lines'
+                                autoSize={ {
+                                  minRows: 2,
+                                  maxRows: 6
+                                } }
+                                defaultValue={ `${ projects[ 0 ].methodology
+                                  ? projects[ 0 ].methodology
+                                  : '' }` }
+                      />
+                    </Form.Item>
+                    <Form.Item name='work_plan' label='Plan de trabajo'>
+                      <TextArea style={ { width: 300 } }
+                                placeholder='Autosize height with minimum and maximum number of lines'
+                                autoSize={ {
+                                  minRows: 2,
+                                  maxRows: 6
+                                } }
+                                defaultValue={ `${ projects[ 0 ].work_plan
+                                  ? projects[ 0 ].work_plan
+                                  : '' }` }
+                      />
+                    </Form.Item>
+                    <Form.Item name='schedule' label='Cronograma' getValueFromEvent={ normPhotoFile }>
+                      <Upload name='files'
+                              accept='image/jpeg,image/png'
+                              listType='picture-card'
+                              multiple={ false }
+                              showUploadList={ false }
+                              beforeUpload={ () => false }
+                              fileList={ fileList }
+                      >
+                        { imageUrl
+                          ? <img src={ imageUrl } alt='Foto' style={ { width: '80px' } } />
+                          : <div>
+                            <PlusOutlined />
+                            <div className='ant-upload-text'>Subir imagen</div>
+                          </div> }
+                      </Upload>
+                    </Form.Item>
+                    <Form.Item name='bibliography' label='Bibliografía'>
+                      <TextArea style={ { width: 300 } }
+                                placeholder='Autosize height with minimum and maximum number of lines'
+                                autoSize={ {
+                                  minRows: 2,
+                                  maxRows: 6
+                                } }
+                                defaultValue={ `${ projects[ 0 ].bibliography
+                                  ? projects[ 0 ].bibliography
+                                  : '' }` }
+                      />
+                    </Form.Item>
+                    <Form.Item wrapperCol={ {
+                      ...layout.wrapperCol,
+                      offset: 8
+                    } }>
+                      <Button className={ 'submit' } htmlType='submit' loading={ sending }>
+                        Guardar plan
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                }
+
 
               </Row>
 
@@ -310,7 +469,7 @@ const PlanForm = () => {
       </Layout>
 
     </>
-);
+  );
 };
 
 export default withAuth( PlanForm );

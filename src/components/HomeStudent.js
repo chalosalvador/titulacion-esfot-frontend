@@ -64,7 +64,7 @@ const HomeStudent = () => {
                  backgroundColor: '#dddddd',
                  padding: 40
                } }>
-          <Title level={ 3 } style={{color:"034c70"}}>Progreso</Title>
+          <Title level={ 3 } style={ { color: '034c70' } }>Progreso</Title>
           <Steps direction='vertical'>
             <Step description='Plan enviado' />
             <Step description='Plan aprobado por director' />
@@ -108,7 +108,7 @@ const HomeStudent = () => {
                         </div>
                         <div>
                           <Button>
-                            <Link to={Routes.PLANFORM}>
+                            <Link to={ Routes.PLANFORM }>
                               Registrar plan
                             </Link>
                           </Button>

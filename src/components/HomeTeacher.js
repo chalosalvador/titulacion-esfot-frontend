@@ -10,7 +10,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../providers/Auth';
 import withAuth from '../hocs/withAuth';
 
-const { SubMenu } = Menu;
 const { Title } = Typography;
 const { Content, Sider } = Layout;
 
