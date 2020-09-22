@@ -138,6 +138,93 @@ const PlanForm = ( {
     // } );
   };
 
+  const onUpdate = async( values ) => {
+    const data = new FormData();
+
+    data.append( 'codirector', values.codirector
+      ? values.codirector
+      : '' );
+    data.append( 'partner', values.partner
+      ? values.partner
+      : '' );
+    data.append( 'project_type', values.project_type
+      ? values.project_type
+      : projects[ 0 ].project_type
+        ? projects[ 0 ].project_type
+        : '' );
+    data.append( 'research_line', values.research_line
+      ? values.research_line
+      : projects[ 0 ].research_line
+        ? projects[ 0 ].research_line
+        : '' );
+    data.append( 'knowledge_area', values.knowledge_area
+      ? values.knowledge_area
+      : projects[ 0 ].knowledge_area
+        ? projects[ 0 ].knowledge_area
+        : '' );
+    data.append( 'title', values.title
+      ? values.title
+      : projects[ 0 ].title );
+    data.append( 'problem', values.problem
+      ? values.problem
+      : projects[ 0 ].problem
+        ? projects[ 0 ].problem
+        : '' );
+    data.append( 'justification', values.justification
+      ? values.justification
+      : projects[ 0 ].justification
+        ? projects[ 0 ].justification
+        : '' );
+    data.append( 'hypothesis', values.hypothesis
+      ? values.hypothesis
+      : projects[ 0 ].hypothesis
+        ? projects[ 0 ].hypothesis
+        : '' );
+    data.append( 'general_objective', values.general_objective
+      ? values.general_objective
+      : projects[ 0 ].general_objective
+        ? projects[ 0 ].general_objective
+        : '' );
+    data.append( 'specifics_objectives', values.specifics_objectives
+      ? values.specifics_objectives
+      : projects[ 0 ].specifics_objectives
+        ? projects[ 0 ].specifics_objectives
+        : '' );
+    data.append( 'methodology', values.methodology
+      ? values.methodology
+      : projects[ 0 ].methodology
+        ? projects[ 0 ].methodology
+        : '' );
+    data.append( 'work_plan', values.work_plan
+      ? values.work_plan
+      : projects[ 0 ].work_plan
+        ? projects[ 0 ].work_plan
+        : '' );
+    data.append( 'schedule', values.schedule
+      ? values.schedule[ 0 ]
+      : projects[ 0 ].schedule
+        ? projects[ 0 ].schedule
+        : '' );
+    data.append( 'bibliography', values.bibliography
+      ? values.bibliography
+      : projects[ 0 ].bibliography
+        ? projects[ 0 ].bibliography
+        : '' );
+    data.append( 'teacher_id', projects[ 0 ].teacher_id );
+
+    console.log( 'DATOS', data );
+    //
+    // delete values['schedule'];
+    try {
+      await API.post( `/projects/${ projects[ 0 ].id }`, data ); // put data to server
+      setSending( false );
+      message.success( 'Cambios guardados correctamente!' );
+    } catch( e ) {
+      console.log( 'ERROR', e );
+      message.error( `No se guardaron los datos:¨${ e }` );
+    }
+  };
+
   const handleClick = ( e ) => {
     console.log( 'click ', e );
     setMenuState( {
@@ -254,213 +341,181 @@ const PlanForm = ( {
           <Title level={ 4 }>Datos Generales</Title>
           <Row>
             <Col span={ 24 }>
-
               <Row justify='center'>
-                {
+                {/*{*/ }
+                {/*  projects.length > 0*/ }
+                <Form { ...layout }
+                      name='nest-messages'
+                      onFinish={ projects[ 0 ].status = 'plan_saved'
+                        ? onUpdate
+                        : onFinish }
+                      initialValues={ projects.length > 0
+                        ? projects[ 0 ]
+                        : {} }
+                      validateMessages={ validateMessages }>
+                  <Form.Item name='teacher_id'
+                             label='Seleccione su director'>
+                    <Select style={ { width: 300 } } loading={ isLoading }>
+                      {
+                        teachers && teachers.map( ( teacher, index ) =>
+                          <Option value={ teacher.id } key={ index }>{ teacher.name }</Option>
+                        )
+                      }
+                    </Select>
+                  </Form.Item>
+                  <Form.Item name='codirector'
+                             label='Seleccione su co-director'>
+                    <Input
+                      style={ { width: 300 } }
+                      placeholder='Nombre del co-director'
+                    />
+                  </Form.Item>
+                  <Form.Item name='partner' label='Seleccione su compañero'>
+                    <Select defaultValue={ `${ projects[ 0 ].partner
+                      ? projects[ 0 ].partner
+                      : '' }` }
+                            style={ { width: 300 } }>
+                      <Option value='jack'>Jack</Option>
+                      <Option value='lucy'>Lucy</Option>
+                      <Option value='Yiminghe'>yiminghe</Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item name='project_type' label='Tipo de proyecto'>
+                    <Select style={ { width: 300 } }>
+                      <Option value='jack'>Pre-grado</Option>
+                      <Option value='lucy'>Post-grado</Option>>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item name='research_line'
+                             label='Línea de investigación'>
+                    <Select defaultValue='Seleccione' style={ { width: 300 } }>
+                      <Option value='jack'>Jack</Option>
+                      <Option value='lucy'>Lucy</Option>
+                      <Option value='Yiminghe'>yiminghe</Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item name='knowledge_area'
+                             label='Área de investigación'>
+                    <Select defaultValue='Seleccione' style={ { width: 300 } }>
+                      <Option value='jack'>Jack</Option>
+                      <Option value='lucy'>Lucy</Option>
+                      <Option value='Yiminghe'>yiminghe</Option>
+                    </Select>
+                  </Form.Item>
 
-                  <Form { ...layout }
-                        name='nest-messages'
-                        onFinish={ onFinish }
-                        validateMessages={ validateMessages }>
-                    <Form.Item name='teacher_id'
-                               label='Seleccione su director'
-                               rules={ [ { required: true } ] }>
-                      <Select defaultValue='Seleccione' style={ { width: 300 } } loading={ isLoading }>
-                        {
-                          teachers && teachers.map( ( teacher, index ) =>
-                            <Option value={ teacher.id } key={ index }>{ teacher.name }</Option>
-                          )
-                        }
-                      </Select>
-                    </Form.Item>
-                    <Form.Item name='codirector'
-                               label='Seleccione su co-director'>
-                      <Input
-                        style={ { width: 300 } }
-                        placeholder='Nombre del co-director'
-                        defaultValue={ `${ projects[ 0 ].coodirector
-                          ? projects[ 0 ].coodirector
-                          : '' }` }
-                      />
-                    </Form.Item>
-                    <Form.Item name='partner' label='Seleccione su compañero'>
-                      <Select defaultValue={ `${ projects[ 0 ].partner
-                        ? projects[ 0 ].partner
-                        : '' }` }
-                              style={ { width: 300 } }>
-                        <Option value='jack'>Jack</Option>
-                        <Option value='lucy'>Lucy</Option>
-                        <Option value='Yiminghe'>yiminghe</Option>
-                      </Select>
-                    </Form.Item>
-                    <Form.Item name='project_type' label='Tipo de proyecto'>
-                      <Select defaultValue={ `${ projects[ 0 ].project_type
-                        ? projects[ 0 ].project_type
-                        : '' }` } style={ { width: 300 } }>
-                        <Option value='jack'>Pre-grado</Option>
-                        <Option value='lucy'>Post-grado</Option>>
-                      </Select>
-                    </Form.Item>
-                    <Form.Item name='research_line'
-                               label='Línea de investigación'>
-                      <Select defaultValue='Seleccione' style={ { width: 300 } }>
-                        <Option value='jack'>Jack</Option>
-                        <Option value='lucy'>Lucy</Option>
-                        <Option value='Yiminghe'>yiminghe</Option>
-                      </Select>
-                    </Form.Item>
-                    <Form.Item name='knowledge_area'
-                               label='Área de investigación'>
-                      <Select defaultValue='Seleccione' style={ { width: 300 } }>
-                        <Option value='jack'>Jack</Option>
-                        <Option value='lucy'>Lucy</Option>
-                        <Option value='Yiminghe'>yiminghe</Option>
-                      </Select>
-                    </Form.Item>
+                  <Title level={ 4 }>Plan</Title>
 
-                    <Title level={ 4 }>Plan</Title>
-
-                    <Form.Item name='title' label='Título' rules={ [ { required: true } ] }>
-                      <TextArea
-                        style={ { width: 300 } }
-                        placeholder='Máximo 15 palabras'
-                        autoSize={ {
-                          minRows: 1,
-                          maxRows: 4
-                        } }
-                        defaultValue={ `${ projects[ 0 ].title
-                          ? projects[ 0 ].title
-                          : '' }` }
-                      />
-                    </Form.Item>
-                    <Form.Item name='problem'
-                               label='Planteamiento del problema'>
-                      <TextArea style={ { width: 300 } }
-                                placeholder='Autosize height with minimum and maximum number of lines'
-                                autoSize={ {
-                                  minRows: 2,
-                                  maxRows: 6
-                                } }
-                                defaultValue={ `${ projects[ 0 ].problem
-                                  ? projects[ 0 ].problem
-                                  : '' }` }
-                      />
-                    </Form.Item>
-                    <Form.Item name='justification' label='Justificación'>
-                      <TextArea style={ { width: 300 } }
-                                placeholder='Autosize height with minimum and maximum number of lines'
-                                autoSize={ {
-                                  minRows: 2,
-                                  maxRows: 6
-                                } }
-                                defaultValue={ `${ projects[ 0 ].justification
-                                  ? projects[ 0 ].justification
-                                  : '' }` }
-                      />
-                    </Form.Item>
-                    <Form.Item name='hypothesis' label='Hipótesis'>
-                      <TextArea style={ { width: 300 } }
-                                placeholder='Autosize height with minimum and maximum number of lines'
-                                autoSize={ {
-                                  minRows: 2,
-                                  maxRows: 6
-                                } }
-                                defaultValue={ `${ projects[ 0 ].hypothesis
-                                  ? projects[ 0 ].hypothesis
-                                  : '' }` }
-                      />
-                    </Form.Item>
-                    <Form.Item name='general_objective'
-                               label='Objetivo General'
+                  <Form.Item name='title' label='Título'>
+                    <TextArea
+                      style={ { width: 300 } }
+                      placeholder='Máximo 15 palabras'
+                      autoSize={ {
+                        minRows: 1,
+                        maxRows: 4
+                      } }
+                    />
+                  </Form.Item>
+                  <Form.Item name='problem'
+                             label='Planteamiento del problema'>
+                    <TextArea style={ { width: 300 } }
+                              placeholder='Autosize height with minimum and maximum number of lines'
+                              autoSize={ {
+                                minRows: 2,
+                                maxRows: 6
+                              } }
+                    />
+                  </Form.Item>
+                  <Form.Item name='justification' label='Justificación'>
+                    <TextArea style={ { width: 300 } }
+                              placeholder='Autosize height with minimum and maximum number of lines'
+                              autoSize={ {
+                                minRows: 2,
+                                maxRows: 6
+                              } }
+                    />
+                  </Form.Item>
+                  <Form.Item name='hypothesis' label='Hipótesis'>
+                    <TextArea style={ { width: 300 } }
+                              placeholder='Autosize height with minimum and maximum number of lines'
+                              autoSize={ {
+                                minRows: 2,
+                                maxRows: 6
+                              } }
+                    />
+                  </Form.Item>
+                  <Form.Item name='general_objective'
+                             label='Objetivo General'
+                  >
+                    <TextArea style={ { width: 300 } }
+                              placeholder='Autosize height with minimum and maximum number of lines'
+                              autoSize={ {
+                                minRows: 2,
+                                maxRows: 6
+                              } }
+                    />
+                  </Form.Item>
+                  <Form.Item name='specifics_objectives' label='Objetivos Específicos'>
+                    <TextArea style={ { width: 300 } }
+                              placeholder='Autosize height with minimum and maximum number of lines'
+                              autoSize={ {
+                                minRows: 2,
+                                maxRows: 6
+                              } }
+                    />
+                  </Form.Item>
+                  <Form.Item name='methodology' label='Metodología'>
+                    <TextArea style={ { width: 300 } }
+                              placeholder='Autosize height with minimum and maximum number of lines'
+                              autoSize={ {
+                                minRows: 2,
+                                maxRows: 6
+                              } }
+                    />
+                  </Form.Item>
+                  <Form.Item name='work_plan' label='Plan de trabajo'>
+                    <TextArea style={ { width: 300 } }
+                              placeholder='Autosize height with minimum and maximum number of lines'
+                              autoSize={ {
+                                minRows: 2,
+                                maxRows: 6
+                              } }
+                    />
+                  </Form.Item>
+                  <Form.Item name='schedule' label='Cronograma' getValueFromEvent={ normPhotoFile }>
+                    <Upload name='files'
+                            accept='image/jpeg,image/png'
+                            listType='picture-card'
+                            multiple={ false }
+                            showUploadList={ false }
+                            beforeUpload={ () => false }
+                            fileList={ fileList }
                     >
-                      <TextArea style={ { width: 300 } }
-                                placeholder='Autosize height with minimum and maximum number of lines'
-                                autoSize={ {
-                                  minRows: 2,
-                                  maxRows: 6
-                                } }
-                                defaultValue={ `${ projects[ 0 ].general_objective
-                                  ? projects[ 0 ].general_objective
-                                  : '' }` }
-                      />
-                    </Form.Item>
-                    <Form.Item name='specifics_objectives' label='Objetivos Específicos'>
-                      <TextArea style={ { width: 300 } }
-                                placeholder='Autosize height with minimum and maximum number of lines'
-                                autoSize={ {
-                                  minRows: 2,
-                                  maxRows: 6
-                                } }
-                                defaultValue={ `${ projects[ 0 ].specifics_objectives
-                                  ? projects[ 0 ].specifics_objectives
-                                  : '' }` }
-                      />
-                    </Form.Item>
-                    <Form.Item name='methodology' label='Metodología'>
-                      <TextArea style={ { width: 300 } }
-                                placeholder='Autosize height with minimum and maximum number of lines'
-                                autoSize={ {
-                                  minRows: 2,
-                                  maxRows: 6
-                                } }
-                                defaultValue={ `${ projects[ 0 ].methodology
-                                  ? projects[ 0 ].methodology
-                                  : '' }` }
-                      />
-                    </Form.Item>
-                    <Form.Item name='work_plan' label='Plan de trabajo'>
-                      <TextArea style={ { width: 300 } }
-                                placeholder='Autosize height with minimum and maximum number of lines'
-                                autoSize={ {
-                                  minRows: 2,
-                                  maxRows: 6
-                                } }
-                                defaultValue={ `${ projects[ 0 ].work_plan
-                                  ? projects[ 0 ].work_plan
-                                  : '' }` }
-                      />
-                    </Form.Item>
-                    <Form.Item name='schedule' label='Cronograma' getValueFromEvent={ normPhotoFile }>
-                      <Upload name='files'
-                              accept='image/jpeg,image/png'
-                              listType='picture-card'
-                              multiple={ false }
-                              showUploadList={ false }
-                              beforeUpload={ () => false }
-                              fileList={ fileList }
-                      >
-                        { imageUrl
-                          ? <img src={ imageUrl } alt='Foto' style={ { width: '80px' } } />
-                          : <div>
-                            <PlusOutlined />
-                            <div className='ant-upload-text'>Subir imagen</div>
-                          </div> }
-                      </Upload>
-                    </Form.Item>
-                    <Form.Item name='bibliography' label='Bibliografía'>
-                      <TextArea style={ { width: 300 } }
-                                placeholder='Autosize height with minimum and maximum number of lines'
-                                autoSize={ {
-                                  minRows: 2,
-                                  maxRows: 6
-                                } }
-                                defaultValue={ `${ projects[ 0 ].bibliography
-                                  ? projects[ 0 ].bibliography
-                                  : '' }` }
-                      />
-                    </Form.Item>
-                    <Form.Item wrapperCol={ {
-                      ...layout.wrapperCol,
-                      offset: 8
-                    } }>
-                      <Button className={ 'submit' } htmlType='submit' loading={ sending }>
-                        Guardar plan
-                      </Button>
-                    </Form.Item>
-                  </Form>
-                }
-
-
+                      { imageUrl
+                        ? <img src={ imageUrl } alt='Foto' style={ { width: '80px' } } />
+                        : <div>
+                          <PlusOutlined />
+                          <div className='ant-upload-text'>Subir imagen</div>
+                        </div> }
+                    </Upload>
+                  </Form.Item>
+                  <Form.Item name='bibliography' label='Bibliografía'>
+                    <TextArea style={ { width: 300 } }
+                              placeholder='Autosize height with minimum and maximum number of lines'
+                              autoSize={ {
+                                minRows: 2,
+                                maxRows: 6
+                              } }
+                    />
+                  </Form.Item>
+                  <Form.Item wrapperCol={ {
+                    ...layout.wrapperCol,
+                    offset: 8
+                  } }>
+                    <Button className={ 'submit' } htmlType='submit' loading={ sending }>
+                      Guardar plan
+                    </Button>
+                  </Form.Item>
+                </Form>
               </Row>
 
             </Col>
