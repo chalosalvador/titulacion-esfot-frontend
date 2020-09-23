@@ -139,6 +139,7 @@ const PlanForm = ( {
   };
 
   const onUpdate = async( values ) => {
+    setSending( true );
     const data = new FormData();
 
     data.append( 'codirector', values.codirector
@@ -346,7 +347,7 @@ const PlanForm = ( {
                 {/*  projects.length > 0*/ }
                 <Form { ...layout }
                       name='nest-messages'
-                      onFinish={ projects[ 0 ].status = 'plan_saved'
+                      onFinish={ projects.length > 0
                         ? onUpdate
                         : onFinish }
                       initialValues={ projects.length > 0
@@ -354,7 +355,8 @@ const PlanForm = ( {
                         : {} }
                       validateMessages={ validateMessages }>
                   <Form.Item name='teacher_id'
-                             label='Seleccione su director'>
+                             label='Seleccione su director'
+                             rules={ [ { required: true } ] }>
                     <Select style={ { width: 300 } } loading={ isLoading }>
                       {
                         teachers && teachers.map( ( teacher, index ) =>
@@ -371,10 +373,7 @@ const PlanForm = ( {
                     />
                   </Form.Item>
                   <Form.Item name='partner' label='Seleccione su compañero'>
-                    <Select defaultValue={ `${ projects[ 0 ].partner
-                      ? projects[ 0 ].partner
-                      : '' }` }
-                            style={ { width: 300 } }>
+                    <Select style={ { width: 300 } }>
                       <Option value='jack'>Jack</Option>
                       <Option value='lucy'>Lucy</Option>
                       <Option value='Yiminghe'>yiminghe</Option>
@@ -405,7 +404,7 @@ const PlanForm = ( {
 
                   <Title level={ 4 }>Plan</Title>
 
-                  <Form.Item name='title' label='Título'>
+                  <Form.Item name='title' label='Título' rules={ [ { required: true } ] }>
                     <TextArea
                       style={ { width: 300 } }
                       placeholder='Máximo 15 palabras'
