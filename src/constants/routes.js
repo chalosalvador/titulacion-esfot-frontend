@@ -8,6 +8,7 @@ const publicRoutes = {
   USERS_ID: `/usuario/:id`,
   INDEX: '/',
   ABOUT: '/acerca-de',
+  TEACHERS_IDEAS: 'ideas-profesores'
 };
 
 const privateRoutes = {

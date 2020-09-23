@@ -41,7 +41,7 @@ const HomePage = () => {
                   </div>
                   <br/>
                   Revisa los temas de titulación disponibles<br/><br/>
-                  <Button type="primary" >Ver temas</Button>
+                  <Button type="primary" href={Routes.TEACHERS_IDEAS}>Ver temas</Button>
                 </Card>
               </Col>
               <Col span={6}>
