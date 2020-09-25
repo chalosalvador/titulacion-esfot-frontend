@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import API from './index';
 
 export const useTeachersIdeasList = () => {
-  const { data, error, mutate } = useSWR( '/teachers-plans', API.fetcher );
+  const { data, error, mutate } = useSWR( '/teachers-ideas', API.fetcher );
 
   return {
     ideas: data && data.data,

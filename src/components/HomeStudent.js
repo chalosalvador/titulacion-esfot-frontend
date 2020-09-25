@@ -156,7 +156,7 @@ const HomeStudent = () => {
                     <Card bordered={ false } className='options resources-options'>
                       <Space direction='vertical' size='large'>
                         <div>Mira posibles temas de titulación propuestos por los docentes de la ESFOT</div>
-                        <div><Button href={ Routes.TEACHERS_IDEAS }>Ver temas</Button></div>
+                        <div><Button><Link to={ Routes.TEACHERS_IDEAS }>Ver temas</Link></Button></div>
                       </Space>
                     </Card>
                   </Col>

@@ -43,7 +43,6 @@ const AppRouter = () => (
   <Switch>
     <PublicRoute exact path={ Routes.INDEX } component={ AsyncHome } />
     <PublicRoute path={ Routes.LOGIN } component={ AsyncLogin } />
-
     <PrivateRoute path={ Routes.HOME } component={ AsyncHomeTeacher } />
     <PrivateRoute path={ Routes.TEACHERS_IDEAS } component={ AsyncTeachersIdeas } />
     <PublicRoute path={ Routes.ABOUT } component={ AsyncAbout } />
