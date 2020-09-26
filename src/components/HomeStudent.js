@@ -64,7 +64,7 @@ const HomeStudent = () => {
                  backgroundColor: '#dddddd',
                  padding: 40
                } }>
-          <Title level={ 3 }>Progreso</Title>
+          <Title level={ 3 } style={ { color: '#034c70' } }>Progreso</Title>
           <Steps direction='vertical'>
             <Step description='Plan enviado' />
             <Step description='Plan aprobado por director' />
@@ -84,11 +84,16 @@ const HomeStudent = () => {
 
         <Layout>
           <PageHeader className='inner-menu'
-                      title={ <Title level={ 3 }>Panel Principal:</Title> }
+                      title={ <Title level={ 3 } style={ { color: '#034c70' } }>Panel Principal:</Title> }
                       extra={ [
-                        <Button key='notifications' type='text' icon={ <BellOutlined /> } />,
+                        <Button key='notifications'
+                                type='text'
+                                style={ { color: '#034c70' } }
+                                icon={ <BellOutlined /> } />,
                         <Dropdown key='user-menu' overlay={ userMenu } placement='bottomLeft'>
-                          <Button type='text' icon={ <UserOutlined /> }>{ currentUser && currentUser.name }</Button>
+                          <Button type='text' style={ { color: '#034c70' } } icon={ <UserOutlined /> }>
+                            { currentUser && currentUser.name }
+                          </Button>
                         </Dropdown>,
                       ] }
           />
@@ -107,7 +112,11 @@ const HomeStudent = () => {
                           Registra tu plan de titulación
                         </div>
                         <div>
-                          <Button>Registrar plan</Button>
+                          <Button>
+                            <Link to={ Routes.PLANFORM }>
+                              Registrar plan
+                            </Link>
+                          </Button>
                         </div>
                       </Space>
                     </Card>
@@ -147,8 +156,16 @@ const HomeStudent = () => {
               </Col>
             </Row>
 
+            <Row>
+              <Col>
+                <Title level={ 3 }
+                       style={ {
+                         color: '#034c70',
+                         marginLeft: -30
+                       } }>Otros recursos:</Title>
+              </Col>
+            </Row>
 
-            <Title level={ 3 }>Otros recursos:</Title>
             <Row>
               <Col span={ 24 }>
                 <Row justify='center'>
@@ -165,7 +182,8 @@ const HomeStudent = () => {
                       <Space direction='vertical' size='large'>
                         <div>Mira las normativas de titulación de la EPN</div>
                         <div>
-                          <Button href={ 'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion' }>
+                          <Button style={ { marginTop: 25 } }
+                                  href={ 'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion' }>
                             Ver normativas
                           </Button>
                         </div>
@@ -177,7 +195,8 @@ const HomeStudent = () => {
                       <Space direction='vertical' size='large'>
                         <div>Mira los formatos de titulación de la EPN</div>
                         <div>
-                          <Button href={ 'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes' }>
+                          <Button style={ { marginTop: 25 } }
+                                  href={ 'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes' }>
                             Ver formatos
                           </Button>
                         </div>
