@@ -62,33 +62,40 @@ const HomeTeacher = () => {
                  backgroundColor: '#dddddd',
                  padding: 40
                } }>
-          <Title level={ 3 } style={ { color: '034c70' } }>Director</Title>
+          <Title level={ 3 } style={ { color: '#034c70' } }>Director</Title>
           <Card className={ 'statistics-content' } title='Tesis dirigidas' bordered={ false }>
-            <p className={ 'numbers' }>10</p>
+            <Title level={ 2 }>10</Title>
           </Card>
 
-          <Card className={ 'statistics-content2' } title='Planes por revisar' bordered={ false }>
-            <p className={ 'numbers' }>2</p>
+          <Card className={ 'statistics-content' } title='Planes por revisar' bordered={ false }>
+            <Title level={ 2 }>2</Title>
           </Card>
 
-          <Card className={ 'statistics-content2' } title='Proyectos por revisar' bordered={ false }>
-            <p className={ 'numbers' }>2</p>
+          <Card className={ 'statistics-content' } title='Proyectos por revisar' bordered={ false }>
+            <Title level={ 2 }>2</Title>
           </Card>
 
-          <h1 className={ 'jury' }>Jurado</h1>
+          <Title level={ 3 } style={ { color: '#034c70' } }>Jurado</Title>
 
-          <Card className={ 'jury-statistics' } title='Proyectos por revisar' bordered={ false }>
-            <p className={ 'numbers' }>1</p>
+          <Card className={ 'statistics-content' } title='Proyectos por revisar' bordered={ false }>
+            <Title level={ 2 }>10</Title>
           </Card>
         </Sider>
 
         <Layout>
           <PageHeader className='inner-menu'
-                      title={ <Title level={ 3 }>Panel Principal:</Title> }
+                      title={ <Title level={ 3 } style={ {
+                        color: '#034c70'
+                      } }>Panel Principal:</Title> }
                       extra={ [
-                        <Button key='notifications' type='text' icon={ <BellOutlined /> } />,
+                        <Button key='notifications'
+                                type='text'
+                                style={ { color: '#034c70' } }
+                                icon={ <BellOutlined /> } />,
                         <Dropdown key='user-menu' overlay={ userMenu } placement='bottomLeft'>
-                          <Button type='text' icon={ <UserOutlined /> }>{ currentUser && currentUser.name }</Button>
+                          <Button type='text' style={ { color: '#034c70' } } icon={ <UserOutlined /> }>
+                            { currentUser && currentUser.name }
+                          </Button>
                         </Dropdown>,
                       ] }
           />
@@ -97,7 +104,7 @@ const HomeTeacher = () => {
 
               <Col span={ 24 }>
 
-                <Row justify='center' className={ 'principal-options' }>
+                <Row justify='center'>
                   <Col span={ 6 }>
                     <Card className={ 'options main-options' } title='Director' bordered={ false }>
                       <Space direction='vertical' size='large'>
@@ -150,7 +157,14 @@ const HomeTeacher = () => {
               </Col>
             </Row>
 
-            <Title level={ 3 }>Otros recursos:</Title>
+            <Row>
+              <Col>
+                <Title level={ 3 } style={ {
+                  color: '#034c70',
+                  marginLeft: -30
+                } }>Otros recursos:</Title>
+              </Col>
+            </Row>
 
             <Row>
               <Col span={ 24 }>
@@ -185,15 +199,22 @@ const HomeTeacher = () => {
               </Col>
             </Row>
 
-            <Title level={ 3 }>Comisión titulación: </Title>
+            <Row>
+              <Col>
+                <Title level={ 3 } style={ {
+                  color: '#034c70',
+                  marginLeft: -30
+                } }>Comisión titulación: </Title>
+              </Col>
+            </Row>
 
             <Row>
 
               <Col span={ 24 }>
 
-                <Row justify='center' className={ 'options principal-options' }>
+                <Row justify='center'>
                   <Col span={ 6 }>
-                    <Card className={ 'options-commission' } title='Planes Comisión' bordered={ false }>
+                    <Card className={ 'options main-options' } title='Planes Comisión' bordered={ false }>
                       <Space direction='vertical' size='large'>
                         <div>
                           <SelectOutlined className={ 'big-icon' } />
