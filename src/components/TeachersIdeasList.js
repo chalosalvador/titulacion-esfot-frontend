@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTeachersIdeasList } from '../data/useTeachersIdeasList';
 import Loading from './Loading';
 import { Row, Button, Dropdown, Layout, Menu, PageHeader, Typography, Col, Table, Modal } from 'antd';
-import { BellOutlined, LoadingOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { BellOutlined, HomeOutlined, LoadingOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import SearchColumnFilter from './SearchColumnFilter';
 import StepsSider from './StepsSider';
 import { useAuth } from '../providers/Auth';
@@ -154,9 +154,19 @@ const TeachersIdeasList = () => {
           <PageHeader className='inner-menu'
                       title={ <Title level={ 2 } style={ { color: '#034c70' } }>Temas de titulación</Title> }
                       extra={ [
-                        <Button key='notifications' type='text' icon={ <BellOutlined /> } />,
+                        <Button key='home' type='text' style={ { color: '#034c70' } }>
+                          <Link to={ Routes.HOME }>
+                            <HomeOutlined />
+                          </Link>
+                        </Button>,
+                        <Button key='notifications'
+                                type='text'
+                                style={ { color: '#034c70' } }
+                                icon={ <BellOutlined /> } />,
                         <Dropdown key='user-menu' overlay={ userMenu } placement='bottomLeft'>
-                          <Button type='text' icon={ <UserOutlined /> }>{ currentUser && currentUser.name }</Button>
+                          <Button type='text' style={ { color: '#034c70' } } icon={ <UserOutlined /> }>
+                            { currentUser && currentUser.name }
+                          </Button>
                         </Dropdown>,
                       ] }
           />
