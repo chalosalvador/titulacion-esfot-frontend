@@ -1,5 +1,5 @@
 import {
-  Col, Row, Card, Steps, Form, Input, Upload, Button, Menu, Select, Layout, PageHeader, Dropdown, Typography, message,
+  Col, Row, Form, Input, Upload, Button, Menu, Select, Layout, PageHeader, Dropdown, Typography, message,
   Modal, Image
 } from 'antd';
 import React, { useState } from 'react';
@@ -8,16 +8,16 @@ import {
   BellOutlined, LoadingOutlined, LogoutOutlined, UserOutlined, PlusOutlined, SendOutlined, HomeOutlined,
   ExclamationCircleOutlined, CheckCircleOutlined
 } from '@ant-design/icons';
-import {} from '@ant-design/icons';
 import Routes from '../constants/routes';
 import { Link, useLocation } from 'react-router-dom';
+import StepsSider from './StepsSider';
 import { useAuth } from '../providers/Auth';
 import withAuth from '../hocs/withAuth';
 import { useProject } from '../data/useProjects';
 import { useTeachers } from '../data/useTeachers';
+import Loading from './Loading';
 import API from '../data';
 
-const { Step } = Steps;
 const { Option } = Select;
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -40,9 +40,7 @@ const PlanForm = ( {
 
   const getProjectData = () => {
     const formData = form.getFieldsValue();
-    if( formData.bibliography !== undefined && formData.general_objective !== undefined && formData.hypothesis !== undefined && formData.justification !== undefined && formData.knowledge_area !== undefined && formData.methodology !== undefined && formData.problem !== undefined && formData.project_type !== undefined && formData.research_line !== undefined && formData.specifics_objectives !== undefined && formData.work_plan !== undefined ) {
-      return true;
-    }
+    return formData.bibliography !== undefined && formData.general_objective !== undefined && formData.hypothesis !== undefined && formData.justification !== undefined && formData.knowledge_area !== undefined && formData.methodology !== undefined && formData.problem !== undefined && formData.project_type !== undefined && formData.research_line !== undefined && formData.specifics_objectives !== undefined && formData.work_plan !== undefined;
   };
 
   let location = useLocation();
@@ -51,9 +49,9 @@ const PlanForm = ( {
   const [ imageUrl, setImageUrl ] = useState( null );
   const [ fileList, setFileList ] = useState( [] );
   const [ sending, setSending ] = useState( false );
-  const [ isFinished, setIsFinished ] = useState( () => getProjectData );
+  const [ isFinished, setIsFinished ] = useState( () => getProjectData() );
 
-  console.log( projects, isError );
+  console.log( projects, isFinished );
 
   const [ menuState, setMenuState ] = useState( {
     current: location.pathname, // set the current selected item in menu, by default the current page
@@ -64,6 +62,13 @@ const PlanForm = ( {
   const layout = {
     labelCol: { span: 9 },
     wrapperCol: { span: 15 },
+  };
+
+  const tailLayout = {
+    wrapperCol: {
+      offset: 8,
+      span: 16
+    },
   };
 
   const validateMessages = {
@@ -143,6 +148,7 @@ const PlanForm = ( {
     } catch( e ) {
       console.log( 'ERROR', e );
       message.error( `No se guardaron los datos:¨${ e }` );
+      setSending( false );
     }
 
     //   } ).catch( info => {
@@ -306,7 +312,7 @@ const PlanForm = ( {
   </Menu>;
 
   if( isLoading ) {
-    return <h1>Cargando...</h1>;
+    return <Loading />;
   }
 
   return (
@@ -318,22 +324,7 @@ const PlanForm = ( {
                  backgroundColor: '#dddddd',
                  padding: 40
                } }>
-          <Title level={ 3 } style={ { color: '#034c70' } }>Progreso</Title>
-          <Steps direction='vertical'>
-            <Step description='Plan enviado' />
-            <Step description='Plan aprobado por director' />
-            <Step description='Curriculum saneado 1' />
-            <Step description='Plan revisado por comisión' />
-            <Step description='Plan aprobado por comisión' />
-            <Step description='Proyecto de titulación subido' />
-            <Step description='Proyecto aprobado por director' />
-            <Step description='Curriculum saneado 2' />
-            <Step description='Tribunal asignado' />
-            <Step description='Proyecto de titulación calificado (documento)' />
-            <Step description='Declarado apto para defensa oral' />
-            <Step description='Fecha de defensa asignada' />
-            <Step description='¡Proyecto completado!' />
-          </Steps>
+          <StepsSider />
         </Sider>
 
         <Layout>
@@ -381,7 +372,10 @@ const PlanForm = ( {
                       <Form.Item name='teacher_id'
                                  label='Seleccione su director'
                                  rules={ [ { required: true } ] }>
-                        <Select style={ { width: 300 } } loading={ isLoading } disabled={ projects.length > 0 }>
+                        <Select placeholder='Seleccione'
+                                style={ { width: 300 } }
+                                loading={ isLoading }
+                                disabled={ projects.length > 0 }>
                           {
                             teachers && teachers.map( ( teacher, index ) =>
                               <Option value={ teacher.id } key={ index }>{ teacher.name }</Option>
@@ -397,21 +391,21 @@ const PlanForm = ( {
                         />
                       </Form.Item>
                       <Form.Item name='partner' label='Seleccione su compañero'>
-                        <Select style={ { width: 300 } }>
+                        <Select placeholder='Seleccione' style={ { width: 300 } }>
                           <Option value='jack'>Jack</Option>
                           <Option value='lucy'>Lucy</Option>
                           <Option value='Yiminghe'>yiminghe</Option>
                         </Select>
                       </Form.Item>
                       <Form.Item name='project_type' label='Tipo de proyecto'>
-                        <Select style={ { width: 300 } }>
+                        <Select placeholder='Seleccione' style={ { width: 300 } }>
                           <Option value='areaInvestigation'>Investigación de campo</Option>
                           <Option value='documentalInvestigation'>Investigación documental</Option>>
                         </Select>
                       </Form.Item>
                       <Form.Item name='research_line'
                                  label='Línea de investigación'>
-                        <Select defaultValue='Seleccione' style={ { width: 300 } }>
+                        <Select placeholder='Seleccione' style={ { width: 300 } }>
                           <Option value='jack'>Jack</Option>
                           <Option value='lucy'>Lucy</Option>
                           <Option value='Yiminghe'>yiminghe</Option>
@@ -419,7 +413,7 @@ const PlanForm = ( {
                       </Form.Item>
                       <Form.Item name='knowledge_area'
                                  label='Área de investigación'>
-                        <Select defaultValue='Seleccione' style={ { width: 300 } }>
+                        <Select placeholder='Seleccione' style={ { width: 300 } }>
                           <Option value='jack'>Jack</Option>
                           <Option value='lucy'>Lucy</Option>
                           <Option value='Yiminghe'>yiminghe</Option>
@@ -454,7 +448,6 @@ const PlanForm = ( {
                       <Form.Item name='problem'
                                  label='Planteamiento del problema'>
                         <TextArea style={ { width: 300 } }
-                                  placeholder='Autosize height with minimum and maximum number of lines'
                                   autoSize={ {
                                     minRows: 2,
                                     maxRows: 6
@@ -463,7 +456,6 @@ const PlanForm = ( {
                       </Form.Item>
                       <Form.Item name='justification' label='Justificación'>
                         <TextArea style={ { width: 300 } }
-                                  placeholder='Autosize height with minimum and maximum number of lines'
                                   autoSize={ {
                                     minRows: 2,
                                     maxRows: 6
@@ -472,7 +464,7 @@ const PlanForm = ( {
                       </Form.Item>
                       <Form.Item name='hypothesis' label='Hipótesis'>
                         <TextArea style={ { width: 300 } }
-                                  placeholder='Autosize height with minimum and maximum number of lines'
+                                  placeholder='Si no aplica escribir N/A'
                                   autoSize={ {
                                     minRows: 2,
                                     maxRows: 6
@@ -483,7 +475,6 @@ const PlanForm = ( {
                                  label='Objetivo General'
                       >
                         <TextArea style={ { width: 300 } }
-                                  placeholder='Autosize height with minimum and maximum number of lines'
                                   autoSize={ {
                                     minRows: 2,
                                     maxRows: 6
@@ -492,7 +483,6 @@ const PlanForm = ( {
                       </Form.Item>
                       <Form.Item name='specifics_objectives' label='Objetivos Específicos'>
                         <TextArea style={ { width: 300 } }
-                                  placeholder='Autosize height with minimum and maximum number of lines'
                                   autoSize={ {
                                     minRows: 2,
                                     maxRows: 6
@@ -501,7 +491,6 @@ const PlanForm = ( {
                       </Form.Item>
                       <Form.Item name='methodology' label='Metodología'>
                         <TextArea style={ { width: 300 } }
-                                  placeholder='Autosize height with minimum and maximum number of lines'
                                   autoSize={ {
                                     minRows: 2,
                                     maxRows: 6
@@ -510,7 +499,6 @@ const PlanForm = ( {
                       </Form.Item>
                       <Form.Item name='work_plan' label='Plan de trabajo'>
                         <TextArea style={ { width: 300 } }
-                                  placeholder='Autosize height with minimum and maximum number of lines'
                                   autoSize={ {
                                     minRows: 2,
                                     maxRows: 6
@@ -536,25 +524,16 @@ const PlanForm = ( {
                       </Form.Item>
                       <Form.Item name='bibliography' label='Bibliografía'>
                         <TextArea style={ { width: 300 } }
-                                  placeholder='Autosize height with minimum and maximum number of lines'
                                   autoSize={ {
                                     minRows: 2,
                                     maxRows: 6
                                   } }
                         />
                       </Form.Item>
-                      <Form.Item wrapperCol={ {
-                        ...layout.wrapperCol,
-                        offset: 8
-                      } }>
+                      <Form.Item { ...tailLayout }>
                         <Button className={ 'submit' } htmlType='submit' loading={ sending }>
                           Guardar plan
                         </Button>
-                      </Form.Item>
-                      <Form.Item wrapperCol={ {
-                        ...layout.wrapperCol,
-                        offset: 8
-                      } }>
                         <Button className={ 'submit' }
                                 onClick={ modal }
                                 disabled={ !isFinished }>
