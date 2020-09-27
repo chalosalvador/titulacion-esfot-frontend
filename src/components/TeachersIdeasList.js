@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useTeachersIdeasList } from '../data/useTeachersIdeasList';
 import Loading from './Loading';
-import { Row, Button, Dropdown, Layout, Menu, PageHeader, Steps, Typography, Col, Table } from 'antd';
+import { Row, Button, Dropdown, Layout, Menu, PageHeader, Typography, Col, Table, Modal } from 'antd';
 import { BellOutlined, LoadingOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import SearchColumnFilter from './SearchColumnFilter';
+import StepsSider from './StepsSider';
 import { useAuth } from '../providers/Auth';
 import Routes from '../constants/routes';
 import { Link, useLocation } from 'react-router-dom';
 
-const { Step } = Steps;
 const { Title } = Typography;
 const { Content, Sider } = Layout;
 
@@ -52,17 +52,69 @@ const TeachersIdeasList = () => {
     </Menu.Item>
   </Menu>;
 
+  const openModalInFo = ( text, record ) => {
+    console.log( text, record );
+    Modal.info( {
+      title: 'Tema propuesto por docente ESFOT',
+      content: (
+        <div>
+          <Row>
+            <Col>
+              <p><strong>Tema: </strong></p>
+            </Col>
+            <Col style={ { paddingLeft: 5 } }>
+              <p> { record.title }</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <p><strong>Problema a resolver: </strong></p>
+            </Col>
+            <Col style={ { paddingLeft: 5 } }>
+              <p> { record.problem }</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <p><strong>Solución: </strong></p>
+            </Col>
+            <Col style={ { paddingLeft: 5 } }>
+              <p> { record.solution }</p>
+            </Col>
+          </Row>
+          <p>Contáctate directamente con el profesor proponente para indicarle que deseas realizar este tema de
+            titulación</p>
+        </div>
+      ),
+      width: 500,
+      okButtonProps: {
+        style: {
+          backgroundColor: '#034c70',
+          marginRight: 130
+        },
+        href: 'https://outlook.office.com/',
+        target: '_blank'
+      },
+      okText: 'Enviar e-mial al profesor',
+      maskClosable: true,
+      centered: true
+    } );
+  };
+
   const columns = [
     {
       title: 'Título del proyecto',
       dataIndex: 'title',
       key: 'title',
-      ...SearchColumnFilter( 'title' )
+      width: 500,
+      ...SearchColumnFilter( 'title' ),
+      render: ( text, record ) => (<a onClick={ () => {openModalInFo( text, record );} }>{ text }</a>)
     },
     {
       title: 'Profesor',
       dataIndex: 'teacher_name',
       key: 'teacher_name',
+      width: 225,
       ...SearchColumnFilter( 'teacher_name' )
     }
   ];
@@ -76,6 +128,15 @@ const TeachersIdeasList = () => {
   if( isError ) {
     return <h1>Error</h1>;
   }
+  const data = ideas.map( ( idea, index ) => {
+    return {
+      key: index,
+      title: idea.title,
+      teacher_name: idea.teacher_name,
+      problem: idea.problem,
+      solution: idea.solution
+    };
+  } );
 
   return (
     <>
@@ -86,27 +147,12 @@ const TeachersIdeasList = () => {
                  backgroundColor: '#dddddd',
                  padding: 40
                } }>
-          <Title level={ 3 }>Progreso</Title>
-          <Steps direction='vertical'>
-            <Step description='Plan enviado' />
-            <Step description='Plan aprobado por director' />
-            <Step description='Curriculum saneado 1' />
-            <Step description='Plan revisado por comisión' />
-            <Step description='Plan aprobado por comisión' />
-            <Step description='Proyecto de titulación subido' />
-            <Step description='Proyecto aprobado por director' />
-            <Step description='Curriculum saneado 2' />
-            <Step description='Tribunal asignado' />
-            <Step description='Proyecto de titulación calificado (documento)' />
-            <Step description='Declarado apto para defensa oral' />
-            <Step description='Fecha de defensa asignada' />
-            <Step description='¡Proyecto completado!' />
-          </Steps>
+          <StepsSider />
         </Sider>
 
         <Layout>
           <PageHeader className='inner-menu'
-                      title={ <Title level={ 3 }>Panel Estudiante:</Title> }
+                      title={ <Title level={ 2 } style={ { color: '#034c70' } }>Temas de titulación</Title> }
                       extra={ [
                         <Button key='notifications' type='text' icon={ <BellOutlined /> } />,
                         <Dropdown key='user-menu' overlay={ userMenu } placement='bottomLeft'>
@@ -114,20 +160,18 @@ const TeachersIdeasList = () => {
                         </Dropdown>,
                       ] }
           />
-          <Content style={ { padding: 50 } }>
-            <Row>
-              <Col span={ 24 }>
-                <Title level={ 4 }>Temas de titulación</Title>
-              </Col>
-            </Row>
+          <Content style={ {
+            padding: 50,
+            marginTop: -65
+          } }>
             <Row>
               <Col>
-                <Title level={ 3 }>Propuestos por docentes ESFOT</Title>
+                <Title level={ 3 } style={ { color: '#034c70' } }>Propuestos por docentes ESFOT</Title>
               </Col>
             </Row>
-            <Row>
+            <Row justify='center'>
               <Col>
-                <Table columns={ columns } dataSource={ ideas } />
+                <Table columns={ columns } dataSource={ data } />
               </Col>
             </Row>
           </Content>

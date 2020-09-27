@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Card, Steps, Col, Button, Menu, PageHeader, Dropdown, Typography, Layout, Space } from 'antd';
+import { Row, Card, Col, Button, Menu, PageHeader, Dropdown, Typography, Layout, Space } from 'antd';
 import {
   BellOutlined, CopyOutlined, FundProjectionScreenOutlined, LoadingOutlined, LogoutOutlined, UserOutlined,
   FileTextOutlined
@@ -7,10 +7,10 @@ import {
 import Routes from '../constants/routes';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../providers/Auth';
+import StepsSider from './StepsSider';
 import withAuth from '../hocs/withAuth';
 import '../styles/home-student.css';
 
-const { Step } = Steps;
 const { Title } = Typography;
 const { Content, Sider } = Layout;
 
@@ -64,22 +64,7 @@ const HomeStudent = () => {
                  backgroundColor: '#dddddd',
                  padding: 40
                } }>
-          <Title level={ 3 }>Progreso</Title>
-          <Steps direction='vertical'>
-            <Step description='Plan enviado' />
-            <Step description='Plan aprobado por director' />
-            <Step description='Curriculum saneado 1' />
-            <Step description='Plan revisado por comisión' />
-            <Step description='Plan aprobado por comisión' />
-            <Step description='Proyecto de titulación subido' />
-            <Step description='Proyecto aprobado por director' />
-            <Step description='Curriculum saneado 2' />
-            <Step description='Tribunal asignado' />
-            <Step description='Proyecto de titulación calificado (documento)' />
-            <Step description='Declarado apto para defensa oral' />
-            <Step description='Fecha de defensa asignada' />
-            <Step description='¡Proyecto completado!' />
-          </Steps>
+          <StepsSider />
         </Sider>
 
         <Layout>
