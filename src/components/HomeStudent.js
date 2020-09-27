@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Row, Card, Col, Button, Menu, PageHeader, Dropdown, Typography, Layout, Space } from 'antd';
 import {
   BellOutlined, CopyOutlined, FundProjectionScreenOutlined, LoadingOutlined, LogoutOutlined, UserOutlined,
-  FileTextOutlined
+  FileTextOutlined, HomeOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
 import { Link, useLocation } from 'react-router-dom';
@@ -71,6 +71,11 @@ const HomeStudent = () => {
           <PageHeader className='inner-menu'
                       title={ <Title level={ 3 }>Panel Principal:</Title> }
                       extra={ [
+                        <Button key='home' type='text' style={ { color: '#034c70' } }>
+                          <Link to={ Routes.HOME }>
+                            <HomeOutlined />
+                          </Link>
+                        </Button>,
                         <Button key='notifications' type='text' icon={ <BellOutlined /> } />,
                         <Dropdown key='user-menu' overlay={ userMenu } placement='bottomLeft'>
                           <Button type='text' icon={ <UserOutlined /> }>{ currentUser && currentUser.name }</Button>
