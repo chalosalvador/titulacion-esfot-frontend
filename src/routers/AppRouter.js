@@ -23,6 +23,8 @@ const loadableOptions = { fallback: <Loading /> };
 const AsyncHome = loadable( () => import( '../pages/Index' ), loadableOptions );
 const AsyncLogin = loadable( () => import( '../pages/Login' ), loadableOptions );
 const AsyncHomeTeacher = loadable( () => import( '../pages/HomePage' ), loadableOptions );
+const AsyncTeachersIdeas = loadable( () => import( '../pages/TeacherIdeasPage' ), loadableOptions );
+const AsyncPlanForm = loadable(()=>import('../pages/PlanFormPage'), loadableOptions);
 const AsyncAbout = loadable( () => import( '../pages/About' ), loadableOptions );
 const AsyncLogout = loadable( () => import( '../pages/Logout' ), loadableOptions );
 
@@ -42,8 +44,9 @@ const AppRouter = () => (
   <Switch>
     <PublicRoute exact path={ Routes.INDEX } component={ AsyncHome } />
     <PublicRoute path={ Routes.LOGIN } component={ AsyncLogin } />
-
     <PrivateRoute path={ Routes.HOME } component={ AsyncHomeTeacher } />
+    <PrivateRoute path={ Routes.TEACHERS_IDEAS } component={ AsyncTeachersIdeas } />
+    <PrivateRoute path={ Routes.PLANFORM } component={ AsyncPlanForm } />
     <PublicRoute path={ Routes.ABOUT } component={ AsyncAbout } />
     <PrivateRoute path={ Routes.LOGOUT } component={ AsyncLogout } />
 

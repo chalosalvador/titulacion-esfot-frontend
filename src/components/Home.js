@@ -6,6 +6,7 @@ import {
   BookOutlined, CopyOutlined, LoginOutlined, QuestionCircleOutlined, UnorderedListOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
+
 const {Title} = Typography;
 
 const DemoBox = props => <p className={`height-${props.value}`}>{props.children}</p>;
@@ -40,7 +41,9 @@ const HomePage = () => {
                   </div>
                   <br/>
                   Revisa los temas de titulación disponibles<br/><br/>
-                  <Button className='home-button' type="primary" >Ver temas</Button>
+
+                  <Button type="primary" href={Routes.TEACHERS_IDEAS}>Ver temas</Button>
+
                 </Card>
               </Col>
               <Col span={6}>
