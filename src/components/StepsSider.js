@@ -55,7 +55,7 @@ const StepsSider = () => {
 
   return (
     <>
-      <Title level={ 3 }>Progreso</Title>
+      <Title level={ 3 } style={{color: '#034c70'}}>Progreso</Title>
       <Steps current={ numbers } direction='vertical'>
         <Step description='Plan enviado' />
         <Step description='Plan aprobado por director' />

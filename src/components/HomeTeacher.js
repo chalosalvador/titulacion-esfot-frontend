@@ -125,13 +125,13 @@ const HomeTeacher = () => {
                     <Card className={ 'options main-options' } title='Jurado calificador' bordered={ false }>
                       <Space direction='vertical' size='large'>
                         <div>
-                          <BulbOutlined className={ 'big-icon' } />
+                          <BarsOutlined className={ 'big-icon' } />
                         </div>
                         <div>
                           Revisa los proyectos como jurado
                         </div>
                         <div>
-                          <Button>Ver proyectos</Button>
+                          <Button style={ { marginTop: 20 } }>Ver proyectos</Button>
                         </div>
                       </Space>
                     </Card>
