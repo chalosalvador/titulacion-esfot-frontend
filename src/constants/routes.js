@@ -15,6 +15,7 @@ const publicRoutes = {
 const privateRoutes = {
   LOGOUT: '/logout',
   HOME: '/inicio',
+  PLANFORM: '/plan-titulacion'
 };
 
 const Routes = {

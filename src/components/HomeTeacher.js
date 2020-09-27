@@ -1,4 +1,4 @@
-import { Row, Card, Col, Button, Menu } from 'antd';
+import { Row, Card, Col, Button, Menu, PageHeader, Dropdown, Space, Typography, Layout, Steps } from 'antd';
 import React, { useState } from 'react';
 import '../styles/home-teacher.css';
 import {
@@ -10,7 +10,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../providers/Auth';
 import withAuth from '../hocs/withAuth';
 
-const { SubMenu } = Menu;
+const { Title } = Typography;
+const { Content, Sider } = Layout;
 
 const HomeTeacher = () => {
 
@@ -39,154 +40,205 @@ const HomeTeacher = () => {
     } );
   }, [ location, isAuthenticated ] );
 
-  return (
-    <div style={ { height: 1500 } }>
-      <Menu mode='horizontal' className={ 'menus' } onClick={ handleClick }>
-        <Menu.Item key='notification' icon={ <BellOutlined /> } />
+  const userMenu = <Menu onClick={ handleClick }>
+    <Menu.Item key='password'>Cambiar clave</Menu.Item>
+    <Menu.Item key={ Routes.LOGIN }>
+      <Link to={ Routes.LOGOUT } className='logout-link'>
         {
-          isAuthenticated
-            ? <SubMenu icon={ <UserOutlined /> } title={ currentUser && currentUser.name }>
-              <Menu.Item key='password'>Cambiar clave</Menu.Item>
-
-              <Menu.Item key={ Routes.LOGIN }>
-                <Link to={ Routes.LOGOUT } className='logout-link'>
-                  {
-                    isCheckingAuth
-                      ? <LoadingOutlined />
-                      : <><LogoutOutlined /> Cerrar sesión </>
-                  }
-                </Link>
-              </Menu.Item>
-            </SubMenu>
-            : <Menu.Item key={ Routes.LOGIN }>
-              <Link to={ Routes.LOGIN }>
-                {
-                  isCheckingAuth
-                    ? <LoadingOutlined />
-                    : <><LoginOutlined /> Ingresar</>
-                }
-              </Link>
-            </Menu.Item>
+          isCheckingAuth
+            ? <LoadingOutlined />
+            : <><LogoutOutlined /> Cerrar sesión </>
         }
-      </Menu>
-      <Card className={ 'statistics' }>
-        <h1 className={ 'titles' }>Director</h1>
-        <Card className={ 'statistics-content' } title='Tesis dirigidas' bordered={ false }>
-          <p className={ 'numbers' }>10</p>
-        </Card>
+      </Link>
+    </Menu.Item>
+  </Menu>;
 
-        <Card className={ 'statistics-content2' } title='Planes por revisar' bordered={ false }>
-          <p className={ 'numbers' }>2</p>
-        </Card>
+  return (
+    <>
+      <Layout>
+        <Sider theme='light'
+               width={ 300 }
+               style={ {
+                 backgroundColor: '#dddddd',
+                 padding: 40
+               } }>
+          <Title level={ 3 } style={ { color: '#034c70' } }>Director</Title>
+          <Card className={ 'statistics-content' } title='Tesis dirigidas' bordered={ false }>
+            <Title level={ 2 }>10</Title>
+          </Card>
 
-        <Card className={ 'statistics-content2' } title='Proyectos por revisar' bordered={ false }>
-          <p className={ 'numbers' }>2</p>
-        </Card>
+          <Card className={ 'statistics-content' } title='Planes por revisar' bordered={ false }>
+            <Title level={ 2 }>2</Title>
+          </Card>
 
-        <h1 className={ 'jury' }>Jurado</h1>
+          <Card className={ 'statistics-content' } title='Proyectos por revisar' bordered={ false }>
+            <Title level={ 2 }>2</Title>
+          </Card>
 
-        <Card className={ 'jury-statistics' } title='Proyectos por revisar' bordered={ false }>
-          <p className={ 'numbers' }>1</p>
-        </Card>
-      </Card>
+          <Title level={ 3 } style={ { color: '#034c70' } }>Jurado</Title>
 
-      <Row className='principal'>
+          <Card className={ 'statistics-content' } title='Proyectos por revisar' bordered={ false }>
+            <Title level={ 2 }>10</Title>
+          </Card>
+        </Sider>
 
-        <h1 className={ 'title' }>
-          Panel Principal:
-        </h1>
+        <Layout>
+          <PageHeader className='inner-menu'
+                      title={ <Title level={ 3 } style={ {
+                        color: '#034c70'
+                      } }>Panel Principal:</Title> }
+                      extra={ [
+                        <Button key='notifications'
+                                type='text'
+                                style={ { color: '#034c70' } }
+                                icon={ <BellOutlined /> } />,
+                        <Dropdown key='user-menu' overlay={ userMenu } placement='bottomLeft'>
+                          <Button type='text' style={ { color: '#034c70' } } icon={ <UserOutlined /> }>
+                            { currentUser && currentUser.name }
+                          </Button>
+                        </Dropdown>,
+                      ] }
+          />
+          <Content style={ { padding: 50 } }>
+            <Row>
 
-        <Col span={ 24 }>
+              <Col span={ 24 }>
 
-          <Row justify='center' className={ 'principal-options' }>
-            <Col span={ 6 }>
-              <Card className={ 'options' } title='Director' bordered={ false }>
-                <div>
-                  <BulbOutlined className={ 'big-icon' } />
-                </div>
-                <br />
-                Revisa los planes y proyectos de titulación que diriges<br /><br />
-                <Button>Ver proyectos</Button>
-              </Card>
-            </Col>
-            <Col span={ 6 }>
-              <Card className={ 'options' } title='Jurado calificador' bordered={ false }>
-                <div>
-                  <CheckOutlined className={ 'big-icon' } />
-                </div>
-                <br />
-                Revisa los proyectos como jurado<br /><br /><br />
-                <Button>Ver proyectos</Button>
-              </Card>
-            </Col>
-            <Col span={ 6 }>
-              <Card className={ 'options' } title='Listado de temas' bordered={ false }>
-                <div>
-                  <BarsOutlined className={ 'big-icon' } />
-                </div>
-                <br />
-                Registrar propuestas de temas<br /><br /><br />
-                <Button>Registrar temas</Button>
-              </Card>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+                <Row justify='center'>
+                  <Col span={ 6 }>
+                    <Card className={ 'options main-options' } title='Director' bordered={ false }>
+                      <Space direction='vertical' size='large'>
+                        <div>
+                          <BulbOutlined className={ 'big-icon' } />
+                        </div>
+                        <div>
+                          Revisa los planes y proyectos de titulación que diriges
+                        </div>
+                        <div>
+                          <Button>Ver proyectos</Button>
+                        </div>
+                      </Space>
+                    </Card>
+                  </Col>
 
-      <Row className='resources'>
+                  <Col span={ 6 }>
+                    <Card className={ 'options main-options' } title='Jurado calificador' bordered={ false }>
+                      <Space direction='vertical' size='large'>
+                        <div>
+                          <BulbOutlined className={ 'big-icon' } />
+                        </div>
+                        <div>
+                          Revisa los proyectos como jurado
+                        </div>
+                        <div>
+                          <Button>Ver proyectos</Button>
+                        </div>
+                      </Space>
+                    </Card>
+                  </Col>
 
-        <h1 className={ 'title2' }>
-          Otros recursos:
-        </h1>
+                  <Col span={ 6 }>
+                    <Card className={ 'options main-options' } title='Listado de temas' bordered={ false }>
+                      <Space direction='vertical' size='large'>
+                        <div>
+                          <CheckOutlined className={ 'big-icon' } />
+                        </div>
+                        <div>
+                          Registrar propuestas de temas
+                        </div>
+                        <div>
+                          <Button>Registrar temas</Button>
+                        </div>
+                      </Space>
+                    </Card>
+                  </Col>
 
-        <Col span={ 24 }>
+                </Row>
+              </Col>
+            </Row>
 
-          <Row justify='center' className={ 'principal-options' }>
-            <Col span={ 6 }>
-              <Card className={ 'options-resources' } bordered={ false }>
-                <br />
-                Mira las normativas de titulación de la EPN<br /><br />
-                <Button href={'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion'}>Ver normativas</Button>
-              </Card>
-            </Col>
-            <Col span={ 6 }>
-              <Card className={ 'options-resources' } bordered={ false }>
-                <br />
-                Mira los formatos de titulación de la EPN<br /><br />
-                <Button href={'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes'}>Ver formatos</Button>
-              </Card>
-            </Col>
-            <Col span={ 6 } />
-          </Row>
-        </Col>
-      </Row>
+            <Row>
+              <Col>
+                <Title level={ 3 } style={ {
+                  color: '#034c70',
+                  marginLeft: -30
+                } }>Otros recursos:</Title>
+              </Col>
+            </Row>
 
-      <Row className='commission'>
+            <Row>
+              <Col span={ 24 }>
+                <Row justify='center'>
+                  <Col span={ 6 }>
+                    <Card bordered={ false } className='options resources-options'>
+                      <Space direction='vertical' size='large'>
+                        <div>Mira las normativas de titulación de la EPN</div>
+                        <div>
+                          <Button href={ 'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion' }>
+                            Ver normativas
+                          </Button>
+                        </div>
+                      </Space>
+                    </Card>
+                  </Col>
+                  <Col span={ 6 }>
+                    <Card bordered={ false } className='options resources-options'>
+                      <Space direction='vertical' size='large'>
+                        <div>Mira los formatos de titulación de la EPN</div>
+                        <div>
+                          <Button href={ 'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes' }>
+                            Ver formatos
+                          </Button>
+                        </div>
+                      </Space>
+                    </Card>
+                  </Col>
 
-        <h1 className={ 'title3' }>
-          Comisión titulación:
-        </h1>
+                  <Col span={ 6 } />
+                </Row>
+              </Col>
+            </Row>
 
-        <Col span={ 24 }>
+            <Row>
+              <Col>
+                <Title level={ 3 } style={ {
+                  color: '#034c70',
+                  marginLeft: -30
+                } }>Comisión titulación: </Title>
+              </Col>
+            </Row>
 
-          <Row justify='center' className={ 'principal-options' }>
-            <Col span={ 6 }>
-              <Card className={ 'options-commission' } title='Planes Comisión' bordered={ false }>
-                <div>
-                  <SelectOutlined className={ 'big-icon' } />
-                </div>
-                <br />
-                Revisa los planes que llegan a la comisión de titulación<br /><br />
-                <Button>Ver planes</Button>
-              </Card>
-            </Col>
-            <Col span={ 6 } />
-            <Col span={ 6 } />
-          </Row>
-        </Col>
-      </Row>
-    </div>
+            <Row>
+
+              <Col span={ 24 }>
+
+                <Row justify='center'>
+                  <Col span={ 6 }>
+                    <Card className={ 'options main-options' } title='Planes Comisión' bordered={ false }>
+                      <Space direction='vertical' size='large'>
+                        <div>
+                          <SelectOutlined className={ 'big-icon' } />
+                        </div>
+                        <div>
+                          Revisa los planes que llegan a la comisión de titulación
+                        </div>
+                        <div>
+                          <Button>Ver planes</Button>
+                        </div>
+                      </Space>
+
+                    </Card>
+                  </Col>
+                  <Col span={ 6 } />
+                  <Col span={ 6 } />
+                </Row>
+              </Col>
+            </Row>
+          </Content>
+        </Layout>
+      </Layout>
+    </>
   );
 };
 
-export default withAuth(HomeTeacher);
+export default withAuth( HomeTeacher );

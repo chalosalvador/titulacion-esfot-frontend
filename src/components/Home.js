@@ -6,9 +6,9 @@ import {
   BookOutlined, CopyOutlined, LoginOutlined, QuestionCircleOutlined, UnorderedListOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
-import lapices from '../images/lapices.png';
-import libros from '../images/fondolibros 1.png';
+
 const {Title} = Typography;
+
 const DemoBox = props => <p className={`height-${props.value}`}>{props.children}</p>;
 
 const HomePage = () => {
