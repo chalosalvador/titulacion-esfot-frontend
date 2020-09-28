@@ -23,6 +23,7 @@ const loadableOptions = { fallback: <Loading /> };
 const AsyncHome = loadable( () => import( '../pages/Index' ), loadableOptions );
 const AsyncLogin = loadable( () => import( '../pages/Login' ), loadableOptions );
 const AsyncHomeTeacher = loadable( () => import( '../pages/HomePage' ), loadableOptions );
+const AsyncTeacherPanel = loadable( () => import('../pages/TeacherPanelPage'),loadableOptions);
 const AsyncAbout = loadable( () => import( '../pages/About' ), loadableOptions );
 const AsyncLogout = loadable( () => import( '../pages/Logout' ), loadableOptions );
 
@@ -44,6 +45,7 @@ const AppRouter = () => (
     <PublicRoute path={ Routes.LOGIN } component={ AsyncLogin } />
 
     <PrivateRoute path={ Routes.HOME } component={ AsyncHomeTeacher } />
+    <PrivateRoute path={Routes.TEACHER_PANEL} component={AsyncTeacherPanel} />
     <PublicRoute path={ Routes.ABOUT } component={ AsyncAbout } />
     <PrivateRoute path={ Routes.LOGOUT } component={ AsyncLogout } />
 

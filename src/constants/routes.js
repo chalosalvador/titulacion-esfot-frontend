@@ -13,6 +13,7 @@ const publicRoutes = {
 const privateRoutes = {
   LOGOUT: '/logout',
   HOME: '/inicio',
+  TEACHER_PANEL: '/panel-profesor'
 };
 
 const Routes = {

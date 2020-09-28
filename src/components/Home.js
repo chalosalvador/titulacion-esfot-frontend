@@ -1,14 +1,15 @@
 import React from 'react';
 import { Typography, Row, Col, Button, Popover,Divider,Space,Card } from 'antd';
 import '../styles/home.css'
+import lapices from '../images/lapices.png';
+import libros from '../images/fondolibros 1.png';
 import { Link, useLocation } from 'react-router-dom';
 import {
   BookOutlined, CopyOutlined, LoginOutlined, QuestionCircleOutlined, UnorderedListOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
 const {Title} = Typography;
-import lapices from '../images/lapices.png';
-import libros from '../images/fondolibros 1.png';
+
 const DemoBox = props => <p className={`height-${props.value}`}>{props.children}</p>;
 
 const HomePage = () => {
