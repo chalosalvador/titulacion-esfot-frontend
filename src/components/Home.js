@@ -1,6 +1,8 @@
 import React from 'react';
 import { Typography, Row, Col, Button, Popover,Divider,Space,Card } from 'antd';
 import '../styles/home.css'
+import lapices from '../images/lapices.png';
+import libros from '../images/fondolibros 1.png';
 import { Link, useLocation } from 'react-router-dom';
 import {
   BookOutlined, CopyOutlined, LoginOutlined, QuestionCircleOutlined, UnorderedListOutlined
