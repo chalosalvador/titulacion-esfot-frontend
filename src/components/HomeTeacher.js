@@ -115,7 +115,7 @@ const HomeTeacher = () => {
                           Revisa los planes y proyectos de titulación que diriges
                         </div>
                         <div>
-                          <Button>Ver proyectos</Button>
+                          <Button href={ Routes.TEACHER_PANEL }>Ver proyectos</Button>
                         </div>
                       </Space>
                     </Card>
