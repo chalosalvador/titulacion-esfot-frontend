@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { Row, Card, Steps, Col, Button, Menu, PageHeader, Dropdown, Typography, Layout, Space } from 'antd';
+import { Row, Card, Col, Button, Menu, PageHeader, Dropdown, Typography, Layout, Space } from 'antd';
 import {
   BellOutlined, CopyOutlined, FundProjectionScreenOutlined, LoadingOutlined, LogoutOutlined, UserOutlined,
-  FileTextOutlined
+  FileTextOutlined, HomeOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../providers/Auth';
+import StepsSider from './StepsSider';
 import withAuth from '../hocs/withAuth';
 import '../styles/home-student.css';
 
-const { Step } = Steps;
 const { Title } = Typography;
 const { Content, Sider } = Layout;
 
@@ -64,31 +64,21 @@ const HomeStudent = () => {
                  backgroundColor: '#dddddd',
                  padding: 40
                } }>
-          <Title level={ 3 }>Progreso</Title>
-          <Steps direction='vertical'>
-            <Step description='Plan enviado' />
-            <Step description='Plan aprobado por director' />
-            <Step description='Curriculum saneado 1' />
-            <Step description='Plan revisado por comisión' />
-            <Step description='Plan aprobado por comisión' />
-            <Step description='Proyecto de titulación subido' />
-            <Step description='Proyecto aprobado por director' />
-            <Step description='Curriculum saneado 2' />
-            <Step description='Tribunal asignado' />
-            <Step description='Proyecto de titulación calificado (documento)' />
-            <Step description='Declarado apto para defensa oral' />
-            <Step description='Fecha de defensa asignada' />
-            <Step description='¡Proyecto completado!' />
-          </Steps>
+          <StepsSider />
         </Sider>
 
         <Layout>
           <PageHeader className='inner-menu'
-                      title={ <Title level={ 3 }>Panel Principal:</Title> }
+                      title={ <Title level={ 3 } style={ { color: '#034c70' } }>Panel Principal:</Title> }
                       extra={ [
-                        <Button key='notifications' type='text' icon={ <BellOutlined /> } />,
+                        <Button key='notifications'
+                                type='text'
+                                style={ { color: '#034c70' } }
+                                icon={ <BellOutlined /> } />,
                         <Dropdown key='user-menu' overlay={ userMenu } placement='bottomLeft'>
-                          <Button type='text' icon={ <UserOutlined /> }>{ currentUser && currentUser.name }</Button>
+                          <Button type='text' style={ { color: '#034c70' } } icon={ <UserOutlined /> }>
+                            { currentUser && currentUser.name }
+                          </Button>
                         </Dropdown>,
                       ] }
           />
@@ -107,7 +97,11 @@ const HomeStudent = () => {
                           Registra tu plan de titulación
                         </div>
                         <div>
-                          <Button>Registrar plan</Button>
+                          <Button>
+                            <Link to={ Routes.PLANFORM }>
+                              Registrar plan
+                            </Link>
+                          </Button>
                         </div>
                       </Space>
                     </Card>
@@ -147,8 +141,16 @@ const HomeStudent = () => {
               </Col>
             </Row>
 
+            <Row>
+              <Col>
+                <Title level={ 3 }
+                       style={ {
+                         color: '#034c70',
+                         marginLeft: -30
+                       } }>Otros recursos:</Title>
+              </Col>
+            </Row>
 
-            <Title level={ 3 }>Otros recursos:</Title>
             <Row>
               <Col span={ 24 }>
                 <Row justify='center'>
@@ -156,7 +158,7 @@ const HomeStudent = () => {
                     <Card bordered={ false } className='options resources-options'>
                       <Space direction='vertical' size='large'>
                         <div>Mira posibles temas de titulación propuestos por los docentes de la ESFOT</div>
-                        <div><Button>Ver temas</Button></div>
+                        <div><Button><Link to={ Routes.TEACHERS_IDEAS }>Ver temas</Link></Button></div>
                       </Space>
                     </Card>
                   </Col>
@@ -165,7 +167,8 @@ const HomeStudent = () => {
                       <Space direction='vertical' size='large'>
                         <div>Mira las normativas de titulación de la EPN</div>
                         <div>
-                          <Button href={ 'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion' }>
+                          <Button style={ { marginTop: 25 } }
+                                  href={ 'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion' }>
                             Ver normativas
                           </Button>
                         </div>
@@ -177,7 +180,8 @@ const HomeStudent = () => {
                       <Space direction='vertical' size='large'>
                         <div>Mira los formatos de titulación de la EPN</div>
                         <div>
-                          <Button href={ 'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes' }>
+                          <Button style={ { marginTop: 25 } }
+                                  href={ 'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes' }>
                             Ver formatos
                           </Button>
                         </div>
