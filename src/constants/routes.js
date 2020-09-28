@@ -16,6 +16,7 @@ const privateRoutes = {
   LOGOUT: '/logout',
   HOME: '/inicio',
   TEACHER_PANEL: '/panel-profesor',
+  TEACHERS_PLANS:'/profesor-ideas',
   PLANFORM: '/plan-titulacion'
 };
 

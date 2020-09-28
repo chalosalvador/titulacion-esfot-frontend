@@ -115,7 +115,7 @@ const HomeTeacher = () => {
                           Revisa los planes y proyectos de titulación que diriges
                         </div>
                         <div>
-                          <Button>Ver proyectos</Button>
+                          <Button href={ Routes.TEACHER_PANEL }>Ver proyectos</Button>
                         </div>
                       </Space>
                     </Card>
@@ -147,7 +147,7 @@ const HomeTeacher = () => {
                           Registrar propuestas de temas
                         </div>
                         <div>
-                          <Button style={ { marginTop: 20 } }>Registrar temas</Button>
+                          <Button style={ { marginTop: 20 } } href={ Routes.TEACHERS_PLANS }>Registrar temas</Button>
                         </div>
                       </Space>
                     </Card>
