@@ -25,6 +25,7 @@ const AsyncLogin = loadable( () => import( '../pages/Login' ), loadableOptions )
 const AsyncHomeTeacher = loadable( () => import( '../pages/HomePage' ), loadableOptions );
 const AsyncTeacherPanel = loadable( () => import('../pages/TeacherPanelPage'),loadableOptions);
 const AsyncTeachersIdeas = loadable( () => import( '../pages/TeacherIdeasPage' ), loadableOptions );
+const AsyncTeachersPlans = loadable( () => import( '../pages/TeacherPlansPage' ), loadableOptions );
 const AsyncPlanForm = loadable(()=>import('../pages/PlanFormPage'), loadableOptions);
 const AsyncAbout = loadable( () => import( '../pages/About' ), loadableOptions );
 const AsyncLogout = loadable( () => import( '../pages/Logout' ), loadableOptions );
@@ -48,6 +49,7 @@ const AppRouter = () => (
     <PrivateRoute path={ Routes.HOME } component={ AsyncHomeTeacher } />
     <PrivateRoute path={Routes.TEACHER_PANEL} component={AsyncTeacherPanel} />
     <PrivateRoute path={ Routes.TEACHERS_IDEAS } component={ AsyncTeachersIdeas } />
+    <PrivateRoute path={ Routes.TEACHERS_PLANS } component={ AsyncTeachersPlans } />
     <PrivateRoute path={ Routes.PLANFORM } component={ AsyncPlanForm } />
     <PublicRoute path={ Routes.ABOUT } component={ AsyncAbout } />
     <PrivateRoute path={ Routes.LOGOUT } component={ AsyncLogout } />

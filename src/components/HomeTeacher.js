@@ -147,7 +147,7 @@ const HomeTeacher = () => {
                           Registrar propuestas de temas
                         </div>
                         <div>
-                          <Button style={ { marginTop: 20 } }>Registrar temas</Button>
+                          <Button style={ { marginTop: 20 } } href={ Routes.TEACHERS_PLANS }>Registrar temas</Button>
                         </div>
                       </Space>
                     </Card>
