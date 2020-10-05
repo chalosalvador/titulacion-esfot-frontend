@@ -1,9 +1,9 @@
-import { Row, Card, Col, Button, Menu, PageHeader, Dropdown, Space, Typography, Layout, Steps } from 'antd';
+import { Row, Card, Col, Button, Menu, PageHeader, Dropdown, Space, Typography, Layout } from 'antd';
 import React, { useState } from 'react';
 import '../styles/home-teacher.css';
 import {
   BellOutlined, BulbOutlined, BarsOutlined, CheckOutlined, SelectOutlined, UserOutlined, LoadingOutlined,
-  LogoutOutlined, LoginOutlined
+  LogoutOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
 import { Link, useLocation } from 'react-router-dom';

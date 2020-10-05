@@ -1,9 +1,9 @@
 /**
  * Created by chalosalvador on 3/1/20
  */
-import API from './index';
-import Routes from '../constants/routes';
-import {history} from 'react-router-dom';
+// import API from './index';
+// import Routes from '../constants/routes';
+// import {history} from 'react-router-dom';
  // import { translateMessage } from '../helpers/translateMessage';
 //
 //

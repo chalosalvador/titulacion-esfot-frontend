@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Typography, Collapse, Row, Col } from 'antd';
+import React from 'react';
+import { Collapse, Row, Col } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import PlanFormTeacher from './PlanReviewTeacher';
 import '../styles/plan-collapse.css'
 
-
-const { Text } = Typography;
 const { Panel } = Collapse;
 
 const PlanReview = ( props ) => {

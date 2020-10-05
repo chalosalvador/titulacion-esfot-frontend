@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Row, Card, Col, Button, Menu, PageHeader, Dropdown, Typography, Layout, Space } from 'antd';
 import {
   BellOutlined, CopyOutlined, FundProjectionScreenOutlined, LoadingOutlined, LogoutOutlined, UserOutlined,
-  FileTextOutlined, HomeOutlined
+  FileTextOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
 import { Link, useLocation } from 'react-router-dom';
