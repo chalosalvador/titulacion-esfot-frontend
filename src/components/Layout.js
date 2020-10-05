@@ -2,16 +2,12 @@
  * Created by chalosalvador on 3/1/20
  */
 import React from 'react';
-import Routes from '../constants/routes';
 import Navigation from './Navigation';
 import { Layout, Row, Col, Button, Popover } from 'antd';
-import { FacebookOutlined, InstagramOutlined, GithubOutlined, MailOutlined, WhatsAppOutlined } from '@ant-design/icons';
-import logo from '../images/logo-menta.png';
+import { FacebookOutlined } from '@ant-design/icons';
 
 import logoEPN from '../images/Logotipo-ESFOT.png';
 import logoESFOT from '../images/Logotipo-ESFOT2.png';
-import moment from 'moment';
-import { Link } from 'react-router-dom';
 
 const Header = Layout.Header;
 const Content = Layout.Content;

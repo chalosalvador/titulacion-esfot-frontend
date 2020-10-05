@@ -12,6 +12,7 @@ import { useAuth } from '../providers/Auth';
 import Routes from '../constants/routes';
 import '../styles/home-teacher.css';
 import SearchColumnFilter from './SearchColumnFilter';
+import PlanReview from './PlansReviewCollapse';
 
 const { Content, Sider } = Layout;
 const { Title } = Typography;
@@ -19,6 +20,11 @@ const { Title } = Typography;
 
 const TeacherPanel = () => {
 
+
+  const [ state, setState ] = useState( {
+    idPlan: null,
+    showPlanReview: false
+  } );
   let location = useLocation();
   const { isAuthenticated, isCheckingAuth, currentUser } = useAuth();
   const { teachersProjects, meta, isLoading, isError } = useProjectsList();
@@ -120,7 +126,8 @@ const TeacherPanel = () => {
       student_name: project[ 'students' ].length > 0
         ? project[ 'students' ][ 0 ][ 'name' ]
         : '',
-      status: project.status
+      status: project.status,
+      id: project.id,
     };
   } );
 
@@ -131,6 +138,33 @@ const TeacherPanel = () => {
       total: meta.total,
       showSizeChanger: false
     };
+  }
+
+  let content= '';
+  let titleTable= '';
+  if(!state.showPlanReview){
+    titleTable=
+      <Title level={ 3 } style={ { color: '#034c70' } }>Planes y proyectos de titulación</Title>;
+
+    content=
+      <Table
+      dataSource={ data }
+      columns={ columns }
+      rowKey={ data => data.id }
+      onRow={ ( record ) => {
+        return {
+          onClick: event => {
+            event.stopPropagation();
+            setState( {
+              idPlan: record.id,
+              showPlanReview: true
+            } );
+          }
+        };
+      } }
+    />;
+  }else{
+    content= <PlanReview planId={state.idPlan}/>
   }
 
   // console.log("Pilas",getDataSource());
@@ -157,7 +191,7 @@ const TeacherPanel = () => {
             <Title level={ 2 }>2</Title>
           </Card>
 
-          <Title level={ 3 } style={ { color: '#034c70' } }>Jurado</Title>
+          <Title level={ 3 } style={ { color: '#034c70', marginTop:40 } }>Jurado</Title>
 
           <Card className={ 'statistics-content' } title='Proyectos por revisar' bordered={ false }>
             <Title level={ 2 }>10</Title>
@@ -188,14 +222,12 @@ const TeacherPanel = () => {
           <Content style={ { padding: 50 } }>
             <Row>
               <Col>
-                <Title level={ 3 } style={ { color: '#034c70' } }>Planes y proyectos de titulación</Title>
+                {titleTable}
               </Col>
             </Row>
             <Row>
               <Col>
-                <Table
-                  dataSource={ data }
-                  columns={ columns } />
+                {content}
               </Col>
             </Row>
           </Content>

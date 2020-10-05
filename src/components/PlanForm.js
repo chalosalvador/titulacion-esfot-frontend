@@ -44,7 +44,7 @@ const PlanForm = ( {
   };
 
   let location = useLocation();
-  const { projects, isError, isLoading } = useProject();
+  const { projects, isLoading } = useProject();
   const { teachers } = useTeachers();
   const [ imageUrl, setImageUrl ] = useState( null );
   const [ fileList, setFileList ] = useState( [] );

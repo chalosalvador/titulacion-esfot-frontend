@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Skeleton, Card, Col, Row, Radio, Typography, Button, Table } from 'antd';
-import Routes from '../constants/routes';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Skeleton, Card, Col, Row, Table } from 'antd';
 import { useProjectsList } from '../data/useProjectsList';
 import ShowError from './ShowError';
 
-const { Text } = Typography;
 
 const ProjectsList = ( props ) => {
 
-  const { projects, isLoading, isError, mutate } = useProjectsList();
+  const { projects, isLoading, isError } = useProjectsList();
 
   if( isLoading ) {
     return <Row justify='center' gutter={ 30 }>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import '../styles/home-teacher.css';
 import 'antd/dist/antd.css';
 import Routes from '../constants/routes';
@@ -10,7 +10,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../providers/Auth';
 import { useTeachersPlansList } from '../data/useTeacherPlansList';
 import {
-  Menu, Card, Typography, Table, Tag, Form, Button, Row, Col, message, Modal, Layout,
+  Menu, Card, Typography, Table, Form, Button, Row, Col, message, Modal, Layout,
   Dropdown, PageHeader
 } from 'antd';
 import TeacherPlanForm from './TeacherPlanForm';

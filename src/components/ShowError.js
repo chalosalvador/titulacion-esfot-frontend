@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Result } from 'antd';
 import { translateMessage } from '../utils/translateMessage';
-import Routes from '../constants/routes';
 
 const setStatus = ( status ) => {
   switch( status ) {

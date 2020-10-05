@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-import { Form, Input, message } from 'antd';
-import Button from 'antd/es/button';
-import API from '../data';
+import React from 'react';
+import { Form, Input } from 'antd';
 
 const formItemLayout = {
   labelCol: {
