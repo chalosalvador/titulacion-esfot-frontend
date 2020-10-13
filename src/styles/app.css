@@ -225,8 +225,8 @@ code {
   }
 
   .footer {
-    padding: 30px 100px;
-    min-height: 200px;
+    padding: 0px 104px;
+    min-height: 130px;
     background-color: #034c70;
     color: #ffffff;
   }
