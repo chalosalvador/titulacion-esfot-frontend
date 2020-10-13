@@ -29,6 +29,7 @@ const MainLayout = props => {
       <Layout>
         <Row type='flex' justify='center' className='header-wrapper'>
           <Col span={ 20 }>
+
             <Header className='header'>
               <Row type='flex' justify='space-between' align='bottom'>
                 <Col xs={ 24 } md={ 6 } className='logo-wrapper'>
