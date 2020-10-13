@@ -165,18 +165,19 @@ const PlanForm = ( {
     try {
       await API.post( `/projects/${ projects[ 0 ].id }`, data ); // put data to server
       setSending( false );
-      message.success( 'Cambios guardados correctamente!' );
     } catch( e ) {
       console.log( 'ERROR', e );
       message.error( `No se guardaron los datos:¨${ e }` );
     }
   };
 
-  const onCompleteForm = ( formName, info ) => {
+  const onCompleteForm = () => {
     const formData = form.getFieldsValue();
     if( formData.bibliography !== undefined && formData.general_objective !== undefined && formData.hypothesis !== undefined && formData.justification !== undefined && formData.knowledge_area !== undefined && formData.methodology !== undefined && formData.problem !== undefined && formData.project_type !== undefined && formData.research_line !== undefined && formData.specifics_objectives !== undefined && formData.work_plan !== undefined ) {
       setIsFinished( true );
     }
+
+    onUpdate( formData ).then( () => message.success( 'Cambios guardados correctamente!' ) );
     console.log( 'FORM', formData );
   };
 
@@ -355,7 +356,7 @@ const PlanForm = ( {
                        color: '#034c70',
                        marginLeft: 30
                      } }>Datos Generales</Title>
-              <Form.Provider onFormChange={ onCompleteForm }>
+              <Form.Provider onFormChange={ () => {setTimeout( () => {onCompleteForm();}, 2000 );} }>
                 <Form { ...layout }
                       name='nest-messages'
                       onFinish={ projects.length > 0
@@ -433,75 +434,75 @@ const PlanForm = ( {
                     </Col>
                   </Row>
 
-                  <Row justify={ 'center' }>
+                  <Row justify={ 'left' }>
                     <Col>
                       <Form.Item name='title' label='Título' rules={ [ { required: true } ] }>
                         <TextArea
-                          style={ { width: 300 } }
+                          style={ { width: 600 } }
                           placeholder='Máximo 15 palabras'
                           autoSize={ {
-                            minRows: 1,
-                            maxRows: 4
+                            minRows: 2,
+                            maxRows: 5
                           } }
                         />
                       </Form.Item>
                       <Form.Item name='problem'
                                  label='Planteamiento del problema'>
-                        <TextArea style={ { width: 300 } }
+                        <TextArea style={ { width: 600 } }
                                   autoSize={ {
-                                    minRows: 2,
-                                    maxRows: 6
+                                    minRows: 4,
+                                    maxRows: 7
                                   } }
                         />
                       </Form.Item>
                       <Form.Item name='justification' label='Justificación'>
-                        <TextArea style={ { width: 300 } }
+                        <TextArea style={ { width: 600 } }
                                   autoSize={ {
-                                    minRows: 2,
-                                    maxRows: 6
+                                    minRows: 4,
+                                    maxRows: 7
                                   } }
                         />
                       </Form.Item>
                       <Form.Item name='hypothesis' label='Hipótesis'>
-                        <TextArea style={ { width: 300 } }
+                        <TextArea style={ { width: 600 } }
                                   placeholder='Si no aplica escribir N/A'
                                   autoSize={ {
-                                    minRows: 2,
-                                    maxRows: 6
+                                    minRows: 4,
+                                    maxRows: 7
                                   } }
                         />
                       </Form.Item>
                       <Form.Item name='general_objective'
                                  label='Objetivo General'
                       >
-                        <TextArea style={ { width: 300 } }
+                        <TextArea style={ { width: 600 } }
                                   autoSize={ {
-                                    minRows: 2,
-                                    maxRows: 6
+                                    minRows: 4,
+                                    maxRows: 7
                                   } }
                         />
                       </Form.Item>
                       <Form.Item name='specifics_objectives' label='Objetivos Específicos'>
-                        <TextArea style={ { width: 300 } }
+                        <TextArea style={ { width: 600 } }
                                   autoSize={ {
-                                    minRows: 2,
-                                    maxRows: 6
+                                    minRows: 4,
+                                    maxRows: 7
                                   } }
                         />
                       </Form.Item>
                       <Form.Item name='methodology' label='Metodología'>
-                        <TextArea style={ { width: 300 } }
+                        <TextArea style={ { width: 600 } }
                                   autoSize={ {
-                                    minRows: 2,
-                                    maxRows: 6
+                                    minRows: 4,
+                                    maxRows: 7
                                   } }
                         />
                       </Form.Item>
                       <Form.Item name='work_plan' label='Plan de trabajo'>
-                        <TextArea style={ { width: 300 } }
+                        <TextArea style={ { width: 600 } }
                                   autoSize={ {
-                                    minRows: 2,
-                                    maxRows: 6
+                                    minRows: 4,
+                                    maxRows: 7
                                   } }
                         />
                       </Form.Item>
@@ -515,7 +516,7 @@ const PlanForm = ( {
                                 fileList={ fileList }
                         >
                           { imageUrl
-                            ? <img src={ imageUrl } alt='Foto' style={ { width: '80px' } } />
+                            ? <img src={ imageUrl } alt='Foto' style={ { width: '100px' } } />
                             : <div>
                               <PlusOutlined />
                               <div className='ant-upload-text'>Subir imagen</div>
@@ -523,22 +524,28 @@ const PlanForm = ( {
                         </Upload>
                       </Form.Item>
                       <Form.Item name='bibliography' label='Bibliografía'>
-                        <TextArea style={ { width: 300 } }
+                        <TextArea style={ { width: 600 } }
                                   autoSize={ {
-                                    minRows: 2,
-                                    maxRows: 6
+                                    minRows: 4,
+                                    maxRows: 7
                                   } }
                         />
                       </Form.Item>
                       <Form.Item { ...tailLayout }>
-                        <Button className={ 'submit' } htmlType='submit' loading={ sending }>
-                          Guardar plan
-                        </Button>
-                        <Button className={ 'submit' }
-                                onClick={ modal }
-                                disabled={ !isFinished }>
-                          <SendOutlined /> Enviar plan
-                        </Button>
+                        <Row>
+                          <Col>
+                            <p>Todos los cambios serán <br />
+                              guardados automáticamente</p>
+                          </Col>
+                          <Col>
+                            <Button className={ 'submit' }
+                                    onClick={ modal }
+                                    disabled={ !isFinished }
+                                    style={ { marginLeft: 10 } }>
+                              <SendOutlined /> Enviar plan
+                            </Button>
+                          </Col>
+                        </Row>
                       </Form.Item>
                     </Col>
                   </Row>
