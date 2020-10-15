@@ -1,12 +1,12 @@
 import {
   Col, Row, Form, Input, Upload, Button, Select, Typography, message,
-  Modal, Image
+  Modal, Image, Comment
 } from 'antd';
 import React, { useState } from 'react';
 import '../styles/plan-form.css';
 import {
   PlusOutlined, SendOutlined,
-  ExclamationCircleOutlined, CheckCircleOutlined
+  ExclamationCircleOutlined, CheckCircleOutlined, CommentOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
 import { useLocation } from 'react-router-dom';
@@ -16,6 +16,7 @@ import { useTeachers } from '../data/useTeachers';
 import Loading from './Loading';
 import API from '../data';
 import { usePlanContent } from '../data/usePlan';
+import AddComments from './AddComments';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -50,6 +51,13 @@ const PlanFormTeacher = ( {
   const [ fileList, setFileList ] = useState( [] );
   const [ sending, setSending ] = useState( false );
   const [ isFinished, setIsFinished ] = useState( () => getProjectData() );
+  const [ showComments, showAddCommentsModal ] = useState( false );
+  const [ comments, setComments ] = useState( " " );
+
+  const showAddComments = async( values ) => {
+    showAddCommentsModal( true );
+    setComments( values );
+  };
 
   console.log( plan, isFinished );
 
@@ -83,7 +91,6 @@ const PlanFormTeacher = ( {
   };
 
 
-
   const onSentComments = async( values ) => {
     setSending( true );
     const data = { ...values };
@@ -112,7 +119,7 @@ const PlanFormTeacher = ( {
     confirm( {
       icon: <ExclamationCircleOutlined />,
       title: '¿Estás seguro de mandar el plan?',
-        content: 'Una vez aprobado se enviará a la comisión de titulación para su revisión.',
+      content: 'Una vez aprobado se enviará a la comisión de titulación para su revisión.',
       okText: 'Si',
       cancelText: 'No',
       onOk() {
@@ -322,76 +329,139 @@ const PlanFormTeacher = ( {
 
               <Row justify={ 'left' }>
                 <Col>
+                  <CommentOutlined style={ {
+                    color: '#034c70',
+                    fontSize: 25,
+                    marginLeft: 15,
+                    float: 'right'
+                  } } onClick={ () => showAddComments( 'title_comment' ) } />
                   <Form.Item name='title' label='Título' rules={ [ { required: true } ] }>
                     <TextArea
                       style={ { width: 600 } }
                       placeholder='Máximo 15 palabras'
                       autoSize={ {
-                        minRows: 1,
-                        maxRows: 4
+                        minRows: 2,
+                        maxRows: 5
                       } }
                     />
                   </Form.Item>
+
+                  <CommentOutlined name='problem_comment' style={ {
+                    color: '#034c70',
+                    fontSize: 25,
+                    marginLeft: 15,
+                    float: 'right'
+                  } } onClick={ () => showAddComments( 'problem_comment' ) } />
+
                   <Form.Item name='problem'
                              label='Planteamiento del problema'>
                     <TextArea style={ { width: 600 } }
                               autoSize={ {
-                                minRows: 2,
-                                maxRows: 6
+                                minRows: 15,
+                                maxRows: 15
                               } }
                     />
                   </Form.Item>
+
+                  <CommentOutlined name='justification_comment' style={ {
+                    color: '#034c70',
+                    fontSize: 25,
+                    marginLeft: 15,
+                    float: 'right'
+                  } } onClick={ () => showAddComments( 'justification_comment' ) } />
                   <Form.Item name='justification' label='Justificación'>
                     <TextArea style={ { width: 600 } }
                               autoSize={ {
-                                minRows: 2,
-                                maxRows: 6
+                                minRows: 15,
+                                maxRows: 15
                               } }
                     />
                   </Form.Item>
+
+                  <CommentOutlined name='hypothesis_comment' style={ {
+                    color: '#034c70',
+                    fontSize: 25,
+                    marginLeft: 15,
+                    float: 'right'
+                  } } onClick={ () => showAddComments( 'hypothesis_comment' ) } />
                   <Form.Item name='hypothesis' label='Hipótesis'>
                     <TextArea style={ { width: 600 } }
                               placeholder='Si no aplica escribir N/A'
                               autoSize={ {
-                                minRows: 2,
+                                minRows: 6,
                                 maxRows: 6
                               } }
                     />
                   </Form.Item>
+
+                  <CommentOutlined name='general_objective_comment' style={ {
+                    color: '#034c70',
+                    fontSize: 25,
+                    marginLeft: 15,
+                    float: 'right'
+                  } } onClick={ () => showAddComments( 'general_objective_comment' ) } />
                   <Form.Item name='general_objective'
                              label='Objetivo General'
                   >
                     <TextArea style={ { width: 600 } }
                               autoSize={ {
-                                minRows: 2,
+                                minRows: 6,
                                 maxRows: 6
                               } }
                     />
                   </Form.Item>
+
+                  <CommentOutlined name='specifics_objectives_comment' style={ {
+                    color: '#034c70',
+                    fontSize: 25,
+                    marginLeft: 15,
+                    float: 'right'
+                  } } onClick={ () => showAddComments( 'specifics_objectives_comment' ) } />
                   <Form.Item name='specifics_objectives' label='Objetivos Específicos'>
                     <TextArea style={ { width: 600 } }
                               autoSize={ {
-                                minRows: 2,
+                                minRows: 6,
                                 maxRows: 6
                               } }
                     />
                   </Form.Item>
+
+                  <CommentOutlined name='methodology_comment' style={ {
+                    color: '#034c70',
+                    fontSize: 25,
+                    marginLeft: 15,
+                    float: 'right'
+                  } } onClick={ () => showAddComments( 'methodology_comment' ) } />
                   <Form.Item name='methodology' label='Metodología'>
                     <TextArea style={ { width: 600 } }
                               autoSize={ {
-                                minRows: 2,
-                                maxRows: 6
+                                minRows: 15,
+                                maxRows: 15
                               } }
                     />
                   </Form.Item>
+
+                  <CommentOutlined name='work_plan_comment' style={ {
+                    color: '#034c70',
+                    fontSize: 25,
+                    marginLeft: 15,
+                    float: 'right'
+                  } } onClick={ () => showAddComments( 'work_plan_comment' ) } />
                   <Form.Item name='work_plan' label='Plan de trabajo'>
                     <TextArea style={ { width: 600 } }
                               autoSize={ {
-                                minRows: 2,
-                                maxRows: 6
+                                minRows: 15,
+                                maxRows: 15
                               } }
                     />
                   </Form.Item>
+
+                  <CommentOutlined name='schedule_comment' style={ {
+                    color: '#034c70',
+                    fontSize: 25,
+                    marginLeft: 15,
+                    float: 'right'
+                  } } onClick={ () => showAddComments( 'schedule_comment' ) } />
                   <Form.Item name='schedule' label='Cronograma' getValueFromEvent={ normPhotoFile }>
                     <Upload name='files'
                             accept='image/jpeg,image/png'
@@ -409,10 +479,17 @@ const PlanFormTeacher = ( {
                         </div> }
                     </Upload>
                   </Form.Item>
+
+                  <CommentOutlined name='bibliography_comment' style={ {
+                    color: '#034c70',
+                    fontSize: 25,
+                    marginLeft: 15,
+                    float: 'right'
+                  } } onClick={ () => showAddComments( 'bibliography_comment' ) } />
                   <Form.Item name='bibliography' label='Bibliografía'>
                     <TextArea style={ { width: 600 } }
                               autoSize={ {
-                                minRows: 2,
+                                minRows: 6,
                                 maxRows: 6
                               } }
                     />
@@ -434,6 +511,15 @@ const PlanFormTeacher = ( {
         </Col>
       </Row>
 
+      <Modal
+        visible={ showComments }
+        footer={ null }
+        onCancel={ () => showAddCommentsModal( false ) }
+      >
+        <AddComments
+          comments={ comments }
+          closeModal={ () => showAddCommentsModal( false ) } />
+      </Modal>
 
     </>
   );

@@ -150,10 +150,6 @@ const PlanForm = ( {
       message.error( `No se guardaron los datos:¨${ e }` );
       setSending( false );
     }
-
-    //   } ).catch( info => {
-    //   console.log( 'Validate Failed:', info );
-    // } );
   };
 
   const onUpdate = async( values ) => {
@@ -451,7 +447,7 @@ const PlanForm = ( {
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
                                     minRows: 4,
-                                    maxRows: 7
+                                    maxRows: 15
                                   } }
                         />
                       </Form.Item>
@@ -459,7 +455,7 @@ const PlanForm = ( {
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
                                     minRows: 4,
-                                    maxRows: 7
+                                    maxRows: 15
                                   } }
                         />
                       </Form.Item>
@@ -468,7 +464,7 @@ const PlanForm = ( {
                                   placeholder='Si no aplica escribir N/A'
                                   autoSize={ {
                                     minRows: 4,
-                                    maxRows: 7
+                                    maxRows: 6
                                   } }
                         />
                       </Form.Item>
@@ -478,7 +474,7 @@ const PlanForm = ( {
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
                                     minRows: 4,
-                                    maxRows: 7
+                                    maxRows: 6
                                   } }
                         />
                       </Form.Item>
@@ -486,7 +482,7 @@ const PlanForm = ( {
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
                                     minRows: 4,
-                                    maxRows: 7
+                                    maxRows: 6
                                   } }
                         />
                       </Form.Item>
@@ -494,7 +490,7 @@ const PlanForm = ( {
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
                                     minRows: 4,
-                                    maxRows: 7
+                                    maxRows: 15
                                   } }
                         />
                       </Form.Item>
@@ -502,7 +498,7 @@ const PlanForm = ( {
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
                                     minRows: 4,
-                                    maxRows: 7
+                                    maxRows: 15
                                   } }
                         />
                       </Form.Item>
@@ -527,7 +523,7 @@ const PlanForm = ( {
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
                                     minRows: 4,
-                                    maxRows: 7
+                                    maxRows: 6
                                   } }
                         />
                       </Form.Item>
