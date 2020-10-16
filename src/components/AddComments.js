@@ -17,100 +17,110 @@ const AddComments = ( props ) => {
       case 'title_comment':
         comment = [
           {
-            content: <p>{ props.plan.title_comment }</p>,
-            datetime: props.plan.title_comment
-              ? moment().fromNow()
-              : '',
+            content: <div>{
+              props.plan.title_comment
+                ? <p><b>Comentarios: </b>{ props.plan.title_comment }</p>
+                : ''
+            }</div>
           }
         ];
         break;
       case 'problem_comment':
         comment = [
           {
-            content: <p>{ props.plan.problem_comment }</p>,
-            datetime: props.plan.problem_comment
-              ? moment().fromNow()
-              : '',
+            content: <div>{
+              props.plan.problem_comment
+                ? <p><b>Comentarios: </b>{ props.plan.problem_comment }</p>
+                : ''
+            }</div>
           }
         ];
         break;
       case 'justification_comment':
         comment = [
           {
-            content: <p>{ props.plan.justification_comment }</p>,
-            datetime: props.plan.justification_comment
-              ? moment().fromNow()
-              : '',
+            content: <div>{
+              props.plan.justification_comment
+                ? <p><b>Comentarios: </b>{ props.plan.justification_comment }</p>
+                : ''
+            }</div>
           }
         ];
         break;
       case 'hypothesis_comment':
         comment = [
           {
-            content: <p>{ props.plan.hypothesis_comment }</p>,
-            datetime: props.plan.hypothesis_comment
-              ? moment().fromNow()
-              : '',
+            content: <div>{
+              props.plan.hypothesis_comment
+                ? <p><b>Comentarios: </b>{ props.plan.hypothesis_comment }</p>
+                : ''
+            }</div>
           }
         ];
         break;
       case 'general_objective_comment':
         comment = [
           {
-            content: <p>{ props.plan.general_objective_comment }</p>,
-            datetime: props.plan.general_objective_comment
-              ? moment().fromNow()
-              : '',
+            content: <div>{
+              props.plan.general_objective_comment
+                ? <p><b>Comentarios: </b>{ props.plan.general_objective_comment }</p>
+                : ''
+            }</div>
           }
         ];
         break;
       case 'specifics_objectives_comment':
         comment = [
           {
-            content: <p>{ props.plan.specifics_objectives_comment }</p>,
-            datetime: props.plan.specifics_objectives_comment
-              ? moment().fromNow()
-              : '',
+            content: <div>{
+              props.plan.specifics_objectives_comment
+                ? <p><b>Comentarios: </b>{ props.plan.specifics_objectives_comment }</p>
+                : ''
+            }</div>
           }
         ];
         break;
       case 'methodology_comment':
         comment = [
           {
-            content: <p>{ props.plan.methodology_comment }</p>,
-            datetime: props.plan.methodology_comment
-              ? moment().fromNow()
-              : '',
+            content: <div>{
+              props.plan.methodology_comment
+                ? <p><b>Comentarios: </b>{ props.plan.methodology_comment }</p>
+                : ''
+            }</div>
           }
         ];
         break;
       case 'work_plan_comment':
         comment = [
           {
-            content: <p>{ props.plan.work_plan_comment }</p>,
-            datetime: props.plan.work_plan_comment
-              ? moment().fromNow()
-              : '',
+            content: <div>{
+              props.plan.work_pkan_comment
+                ? <p><b>Comentarios: </b>{ props.plan.work_plan_comment }</p>
+                : ''
+            }</div>
           }
         ];
         break;
       case 'schedule_comment':
         comment = [
           {
-            content: <p>{ props.plan.schedule_comment }</p>,
-            datetime: props.plan.schedule_comment
-              ? moment().fromNow()
-              : '',
+            content: <div>{
+              props.plan.schedule_comment
+                ? <p><b>Comentarios: </b>{ props.plan.schedule_comment }</p>
+                : ''
+            }</div>
           }
         ];
         break;
       case 'bibliography_comment':
         comment = [
           {
-            content: <p>{ props.plan.bibliography_comment }</p>,
-            datetime: props.plan.bibliography_comment
-              ? moment().fromNow()
-              : '',
+            content: <div>{
+              props.plan.bibliography_comment
+                ? <p><b>Comentarios: </b>props.plan.bibliography_comment</p>
+                : ''
+            }</div>
           }
         ];
         break;
@@ -180,82 +190,70 @@ const AddComments = ( props ) => {
         case 'title_comment':
           setComments( [
             {
-              content: <p>{ values.title_comment }</p>,
-              datetime: values.title_comment
-                ? moment().fromNow()
-                : '',
+              content: <p><b>Comentarios: </b>{ values.title_comment }</p>,
             }
           ] );
           break;
         case 'problem_comment':
           setComments( [
             {
-              content: <p>{ values.problem_comment }</p>,
-              datetime: moment().fromNow(),
+              content: <p><b>Comentarios: </b>{ values.problem_comment }</p>,
             }
           ] );
           break;
         case 'justification_comment':
           setComments( [
             {
-              content: <p>{ values.justification_comment }</p>,
-              datetime: moment().fromNow(),
+              content: <p><b>Comentarios: </b>{ values.justification_comment }</p>,
             }
           ] );
           break;
         case 'hypothesis_comment':
           setComments( [
             {
-              content: <p>{ values.hypothesis_comment }</p>,
-              datetime: moment().fromNow(),
+              content: <p><b>Comentarios: </b>{ values.hypothesis_comment }</p>,
             }
           ] );
           break;
         case 'general_objective_comment':
           setComments( [
             {
-              content: <p>{ values.general_objective_comment }</p>,
-              datetime: moment().fromNow(),
+              content: <p><b>Comentarios: </b>{ values.general_objective_comment }</p>,
             }
           ] );
           break;
         case 'specifics_objectives_comment':
           setComments( [
             {
-              content: <p>{ values.specifics_objectives_comment }</p>,
-              datetime: moment().fromNow(),
+              content: <p><b>Comentarios: </b>{ values.specifics_objectives_comment }</p>,
             }
           ] );
           break;
         case 'methodology_comment':
           setComments( [
             {
-              content: <p>{ values.methodology_comment }</p>,
-              datetime: moment().fromNow(),
+              content: <p><b>Comentarios: </b>{ values.methodology_comment }</p>,
             }
           ] );
           break;
         case 'work_plan_comment':
           setComments( [
             {
-              content: <p>{ values.work_plan_comment }</p>,
-              datetime: moment().fromNow(),
+              content: <p><b>Comentarios: </b>{ values.work_plan_comment }</p>,
             }
           ] );
           break;
         case 'schedule_comment':
           setComments( [
             {
-              content: <p>{ values.schedule_comment }</p>,
-              datetime: moment().fromNow(),
+              content: <p><b>Comentarios: </b>{ values.schedule_comment }</p>,
             }
           ] );
           break;
         case 'bibliography_comment':
           setComments( [
             {
-              content: <p>{ values.bibliography_comment }</p>,
-              datetime: moment().fromNow(),
+              content: <p><b>Comentarios: </b>{ values.bibliography_comment }</p>,
             }
           ] );
           break;
