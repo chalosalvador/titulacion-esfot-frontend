@@ -24,9 +24,9 @@ const StepsSider = () => {
   const projectStatus = projects.length > 0
     ? projects[ 0 ].status
     : '';
-  const numbers = projects.length === 0 || projectStatus === 'plan_saved' || projectStatus === 'plan_rejected' || projectStatus === 'project_rejected'
+  const numbers = projects.length === 0 || projectStatus === 'plan_saved' || projectStatus === 'plan_rejected' || projectStatus === 'project_rejected' || projectStatus === 'plan_review_teacher'
     ? 0
-    : projectStatus === 'plan_sent'
+    : projectStatus === 'plan_sent' || projectStatus === 'plan_corrections_done'
       ? 1
       : projectStatus === 'plan_approved_director'
         ? 2

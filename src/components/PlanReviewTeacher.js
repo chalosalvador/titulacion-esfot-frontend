@@ -52,7 +52,7 @@ const PlanFormTeacher = ( {
   const [ sending, setSending ] = useState( false );
   const [ isFinished, setIsFinished ] = useState( () => getProjectData() );
   const [ showComments, showAddCommentsModal ] = useState( false );
-  const [ comments, setComments ] = useState( " " );
+  const [ comments, setComments ] = useState( ' ' );
 
   const showAddComments = async( values ) => {
     showAddCommentsModal( true );
@@ -93,14 +93,47 @@ const PlanFormTeacher = ( {
 
   const onSentComments = async( values ) => {
     setSending( true );
-    const data = { ...values };
+    const data = {
+      ...values,
+      status: 'plan_review_teacher'
+    };
 
     console.log( 'DATOS', data );
 
     try {
       await API.post( `/projects/${ plan.id }`, data ); // put data to server
       setSending( false );
-      message.success( 'Cambios guardados correctamente!' );
+      confirm( {
+        icon: <CheckCircleOutlined />,
+        title: <Title level={ 3 } style={ { color: '#034c70' } }>¡Buen trabajo!</Title>,
+        content:
+          <>
+            <Row justify='center'>
+              <Col>
+                <Image src='boy.png' width={ 100 } /><Image src='girl.png' width={ 100 } />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <p style={ { color: '#034c70' } }>
+                  Gracias por tu esfuerzo en revisar el plan,
+                  <br />
+                  <strong>tus comentarios han sido enviados</strong>.
+                </p>
+              </Col>
+            </Row>
+          </>,
+        okText: 'Entendido',
+        okButtonProps: {
+          href: Routes.HOME,
+          style: {
+            backgroundColor: '#034c70',
+            marginRight: 125
+          }
+        },
+        cancelButtonProps: { hidden: true }
+      } );
     } catch( e ) {
       console.log( 'ERROR', e );
       message.error( `No se guardaron los datos:¨${ e }` );
@@ -518,6 +551,8 @@ const PlanFormTeacher = ( {
       >
         <AddComments
           comments={ comments }
+          planID={ idPlan }
+          plan={ plan }
           closeModal={ () => showAddCommentsModal( false ) } />
       </Modal>
 
