@@ -615,7 +615,7 @@ const PlanForm = ( {
                       </Form.Item>
 
                       {
-                        projects[ 0 ].work_plan && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ].work_plan_comment && projects[ 0 ].status === 'plan_review_teacher'
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
