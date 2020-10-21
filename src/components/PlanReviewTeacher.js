@@ -165,7 +165,7 @@ const PlanFormTeacher = ( {
     const modalProps = {
 
       title: <Title level={ 1 } style={ { color: '#034c70' } }>Confirmación</Title>,
-      okText: <span><CheckOutlined />Aporbar plan</span>,
+      okText: <span><CheckOutlined />Aprobar plan</span>,
       cancelButtonProps: { hidden: true },
       closeIcon: <CloseCircleOutlined style={ { color: '#034c70' } } />,
       visible: approvePlan,
