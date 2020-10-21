@@ -118,7 +118,7 @@ const AddComments = ( props ) => {
           {
             content: <div>{
               props.plan.bibliography_comment
-                ? <p><b>Comentarios: </b>props.plan.bibliography_comment</p>
+                ? <p><b>Comentarios: </b>{ props.plan.bibliography_comment }</p>
                 : ''
             }</div>
           }

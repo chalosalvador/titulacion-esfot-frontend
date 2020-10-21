@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import '../styles/plan-form.css';
 import {
   BellOutlined, LoadingOutlined, LogoutOutlined, UserOutlined, PlusOutlined, SendOutlined, HomeOutlined,
-  ExclamationCircleOutlined, CheckCircleOutlined
+  ExclamationCircleOutlined, CheckCircleOutlined, CommentOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
 import { Link, useLocation } from 'react-router-dom';
@@ -17,6 +17,7 @@ import { useProject } from '../data/useProjects';
 import { useTeachers } from '../data/useTeachers';
 import Loading from './Loading';
 import API from '../data';
+import ViewComments from './ViewComments';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -50,6 +51,13 @@ const PlanForm = ( {
   const [ fileList, setFileList ] = useState( [] );
   const [ sending, setSending ] = useState( false );
   const [ isFinished, setIsFinished ] = useState( () => getProjectData() );
+  const [ showComments, showViewCommentsModal ] = useState( false );
+  const [ comments, setComments ] = useState( ' ' );
+
+  const showViewComments = async( values ) => {
+    showViewCommentsModal( true );
+    setComments( values );
+  };
 
   console.log( projects, isFinished );
 
@@ -195,10 +203,19 @@ const PlanForm = ( {
 
   const onFinish = async() => {
     const data = form.getFieldsValue();
-    let dataToSent = {
-      ...data,
-      status: 'plan_sent'
-    };
+    let dataToSent = {};
+    if( projects[ 0 ].status === 'plan_saved' ) {
+      dataToSent = {
+        ...data,
+        status: 'plan_sent'
+      };
+    } else if( projects[ 0 ].status === 'plan_review_teacher' ) {
+      dataToSent = {
+        ...data,
+        status: 'plan_corrections_done'
+      };
+    }
+
     try {
       await API.post( `/projects/${ projects[ 0 ].id }`, dataToSent ); // put data to server
       setSending( false );
@@ -435,7 +452,21 @@ const PlanForm = ( {
                   </Row>
 
                   <Row justify={ 'left' }>
-                    <Col>
+                    <Col>{
+                      projects[ 0 ].title_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        ? <CommentOutlined style={ {
+                          color: '#034c70',
+                          fontSize: 25,
+                          marginLeft: 15,
+                          float: 'right'
+                        } } onClick={ () => showViewComments( 'title_comment' ) } />
+                        : <CommentOutlined style={ {
+                          color: 'transparent',
+                          fontSize: 25,
+                          marginLeft: 15,
+                          float: 'right'
+                        } } />
+                    }
                       <Form.Item name='title' label='Título' rules={ [ { required: true } ] }>
                         <TextArea
                           style={ { width: 600 } }
@@ -446,6 +477,23 @@ const PlanForm = ( {
                           } }
                         />
                       </Form.Item>
+
+                      {
+                        projects[ 0 ].problem_comment && projects[ 0 ].status === 'plan_review_teacher'
+                          ? <CommentOutlined style={ {
+                            color: '#034c70',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } onClick={ () => showViewComments( 'problem_comment' ) } />
+                          : <CommentOutlined style={ {
+                            color: 'transparent',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } />
+                      }
+
                       <Form.Item name='problem'
                                  label='Planteamiento del problema'>
                         <TextArea style={ { width: 600 } }
@@ -455,6 +503,22 @@ const PlanForm = ( {
                                   } }
                         />
                       </Form.Item>
+
+                      {
+                        projects[ 0 ].justification_comment && projects[ 0 ].status === 'plan_review_teacher'
+                          ? <CommentOutlined style={ {
+                            color: '#034c70',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } onClick={ () => showViewComments( 'justification_comment' ) } />
+                          : <CommentOutlined style={ {
+                            color: 'transparent',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } />
+                      }
                       <Form.Item name='justification' label='Justificación'>
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
@@ -463,33 +527,97 @@ const PlanForm = ( {
                                   } }
                         />
                       </Form.Item>
+
+                      {
+                        projects[ 0 ].hypothesis_comment && projects[ 0 ].status === 'plan_review_teacher'
+                          ? <CommentOutlined style={ {
+                            color: '#034c70',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } onClick={ () => showViewComments( 'hypothesis_comment' ) } />
+                          : <CommentOutlined style={ {
+                            color: 'transparent',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } />
+                      }
                       <Form.Item name='hypothesis' label='Hipótesis'>
                         <TextArea style={ { width: 600 } }
                                   placeholder='Si no aplica escribir N/A'
                                   autoSize={ {
                                     minRows: 4,
-                                    maxRows: 6
+                                    maxRows: 15
                                   } }
                         />
                       </Form.Item>
+
+                      {
+                        projects[ 0 ].general_objective_comment && projects[ 0 ].status === 'plan_review_teacher'
+                          ? <CommentOutlined style={ {
+                            color: '#034c70',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } onClick={ () => showViewComments( 'general_objective_comment' ) } />
+                          : <CommentOutlined style={ {
+                            color: 'transparent',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } />
+                      }
                       <Form.Item name='general_objective'
                                  label='Objetivo General'
                       >
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
                                     minRows: 4,
-                                    maxRows: 6
+                                    maxRows: 7
                                   } }
                         />
                       </Form.Item>
+
+                      {
+                        projects[ 0 ].specifics_objectives_comment && projects[ 0 ].status === 'plan_review_teacher'
+                          ? <CommentOutlined style={ {
+                            color: '#034c70',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } onClick={ () => showViewComments( 'specifics_objectives_comment' ) } />
+                          : <CommentOutlined style={ {
+                            color: 'transparent',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } />
+                      }
                       <Form.Item name='specifics_objectives' label='Objetivos Específicos'>
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
                                     minRows: 4,
-                                    maxRows: 6
+                                    maxRows: 15
                                   } }
                         />
                       </Form.Item>
+
+                      {
+                        projects[ 0 ].methodology_comment && projects[ 0 ].status === 'plan_review_teacher'
+                          ? <CommentOutlined style={ {
+                            color: '#034c70',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } onClick={ () => showViewComments( 'methodology_comment' ) } />
+                          : <CommentOutlined style={ {
+                            color: 'transparent',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } />
+                      }
                       <Form.Item name='methodology' label='Metodología'>
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
@@ -498,6 +626,22 @@ const PlanForm = ( {
                                   } }
                         />
                       </Form.Item>
+
+                      {
+                        projects[ 0 ].work_plan_comment && projects[ 0 ].status === 'plan_review_teacher'
+                          ? <CommentOutlined style={ {
+                            color: '#034c70',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } onClick={ () => showViewComments( 'work_plan_comment' ) } />
+                          : <CommentOutlined style={ {
+                            color: 'transparent',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } />
+                      }
                       <Form.Item name='work_plan' label='Plan de trabajo'>
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
@@ -506,6 +650,22 @@ const PlanForm = ( {
                                   } }
                         />
                       </Form.Item>
+
+                      {
+                        projects[ 0 ].schedule_comment && projects[ 0 ].status === 'plan_review_teacher'
+                          ? <CommentOutlined style={ {
+                            color: '#034c70',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } onClick={ () => showViewComments( 'schedule_comment' ) } />
+                          : <CommentOutlined style={ {
+                            color: 'transparent',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } />
+                      }
                       <Form.Item name='schedule' label='Cronograma' getValueFromEvent={ normPhotoFile }>
                         <Upload name='files'
                                 accept='image/jpeg,image/png'
@@ -523,11 +683,27 @@ const PlanForm = ( {
                             </div> }
                         </Upload>
                       </Form.Item>
+
+                      {
+                        projects[ 0 ].bibliography_comment && projects[ 0 ].status === 'plan_review_teacher'
+                          ? <CommentOutlined style={ {
+                            color: '#034c70',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } onClick={ () => showViewComments( 'bibliography_comment' ) } />
+                          : <CommentOutlined style={ {
+                            color: 'transparent',
+                            fontSize: 25,
+                            marginLeft: 15,
+                            float: 'right'
+                          } } />
+                      }
                       <Form.Item name='bibliography' label='Bibliografía'>
                         <TextArea style={ { width: 600 } }
                                   autoSize={ {
                                     minRows: 4,
-                                    maxRows: 6
+                                    maxRows: 7
                                   } }
                         />
                       </Form.Item>
@@ -557,8 +733,21 @@ const PlanForm = ( {
         </Layout>
       </Layout>
 
+      <Modal
+        visible={ showComments }
+        footer={ null }
+        onCancel={ () => showViewCommentsModal( false ) }
+      >
+        <ViewComments
+          comments={ comments }
+          planID={ projects[ 0 ].id }
+          plan={ projects }
+          closeModal={ () => showViewCommentsModal( false ) } />
+      </Modal>
+
     </>
-  );
+  )
+    ;
 };
 
 export default withAuth( PlanForm );
