@@ -38,10 +38,6 @@ const PlanFormTeacher = ( {
 
     const [ form ] = Form.useForm();
 
-    const getProjectData = () => {
-      const formData = form.getFieldsValue();
-      return formData.bibliography !== undefined && formData.general_objective !== undefined && formData.hypothesis !== undefined && formData.justification !== undefined && formData.knowledge_area !== undefined && formData.methodology !== undefined && formData.problem !== undefined && formData.project_type !== undefined && formData.research_line !== undefined && formData.specifics_objectives !== undefined && formData.work_plan !== undefined;
-    };
 
     let location = useLocation();
     // const { projects, isError, isLoading } = useProject();
@@ -51,7 +47,7 @@ const PlanFormTeacher = ( {
     const [ fileList, setFileList ] = useState( [] );
     const [ sending, setSending ] = useState( false );
     const [ approvePlan, setApprovePlan ] = useState( false );
-    const [ isFinished, setIsFinished ] = useState( () => getProjectData() );
+    const [ isFinished, setIsFinished ] = useState( false );
     const [ showComments, showAddCommentsModal ] = useState( false );
     const [ comments, setComments ] = useState( ' ' );
 
@@ -681,7 +677,7 @@ const PlanFormTeacher = ( {
                       </Button>
                       <Button className={ 'submit' }
                               onClick={ () => setApprovePlan( true ) }
-                              disabled={ !isFinished }>
+                              >
                         <SendOutlined /> Aprobar Plan
                       </Button>
                     </Form.Item>
