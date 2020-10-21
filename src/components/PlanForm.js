@@ -152,9 +152,10 @@ const PlanForm = ( {
     }
   };
 
-  const onUpdate = async( values ) => {
+  const onUpdate = async() => {
+    const formData = form.getFieldsValue();
     setSending( true );
-    const data = { ...values };
+    const data = { ...formData };
 
     console.log( 'DATOS', data );
 
@@ -172,9 +173,7 @@ const PlanForm = ( {
     if( formData.bibliography !== undefined && formData.general_objective !== undefined && formData.hypothesis !== undefined && formData.justification !== undefined && formData.knowledge_area !== undefined && formData.methodology !== undefined && formData.problem !== undefined && formData.project_type !== undefined && formData.research_line !== undefined && formData.specifics_objectives !== undefined && formData.work_plan !== undefined ) {
       setIsFinished( true );
     }
-
-    onUpdate( formData ).then( () => message.success( 'Cambios guardados correctamente!' ) );
-    console.log( 'FORM', formData );
+    console.log( 'FORM', JSON.stringify( formData ) );
   };
 
   const modal = () => {
@@ -352,7 +351,12 @@ const PlanForm = ( {
                        color: '#034c70',
                        marginLeft: 30
                      } }>Datos Generales</Title>
-              <Form.Provider onFormChange={ () => {setTimeout( () => {onCompleteForm();}, 2000 );} }>
+              <Form.Provider onFormChange={ () => {
+                onCompleteForm();
+                setTimeout( () => {
+                  onUpdate().then( () => {message.success( 'Cambios guardados correctamente!' );} );
+                }, 2000 );
+              } }>
                 <Form { ...layout }
                       name='nest-messages'
                       onFinish={ projects.length > 0
