@@ -167,12 +167,16 @@ const PlanForm = ( {
 
     console.log( 'DATOS', data );
 
-    try {
-      await API.post( `/projects/${ projects[ 0 ].id }`, data ); // put data to server
-      setSending( false );
-    } catch( e ) {
-      console.log( 'ERROR', e );
-      message.error( `No se guardaron los datos:¨${ e }` );
+    if( projects.length > 0 ) {
+      try {
+        await API.post( `/projects/${ projects[ 0 ].id }`, data ); // put data to server
+        setSending( false );
+      } catch( e ) {
+        console.log( 'ERROR', e );
+        message.error( `No se guardaron los datos:¨${ e }` );
+      }
+    } else {
+      onCreate( data );
     }
   };
 
