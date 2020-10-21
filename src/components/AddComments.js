@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import withAuth from '../hocs/withAuth';
 import { Button, Col, Form, Input, Row, Comment, List, message } from 'antd';
-import moment from 'moment';
 import API from '../data';
 
 const { TextArea } = Input;

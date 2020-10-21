@@ -141,7 +141,7 @@ const HomeStudent = () => {
               </Col>
             </Row>
 
-            <Row>
+            <Row style={ { marginTop: 120 } }>
               <Col>
                 <Title level={ 3 }
                        style={ {
@@ -151,7 +151,7 @@ const HomeStudent = () => {
               </Col>
             </Row>
 
-            <Row>
+            <Row style={ { marginTop: 75 } }>
               <Col span={ 24 }>
                 <Row justify='center'>
                   <Col span={ 6 }>

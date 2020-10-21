@@ -157,7 +157,7 @@ const HomeTeacher = () => {
               </Col>
             </Row>
 
-            <Row>
+            <Row style={ { marginTop: 120 } }>
               <Col>
                 <Title level={ 3 } style={ {
                   color: '#034c70',
@@ -166,7 +166,7 @@ const HomeTeacher = () => {
               </Col>
             </Row>
 
-            <Row>
+            <Row style={ { marginTop: 75 } }>
               <Col span={ 24 }>
                 <Row justify='center'>
                   <Col span={ 6 }>
@@ -199,7 +199,7 @@ const HomeTeacher = () => {
               </Col>
             </Row>
 
-            <Row>
+            <Row style={ { marginTop: 120 } }>
               <Col>
                 <Title level={ 3 } style={ {
                   color: '#034c70',
@@ -208,7 +208,7 @@ const HomeTeacher = () => {
               </Col>
             </Row>
 
-            <Row>
+            <Row style={ { marginTop: 75 } }>
 
               <Col span={ 24 }>
 
