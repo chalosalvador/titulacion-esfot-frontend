@@ -204,10 +204,19 @@ const PlanForm = ( {
 
   const onFinish = async() => {
     const data = form.getFieldsValue();
-    let dataToSent = {
-      ...data,
-      status: 'plan_sent'
-    };
+    let dataToSent = {};
+    if( projects[ 0 ].status === 'plan_saved' ) {
+      dataToSent = {
+        ...data,
+        status: 'plan_sent'
+      };
+    } else if( projects[ 0 ].status === 'plan_review_teacher' ) {
+      dataToSent = {
+        ...data,
+        status: 'plan_corrections_done'
+      };
+    }
+
     try {
       await API.post( `/projects/${ projects[ 0 ].id }`, dataToSent ); // put data to server
       setSending( false );
