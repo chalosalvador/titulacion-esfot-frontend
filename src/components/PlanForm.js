@@ -204,15 +204,16 @@ const PlanForm = ( {
   const onFinish = async() => {
     const data = form.getFieldsValue();
     let dataToSent = {};
-    if( projects[ 0 ].status === 'plan_saved' ) {
-      dataToSent = {
-        ...data,
-        status: 'plan_sent'
-      };
-    } else if( projects[ 0 ].status === 'plan_review_teacher' ) {
+
+    if( projects[ 0 ].status === 'plan_review_teacher' ) {
       dataToSent = {
         ...data,
         status: 'plan_corrections_done'
+      };
+    } else {
+      dataToSent = {
+        ...data,
+        status: 'plan_sent'
       };
     }
 
@@ -453,7 +454,7 @@ const PlanForm = ( {
 
                   <Row justify={ 'left' }>
                     <Col>{
-                      projects[ 0 ].title_comment && projects[ 0 ].status === 'plan_review_teacher'
+                      projects[ 0 ] && projects[ 0 ].title_comment !== undefined && projects[ 0 ].status === 'plan_review_teacher'
                         ? <CommentOutlined style={ {
                           color: '#034c70',
                           fontSize: 25,
@@ -479,7 +480,7 @@ const PlanForm = ( {
                       </Form.Item>
 
                       {
-                        projects[ 0 ].problem_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].problem_comment && projects[ 0 ].status === 'plan_review_teacher'
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -505,7 +506,7 @@ const PlanForm = ( {
                       </Form.Item>
 
                       {
-                        projects[ 0 ].justification_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].justification_comment && projects[ 0 ].status === 'plan_review_teacher'
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -529,7 +530,7 @@ const PlanForm = ( {
                       </Form.Item>
 
                       {
-                        projects[ 0 ].hypothesis_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].hypothesis_comment && projects[ 0 ].status === 'plan_review_teacher'
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -554,7 +555,7 @@ const PlanForm = ( {
                       </Form.Item>
 
                       {
-                        projects[ 0 ].general_objective_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].general_objective_comment && projects[ 0 ].status === 'plan_review_teacher'
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -580,7 +581,7 @@ const PlanForm = ( {
                       </Form.Item>
 
                       {
-                        projects[ 0 ].specifics_objectives_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].specifics_objectives_comment && projects[ 0 ].status === 'plan_review_teacher'
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -604,7 +605,7 @@ const PlanForm = ( {
                       </Form.Item>
 
                       {
-                        projects[ 0 ].methodology_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].methodology_comment && projects[ 0 ].status === 'plan_review_teacher'
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -628,7 +629,7 @@ const PlanForm = ( {
                       </Form.Item>
 
                       {
-                        projects[ 0 ].work_plan_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].work_plan_comment && projects[ 0 ].status === 'plan_review_teacher'
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -652,7 +653,7 @@ const PlanForm = ( {
                       </Form.Item>
 
                       {
-                        projects[ 0 ].schedule_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].schedule_comment && projects[ 0 ].status === 'plan_review_teacher'
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -685,7 +686,7 @@ const PlanForm = ( {
                       </Form.Item>
 
                       {
-                        projects[ 0 ].bibliography_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].bibliography_comment && projects[ 0 ].status === 'plan_review_teacher'
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -740,7 +741,10 @@ const PlanForm = ( {
       >
         <ViewComments
           comments={ comments }
-          planID={ projects[ 0 ].id }
+          planID={ projects[ 0 ]
+            ?
+            projects[ 0 ].id
+            : '' }
           plan={ projects }
           closeModal={ () => showViewCommentsModal( false ) } />
       </Modal>
