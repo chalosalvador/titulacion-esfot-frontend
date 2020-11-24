@@ -1,6 +1,6 @@
 import React from 'react';
 import { Steps, Typography } from 'antd';
-import { useProject } from '../data/useProjects';
+import { useStudentProject } from '../data/useStudentProjects';
 import Loading from './Loading';
 
 const { Step } = Steps;
@@ -8,7 +8,7 @@ const { Title } = Typography;
 
 const StepsSider = () => {
 
-  const { projects, isLoading, isError } = useProject();
+  const { projects, isLoading, isError } = useStudentProject();
 
 
   if( isLoading ) {

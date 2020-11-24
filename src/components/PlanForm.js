@@ -13,7 +13,7 @@ import { Link, useLocation } from 'react-router-dom';
 import StepsSider from './StepsSider';
 import { useAuth } from '../providers/Auth';
 import withAuth from '../hocs/withAuth';
-import { useProject } from '../data/useProjects';
+import { useStudentProject } from '../data/useStudentProjects';
 import { useTeachers } from '../data/useTeachers';
 import Loading from './Loading';
 import API from '../data';
@@ -45,12 +45,12 @@ const PlanForm = ( {
   };
 
   let location = useLocation();
-  const { projects, isLoading } = useProject();
+  const { projects, isLoading } = useStudentProject();
   const { teachers } = useTeachers();
   const [ imageUrl, setImageUrl ] = useState( null );
   const [ fileList, setFileList ] = useState( [] );
   const [ sending, setSending ] = useState( false );
-  const [ isFinished, setIsFinished ] = useState( () => getProjectData() );
+  const [ isFinished, setIsFinished ] = useState( () => {getProjectData()} );
   const [ showComments, showViewCommentsModal ] = useState( false );
   const [ comments, setComments ] = useState( ' ' );
 

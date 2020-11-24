@@ -198,42 +198,49 @@ const HomeTeacher = () => {
                 </Row>
               </Col>
             </Row>
+            {
+              currentUser.committee !== 0
+                ? (
+                  <>
+                    <Row style={ { marginTop: 120 } }>
+                      <Col>
+                        <Title level={ 3 } style={ {
+                          color: '#034c70',
+                          marginLeft: -30
+                        } }>Comisión titulación: </Title>
+                      </Col>
+                    </Row>
 
-            <Row style={ { marginTop: 120 } }>
-              <Col>
-                <Title level={ 3 } style={ {
-                  color: '#034c70',
-                  marginLeft: -30
-                } }>Comisión titulación: </Title>
-              </Col>
-            </Row>
+                    <Row style={ { marginTop: 75 } }>
 
-            <Row style={ { marginTop: 75 } }>
+                      <Col span={ 24 }>
 
-              <Col span={ 24 }>
+                        <Row justify='center'>
+                          <Col span={ 6 }>
+                            <Card className={ 'options main-options' } title='Planes Comisión' bordered={ false }>
+                              <Space direction='vertical' size='large'>
+                                <div>
+                                  <SelectOutlined className={ 'big-icon' } />
+                                </div>
+                                <div>
+                                  Revisa los planes que llegan a la comisión de titulación
+                                </div>
+                                <div>
+                                  <Button href={ Routes.COMMITTEE_PLANS }>Ver planes</Button>
+                                </div>
+                              </Space>
 
-                <Row justify='center'>
-                  <Col span={ 6 }>
-                    <Card className={ 'options main-options' } title='Planes Comisión' bordered={ false }>
-                      <Space direction='vertical' size='large'>
-                        <div>
-                          <SelectOutlined className={ 'big-icon' } />
-                        </div>
-                        <div>
-                          Revisa los planes que llegan a la comisión de titulación
-                        </div>
-                        <div>
-                          <Button>Ver planes</Button>
-                        </div>
-                      </Space>
+                            </Card>
+                          </Col>
+                          <Col span={ 6 } />
+                          <Col span={ 6 } />
+                        </Row>
+                      </Col>
+                    </Row>
+                  </>)
+                : ''
+            }
 
-                    </Card>
-                  </Col>
-                  <Col span={ 6 } />
-                  <Col span={ 6 } />
-                </Row>
-              </Col>
-            </Row>
           </Content>
         </Layout>
       </Layout>
