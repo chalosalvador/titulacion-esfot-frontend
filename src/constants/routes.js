@@ -17,7 +17,8 @@ const privateRoutes = {
   HOME: '/inicio',
   TEACHER_PANEL: '/panel-profesor',
   TEACHERS_PLANS:'/profesor-ideas',
-  PLANFORM: '/plan-titulacion'
+  PLANFORM: '/plan-titulacion',
+  COMMITTEE_PLANS: '/proyectos-comision'
 };
 
 const Routes = {

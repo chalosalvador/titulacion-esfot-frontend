@@ -1,13 +1,16 @@
 import useSWR from 'swr';
 import API from './index';
 
-export const useProject = () => {
-  const { data, error, mutate } = useSWR( '/students/project', API.fetcher );
+
+export const useProjects = ()=>{
+  const { data, error, mutate } = useSWR( '/projects', API.fetcher );
 
   return {
-    projects: data && data.data,
+    projectsList: (data && data.data),
+    links: data && data.links,
+    meta: data && data.meta,
     isLoading: !error && !data,
     isError: error,
     mutate
   };
-};
+}
