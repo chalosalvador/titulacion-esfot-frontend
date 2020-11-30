@@ -5,7 +5,7 @@ import {
 import React, { useState } from 'react';
 import '../styles/plan-form.css';
 import {
-  PlusOutlined, SendOutlined,
+  PlusOutlined, CloseOutlined,
   ExclamationCircleOutlined, CheckCircleOutlined, CommentOutlined, CloseCircleOutlined, CheckOutlined
 } from '@ant-design/icons';
 import Routes from '../constants/routes';
@@ -92,7 +92,7 @@ const PlanFormCommittee = ( {
       setSending( true );
       const data = {
         ...values,
-        status: 'plan_review_teacher'
+        status: 'plan_review_commission'
       };
 
       console.log( 'DATOS', data );
@@ -161,6 +161,22 @@ const PlanFormCommittee = ( {
         okButtonProps: { style: { backgroundColor: '#034c70' } }
       } );
     };
+
+  const modalChanges = () => {
+    confirm( {
+      icon: <ExclamationCircleOutlined />,
+      title: '¿Estás seguro de solicitar cambios?',
+      okText: 'Si',
+      cancelText: 'No',
+      onOk() {
+        onSentComments();
+      },
+      onCancel() {
+        console.log( 'Cancel' );
+      },
+      okButtonProps: { style: { backgroundColor: '#034c70' } }
+    } );
+  };
 
     const modalProps = {
 
@@ -313,7 +329,7 @@ const PlanFormCommittee = ( {
       const data = form.getFieldsValue();
       let dataToSent = {
         ...data,
-        status: 'plan_approved_director'
+        status: 'plan_approved_commission'
       };
       try {
         await API.post( `/projects/${ plan.id }`, dataToSent ); // put data to server
@@ -432,7 +448,7 @@ const PlanFormCommittee = ( {
             <Form.Provider onFormChange={ onCompleteForm }>
               <Form { ...layout }
                     name='nest-messages'
-                    onFinish={ onSentComments }
+                    onFinish={ modalChanges }
                     initialValues={ plan }
                     validateMessages={ validateMessages }
                     form={ form }
@@ -458,24 +474,31 @@ const PlanFormCommittee = ( {
                       <Input
                         style={ { width: 300 } }
                         placeholder='Nombre del co-director'
+                        disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
                       />
                     </Form.Item>
                     <Form.Item name='partner' label='Seleccione su compañero'>
-                      <Select placeholder='Seleccione' style={ { width: 300 } }>
+                      <Select placeholder='Seleccione'
+                              style={ { width: 300 } }
+                              disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }>
                         <Option value='jack'>Jack</Option>
                         <Option value='lucy'>Lucy</Option>
                         <Option value='Yiminghe'>yiminghe</Option>
                       </Select>
                     </Form.Item>
                     <Form.Item name='project_type' label='Tipo de proyecto'>
-                      <Select placeholder='Seleccione' style={ { width: 300 } }>
+                      <Select placeholder='Seleccione'
+                              style={ { width: 300 } }
+                              disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }>
                         <Option value='areaInvestigation'>Investigación de campo</Option>
                         <Option value='documentalInvestigation'>Investigación documental</Option>>
                       </Select>
                     </Form.Item>
                     <Form.Item name='research_line'
                                label='Línea de investigación'>
-                      <Select placeholder='Seleccione' style={ { width: 300 } }>
+                      <Select placeholder='Seleccione'
+                              style={ { width: 300 } }
+                              disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }>
                         <Option value='jack'>Jack</Option>
                         <Option value='lucy'>Lucy</Option>
                         <Option value='Yiminghe'>yiminghe</Option>
@@ -483,7 +506,9 @@ const PlanFormCommittee = ( {
                     </Form.Item>
                     <Form.Item name='knowledge_area'
                                label='Área de investigación'>
-                      <Select placeholder='Seleccione' style={ { width: 300 } }>
+                      <Select placeholder='Seleccione'
+                              style={ { width: 300 } }
+                              disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }>
                         <Option value='jack'>Jack</Option>
                         <Option value='lucy'>Lucy</Option>
                         <Option value='Yiminghe'>yiminghe</Option>
@@ -520,6 +545,7 @@ const PlanFormCommittee = ( {
                           minRows: 2,
                           maxRows: 5
                         } }
+                        disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
                       />
                     </Form.Item>
 
@@ -537,6 +563,7 @@ const PlanFormCommittee = ( {
                                   minRows: 15,
                                   maxRows: 15
                                 } }
+                                disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
                       />
                     </Form.Item>
 
@@ -552,6 +579,7 @@ const PlanFormCommittee = ( {
                                   minRows: 15,
                                   maxRows: 15
                                 } }
+                                disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
                       />
                     </Form.Item>
 
@@ -568,6 +596,7 @@ const PlanFormCommittee = ( {
                                   minRows: 6,
                                   maxRows: 6
                                 } }
+                                disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
                       />
                     </Form.Item>
 
@@ -585,6 +614,7 @@ const PlanFormCommittee = ( {
                                   minRows: 6,
                                   maxRows: 6
                                 } }
+                                disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
                       />
                     </Form.Item>
 
@@ -600,6 +630,7 @@ const PlanFormCommittee = ( {
                                   minRows: 6,
                                   maxRows: 6
                                 } }
+                                disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
                       />
                     </Form.Item>
 
@@ -615,6 +646,7 @@ const PlanFormCommittee = ( {
                                   minRows: 15,
                                   maxRows: 15
                                 } }
+                                disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
                       />
                     </Form.Item>
 
@@ -630,6 +662,7 @@ const PlanFormCommittee = ( {
                                   minRows: 15,
                                   maxRows: 15
                                 } }
+                                disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
                       />
                     </Form.Item>
 
@@ -647,6 +680,7 @@ const PlanFormCommittee = ( {
                               showUploadList={ false }
                               beforeUpload={ () => false }
                               fileList={ fileList }
+                              disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
                       >
                         { imageUrl
                           ? <img src={ imageUrl } alt='Foto' style={ { width: '180px' } } />
@@ -669,16 +703,27 @@ const PlanFormCommittee = ( {
                                   minRows: 6,
                                   maxRows: 6
                                 } }
+                                disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
                       />
                     </Form.Item>
                     <Form.Item { ...tailLayout }>
-                      <Button className={ 'submit' } htmlType='submit' loading={ sending }>
-                        Enviar Comentarios
-                      </Button>
                       <Button className={ 'submit' }
+                              disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
                               onClick={ () => setApprovePlan( true ) }
                       >
-                        <SendOutlined /> Aprobar Plan
+                        <CheckOutlined /> Aprobar Plan
+                      </Button>
+                      <Button className={ 'submit' }
+                              htmlType='submit'
+                              loading={ sending }
+                              disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }>
+                        Solicitar cambios
+                      </Button>
+                      <Button className={ 'submit' }
+                              disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
+                        // onClick={ () => setRejectPlan( true ) }
+                      >
+                        <CloseOutlined /> Rechazar Plan
                       </Button>
                     </Form.Item>
                   </Col>

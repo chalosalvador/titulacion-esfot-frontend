@@ -32,7 +32,7 @@ const StepsSider = () => {
         ? 2
         : projectStatus === 'san_curriculum_1'
           ? 3
-          : projectStatus === 'plan_review_commission'
+          : projectStatus === 'plan_review_commission' || projectStatus === 'plan_corrections_done2'
             ? 4
             : projectStatus === 'plan_approved_commission'
               ? 5

@@ -313,7 +313,17 @@ const PlanFormTeacher = ( {
       const data = form.getFieldsValue();
       let dataToSent = {
         ...data,
-        status: 'plan_approved_director'
+        status: 'plan_approved_director',
+        title_comment: '',
+        problem_comment: '',
+        general_objective_comment: '',
+        specifics_objectives_comment: '',
+        hypothesis_comment: '',
+        justification_comment: '',
+        methodology_comment: '',
+        work_plan_comment: '',
+        schedule_comment: '',
+        bibliography_comment: ''
       };
       try {
         await API.post( `/projects/${ plan.id }`, dataToSent ); // put data to server
@@ -457,25 +467,32 @@ const PlanFormTeacher = ( {
                                label='Seleccione su co-director'>
                       <Input
                         style={ { width: 300 } }
+                        disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }
                         placeholder='Nombre del co-director'
                       />
                     </Form.Item>
                     <Form.Item name='partner' label='Seleccione su compañero'>
-                      <Select placeholder='Seleccione' style={ { width: 300 } }>
+                      <Select placeholder='Seleccione'
+                              style={ { width: 300 } }
+                              disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }>
                         <Option value='jack'>Jack</Option>
                         <Option value='lucy'>Lucy</Option>
                         <Option value='Yiminghe'>yiminghe</Option>
                       </Select>
                     </Form.Item>
                     <Form.Item name='project_type' label='Tipo de proyecto'>
-                      <Select placeholder='Seleccione' style={ { width: 300 } }>
+                      <Select placeholder='Seleccione'
+                              style={ { width: 300 } }
+                              disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }>
                         <Option value='areaInvestigation'>Investigación de campo</Option>
                         <Option value='documentalInvestigation'>Investigación documental</Option>>
                       </Select>
                     </Form.Item>
                     <Form.Item name='research_line'
                                label='Línea de investigación'>
-                      <Select placeholder='Seleccione' style={ { width: 300 } }>
+                      <Select placeholder='Seleccione'
+                              style={ { width: 300 } }
+                              disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }>
                         <Option value='jack'>Jack</Option>
                         <Option value='lucy'>Lucy</Option>
                         <Option value='Yiminghe'>yiminghe</Option>
@@ -483,7 +500,9 @@ const PlanFormTeacher = ( {
                     </Form.Item>
                     <Form.Item name='knowledge_area'
                                label='Área de investigación'>
-                      <Select placeholder='Seleccione' style={ { width: 300 } }>
+                      <Select placeholder='Seleccione'
+                              style={ { width: 300 } }
+                              disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }>
                         <Option value='jack'>Jack</Option>
                         <Option value='lucy'>Lucy</Option>
                         <Option value='Yiminghe'>yiminghe</Option>
@@ -520,6 +539,7 @@ const PlanFormTeacher = ( {
                           minRows: 2,
                           maxRows: 5
                         } }
+                        disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }
                       />
                     </Form.Item>
 
@@ -537,6 +557,7 @@ const PlanFormTeacher = ( {
                                   minRows: 15,
                                   maxRows: 15
                                 } }
+                                disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }
                       />
                     </Form.Item>
 
@@ -552,6 +573,7 @@ const PlanFormTeacher = ( {
                                   minRows: 15,
                                   maxRows: 15
                                 } }
+                                disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }
                       />
                     </Form.Item>
 
@@ -568,6 +590,7 @@ const PlanFormTeacher = ( {
                                   minRows: 6,
                                   maxRows: 6
                                 } }
+                                disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }
                       />
                     </Form.Item>
 
@@ -585,6 +608,7 @@ const PlanFormTeacher = ( {
                                   minRows: 6,
                                   maxRows: 6
                                 } }
+                                disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }
                       />
                     </Form.Item>
 
@@ -600,6 +624,7 @@ const PlanFormTeacher = ( {
                                   minRows: 6,
                                   maxRows: 6
                                 } }
+                                disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }
                       />
                     </Form.Item>
 
@@ -615,6 +640,7 @@ const PlanFormTeacher = ( {
                                   minRows: 15,
                                   maxRows: 15
                                 } }
+                                disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }
                       />
                     </Form.Item>
 
@@ -630,6 +656,7 @@ const PlanFormTeacher = ( {
                                   minRows: 15,
                                   maxRows: 15
                                 } }
+                                disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }
                       />
                     </Form.Item>
 
@@ -647,6 +674,7 @@ const PlanFormTeacher = ( {
                               showUploadList={ false }
                               beforeUpload={ () => false }
                               fileList={ fileList }
+                              disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }
                       >
                         { imageUrl
                           ? <img src={ imageUrl } alt='Foto' style={ { width: '180px' } } />
@@ -669,15 +697,20 @@ const PlanFormTeacher = ( {
                                   minRows: 6,
                                   maxRows: 6
                                 } }
+                                disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }
                       />
                     </Form.Item>
                     <Form.Item { ...tailLayout }>
-                      <Button className={ 'submit' } htmlType='submit' loading={ sending }>
+                      <Button className={ 'submit' }
+                              htmlType='submit'
+                              loading={ sending }
+                              disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }>
                         Enviar Comentarios
                       </Button>
                       <Button className={ 'submit' }
+                              disabled={ !(plan.status === 'plan_sent' || plan.status === 'plan_corrections_done') }
                               onClick={ () => setApprovePlan( true ) }
-                              >
+                      >
                         <SendOutlined /> Aprobar Plan
                       </Button>
                     </Form.Item>

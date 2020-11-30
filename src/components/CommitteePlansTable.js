@@ -5,7 +5,7 @@ import Routes from '../constants/routes';
 import '../styles/home-teacher.css';
 import { Link, useLocation } from 'react-router-dom';
 import { useProjects } from '../data/useProjects';
-import { BellOutlined, LoadingOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { BellOutlined, HomeOutlined, LoadingOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import Loading from './Loading';
 import SearchColumnFilter from './SearchColumnFilter';
 import PlanReviewCommittee from './PlansReviewCollapseCommittee';
@@ -80,7 +80,7 @@ const CommitteePlansTable = () => {
       render: status => {
         let state = 'Plan aprobado';
         let color = 'green';
-        if( status === 'san_curriculum_1' ) {
+        if( status === 'san_curriculum_1' || status === 'plan_corrections_done2' ) {
           state = 'Por revisar';
           color = 'red';
         } else if( status === 'plan_review_commission' ) {
@@ -121,7 +121,7 @@ const CommitteePlansTable = () => {
   const data = [];
 
   for( let i = 0; i < projectsList.length; i++ ) {
-    if( projectsList[ i ].status === 'san_curriculum_1' ) {
+    if( projectsList[ i ].status === 'san_curriculum_1' || projectsList[ i ].status === 'plan_review_commission' || projectsList[ i ].status === 'plan_corrections_done2' || projectsList[ i ].status === 'plan_approved_commission' ) {
       data.push( {
         key: projectsList[ i ].id,
         title: projectsList[ i ].title,
@@ -195,6 +195,11 @@ const CommitteePlansTable = () => {
                         color: '#034c70'
                       } }>Comisión titulación</Title> }
                       extra={ [
+                        <Button key='home' type='text' style={ { color: '#034c70' } }>
+                          <Link to={ Routes.HOME }>
+                            <HomeOutlined />
+                          </Link>
+                        </Button>,
                         <Button key='notifications'
                                 type='text'
                                 style={ { color: '#034c70' } }

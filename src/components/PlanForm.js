@@ -50,7 +50,7 @@ const PlanForm = ( {
   const [ imageUrl, setImageUrl ] = useState( null );
   const [ fileList, setFileList ] = useState( [] );
   const [ sending, setSending ] = useState( false );
-  const [ isFinished, setIsFinished ] = useState( () => {getProjectData()} );
+  const [ isFinished, setIsFinished ] = useState( () => {getProjectData();} );
   const [ showComments, showViewCommentsModal ] = useState( false );
   const [ comments, setComments ] = useState( ' ' );
 
@@ -192,7 +192,26 @@ const PlanForm = ( {
     confirm( {
       icon: <ExclamationCircleOutlined />,
       title: '¿Estás seguro de mandar el plan?',
-      content: 'Una vez enviado le llegará a tu director',
+      content:
+        <>
+
+          { projects[ 0 ].status === 'plan_review_commission'
+            ?
+            <Row>
+              <Col>
+                <p>
+                  Una vez enviado le llegará a la comisión.
+                </p>
+              </Col>
+            </Row>
+            : <Row>
+              <Col>
+                <p>
+                  Una vez enviado le llegará a tu director.
+                </p>
+              </Col>
+            </Row> }
+        </>,
       okText: 'Si',
       cancelText: 'No',
       onOk() {
@@ -213,6 +232,11 @@ const PlanForm = ( {
       dataToSent = {
         ...data,
         status: 'plan_corrections_done'
+      };
+    } else if( projects[ 0 ].status === 'plan_review_commission' ) {
+      dataToSent = {
+        ...data,
+        status: 'plan_corrections_done2'
       };
     } else {
       dataToSent = {
@@ -235,15 +259,26 @@ const PlanForm = ( {
               </Col>
             </Row>
 
-            <Row>
-              <Col>
-                <p style={ { color: '#034c70' } }>
-                  Tu plan ha sido enviado.
-                  <br />
-                  Ahora deberá ser aprobado por tu director.
-                </p>
-              </Col>
-            </Row>
+            { projects[ 0 ].status === 'plan_review_commission'
+              ?
+              <Row>
+                <Col>
+                  <p style={ { color: '#034c70' } }>
+                    Tu plan ha sido enviado.
+                    <br />
+                    Ahora deberá ser aprobado por la comisión.
+                  </p>
+                </Col>
+              </Row>
+              : <Row>
+                <Col>
+                  <p style={ { color: '#034c70' } }>
+                    Tu plan ha sido enviado.
+                    <br />
+                    Ahora deberá ser aprobado por tu director.
+                  </p>
+                </Col>
+              </Row> }
           </>,
         okText: 'Entendido',
         okButtonProps: {
@@ -411,24 +446,31 @@ const PlanForm = ( {
                         <Input
                           style={ { width: 300 } }
                           placeholder='Nombre del co-director'
+                          disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
                       <Form.Item name='partner' label='Seleccione su compañero'>
-                        <Select placeholder='Seleccione' style={ { width: 300 } }>
+                        <Select placeholder='Seleccione'
+                                style={ { width: 300 } }
+                                disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }>
                           <Option value='jack'>Jack</Option>
                           <Option value='lucy'>Lucy</Option>
                           <Option value='Yiminghe'>yiminghe</Option>
                         </Select>
                       </Form.Item>
                       <Form.Item name='project_type' label='Tipo de proyecto'>
-                        <Select placeholder='Seleccione' style={ { width: 300 } }>
+                        <Select placeholder='Seleccione'
+                                style={ { width: 300 } }
+                                disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }>
                           <Option value='areaInvestigation'>Investigación de campo</Option>
-                          <Option value='documentalInvestigation'>Investigación documental</Option>>
+                          <Option value='documentalInvestigation'>Investigación documental</Option>
                         </Select>
                       </Form.Item>
                       <Form.Item name='research_line'
                                  label='Línea de investigación'>
-                        <Select placeholder='Seleccione' style={ { width: 300 } }>
+                        <Select placeholder='Seleccione'
+                                style={ { width: 300 } }
+                                disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }>
                           <Option value='jack'>Jack</Option>
                           <Option value='lucy'>Lucy</Option>
                           <Option value='Yiminghe'>yiminghe</Option>
@@ -436,7 +478,9 @@ const PlanForm = ( {
                       </Form.Item>
                       <Form.Item name='knowledge_area'
                                  label='Área de investigación'>
-                        <Select placeholder='Seleccione' style={ { width: 300 } }>
+                        <Select placeholder='Seleccione'
+                                style={ { width: 300 } }
+                                disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }>
                           <Option value='jack'>Jack</Option>
                           <Option value='lucy'>Lucy</Option>
                           <Option value='Yiminghe'>yiminghe</Option>
@@ -458,7 +502,7 @@ const PlanForm = ( {
 
                   <Row justify={ 'left' }>
                     <Col>{
-                      projects[ 0 ] && projects[ 0 ].title_comment !== undefined && projects[ 0 ].status === 'plan_review_teacher'
+                      projects[ 0 ] && projects[ 0 ].title_comment !== undefined && (projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission')
                         ? <CommentOutlined style={ {
                           color: '#034c70',
                           fontSize: 25,
@@ -480,11 +524,12 @@ const PlanForm = ( {
                             minRows: 2,
                             maxRows: 5
                           } }
+                          disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
                       {
-                        projects[ 0 ] && projects[ 0 ].problem_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].problem_comment && (projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission')
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -506,11 +551,12 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 15
                                   } }
+                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
                       {
-                        projects[ 0 ] && projects[ 0 ].justification_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].justification_comment && (projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission')
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -530,11 +576,12 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 15
                                   } }
+                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
                       {
-                        projects[ 0 ] && projects[ 0 ].hypothesis_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].hypothesis_comment && (projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission')
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -555,11 +602,12 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 15
                                   } }
+                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
                       {
-                        projects[ 0 ] && projects[ 0 ].general_objective_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].general_objective_comment && (projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission')
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -581,11 +629,12 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 7
                                   } }
+                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
                       {
-                        projects[ 0 ] && projects[ 0 ].specifics_objectives_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].specifics_objectives_comment && (projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission')
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -605,11 +654,12 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 15
                                   } }
+                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
                       {
-                        projects[ 0 ] && projects[ 0 ].methodology_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].methodology_comment && (projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission')
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -629,11 +679,12 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 15
                                   } }
+                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
                       {
-                        projects[ 0 ] && projects[ 0 ].work_plan_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].work_plan_comment && (projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission')
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -653,11 +704,12 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 15
                                   } }
+                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
                       {
-                        projects[ 0 ] && projects[ 0 ].schedule_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].schedule_comment && (projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission')
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -679,6 +731,7 @@ const PlanForm = ( {
                                 showUploadList={ false }
                                 beforeUpload={ () => false }
                                 fileList={ fileList }
+                                disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         >
                           { imageUrl
                             ? <img src={ imageUrl } alt='Foto' style={ { width: '100px' } } />
@@ -690,7 +743,7 @@ const PlanForm = ( {
                       </Form.Item>
 
                       {
-                        projects[ 0 ] && projects[ 0 ].bibliography_comment && projects[ 0 ].status === 'plan_review_teacher'
+                        projects[ 0 ] && projects[ 0 ].bibliography_comment && (projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission')
                           ? <CommentOutlined style={ {
                             color: '#034c70',
                             fontSize: 25,
@@ -710,6 +763,7 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 7
                                   } }
+                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
                       <Form.Item { ...tailLayout }>
