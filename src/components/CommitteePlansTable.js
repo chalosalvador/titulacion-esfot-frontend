@@ -8,12 +8,17 @@ import { useProjects } from '../data/useProjects';
 import { BellOutlined, LoadingOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import Loading from './Loading';
 import SearchColumnFilter from './SearchColumnFilter';
+import PlanReviewCommittee from './PlansReviewCollapseCommittee';
 
 const { Title } = Typography;
 const { Content, Sider } = Layout;
 
 const CommitteePlansTable = () => {
 
+  const [ state, setState ] = useState( {
+    idPlan: null,
+    showPlanReview: false
+  } );
   let location = useLocation();
 
   const { isAuthenticated, isCheckingAuth, currentUser } = useAuth();
@@ -121,12 +126,40 @@ const CommitteePlansTable = () => {
         key: projectsList[ i ].id,
         title: projectsList[ i ].title,
         status: projectsList[ i ].status,
-        students: projectsList[ i ].students
+        students: projectsList[ i ].students,
+        id: projectsList[ i ].id
       } );
     }
   }
 
   console.log( 'projects', JSON.stringify( data ) );
+
+  let content= '';
+  let titleTable= '';
+  if(!state.showPlanReview){
+    titleTable=
+      <Title level={ 3 } style={ { color: '#034c70' } }>Planes y proyectos de titulación</Title>;
+
+    content=
+      <Table
+        dataSource={ data }
+        columns={ columns }
+        rowKey={ data => data.id }
+        onRow={ ( record ) => {
+          return {
+            onClick: event => {
+              event.stopPropagation();
+              setState( {
+                idPlan: record.id,
+                showPlanReview: true
+              } );
+            }
+          };
+        } }
+      />;
+  }else{
+    content= <PlanReviewCommittee planId={state.idPlan}/>
+  }
 
   return (
     <>
@@ -176,15 +209,12 @@ const CommitteePlansTable = () => {
           <Content style={ { padding: 20 } }>
             <Row>
               <Col>
-                <Title level={ 4 } style={ {
-                  color: '#034c70',
-                  marginLeft: 20
-                } }>Planes y proyectos de titulación</Title>
+                {titleTable}
               </Col>
             </Row>
             <Row justify='center'>
               <Col>
-                <Table columns={ columns } dataSource={ data } />
+                {content}
               </Col>
             </Row>
 
