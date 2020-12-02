@@ -47,6 +47,7 @@ const PlanFormCommittee = ( {
     const [ fileList, setFileList ] = useState( [] );
     const [ sending, setSending ] = useState( false );
     const [ approvePlan, setApprovePlan ] = useState( false );
+  // const [ rejectPlan, setRejectPlan ] = useState( false );
     const [ isFinished, setIsFinished ] = useState( false );
     const [ showComments, showAddCommentsModal ] = useState( false );
     const [ comments, setComments ] = useState( ' ' );
@@ -161,6 +162,23 @@ const PlanFormCommittee = ( {
         okButtonProps: { style: { backgroundColor: '#034c70' } }
       } );
     };
+
+  const modalReject = () => {
+    confirm( {
+      icon: <ExclamationCircleOutlined />,
+      title: '¿Estás seguro de rechazar el plan?',
+      content: 'Una vez rechazado no podrá deshacer la acción.',
+      okText: 'Si',
+      cancelText: 'No',
+      onOk() {
+        onReject();
+      },
+      onCancel() {
+        console.log( 'Cancel' );
+      },
+      okButtonProps: { style: { backgroundColor: '#034c70' } }
+    } );
+  };
 
   const modalChanges = () => {
     confirm( {
@@ -371,6 +389,53 @@ const PlanFormCommittee = ( {
       }
 
     };
+
+  const onReject = async() => {
+    const data = form.getFieldsValue();
+    let dataToSent = {
+      ...data,
+      status: 'plan_rejected'
+    };
+    try {
+      await API.post( `/projects/${ plan.id }`, dataToSent ); // put data to server
+      setSending( false );
+      confirm( {
+        icon: <CheckCircleOutlined />,
+        title: <Title level={ 3 } style={ { color: '#034c70' } }>¡Listo!</Title>,
+        content:
+          <>
+            <Row justify='center'>
+              <Col>
+                <Image src='boy.png' width={ 100 } /><Image src='girl.png' width={ 100 } />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <p style={ { color: '#034c70' } }>
+                  Se ha rechazo este plan,
+                  <br />
+                  <strong>han sido enviadas las notificaciones</strong>.
+                </p>
+              </Col>
+            </Row>
+          </>,
+        okText: 'Entendido',
+        okButtonProps: {
+          href: Routes.HOME,
+          style: {
+            backgroundColor: '#034c70',
+            marginRight: 125
+          }
+        },
+        cancelButtonProps: { hidden: true }
+      } );
+    } catch( e ) {
+      console.log( 'ERROR', e );
+      message.error( `No se guardaron los datos:¨${ e }` );
+    }
+
+  };
 
 
     const normPhotoFile = e => {
@@ -721,7 +786,7 @@ const PlanFormCommittee = ( {
                       </Button>
                       <Button className={ 'submit' }
                               disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
-                        // onClick={ () => setRejectPlan( true ) }
+                        onClick={ modalReject }
                       >
                         <CloseOutlined /> Rechazar Plan
                       </Button>
