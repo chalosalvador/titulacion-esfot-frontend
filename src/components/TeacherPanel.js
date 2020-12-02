@@ -74,9 +74,18 @@ const TeacherPanel = () => {
         let color = '';
         let name = '';
         {
-          if( status === 'plan_sent' ) {
+          if( status === 'plan_sent' || status === 'plan_corrections_done' ) {
             color = 'blue';
             name = 'Por revisar';
+          } else if(status === 'plan_review_teacher') {
+            color = 'red';
+            name = 'Correcciones enviadas';
+          } else if( status === 'plan_approved_director' || status === 'san_curriculum_1' || status === 'plan_review_commission' || status === 'plan_corrections_done2' ) {
+            color = 'green';
+            name = 'Plan aprobado';
+          } else if ( status === 'plan_approved_commission' ) {
+            color = 'purple';
+            name = 'Plan Aprobado por comisión';
           }
           return (
             <Tag color={ color } key={ status }>
@@ -140,31 +149,31 @@ const TeacherPanel = () => {
     };
   }
 
-  let content= '';
-  let titleTable= '';
-  if(!state.showPlanReview){
-    titleTable=
+  let content = '';
+  let titleTable = '';
+  if( !state.showPlanReview ) {
+    titleTable =
       <Title level={ 3 } style={ { color: '#034c70' } }>Planes y proyectos de titulación</Title>;
 
-    content=
+    content =
       <Table
-      dataSource={ data }
-      columns={ columns }
-      rowKey={ data => data.id }
-      onRow={ ( record ) => {
-        return {
-          onClick: event => {
-            event.stopPropagation();
-            setState( {
-              idPlan: record.id,
-              showPlanReview: true
-            } );
-          }
-        };
-      } }
-    />;
-  }else{
-    content= <PlanReview planId={state.idPlan}/>
+        dataSource={ data }
+        columns={ columns }
+        rowKey={ data => data.id }
+        onRow={ ( record ) => {
+          return {
+            onClick: event => {
+              event.stopPropagation();
+              setState( {
+                idPlan: record.id,
+                showPlanReview: true
+              } );
+            }
+          };
+        } }
+      />;
+  } else {
+    content = <PlanReview planId={ state.idPlan } />;
   }
 
   // console.log("Pilas",getDataSource());
@@ -191,7 +200,11 @@ const TeacherPanel = () => {
             <Title level={ 2 }>2</Title>
           </Card>
 
-          <Title level={ 3 } style={ { color: '#034c70', marginTop:40 } }>Jurado</Title>
+          <Title level={ 3 }
+                 style={ {
+                   color: '#034c70',
+                   marginTop: 40
+                 } }>Jurado</Title>
 
           <Card className={ 'statistics-content' } title='Proyectos por revisar' bordered={ false }>
             <Title level={ 2 }>10</Title>
@@ -222,12 +235,12 @@ const TeacherPanel = () => {
           <Content style={ { padding: 50 } }>
             <Row>
               <Col>
-                {titleTable}
+                { titleTable }
               </Col>
             </Row>
             <Row>
               <Col>
-                {content}
+                { content }
               </Col>
             </Row>
           </Content>

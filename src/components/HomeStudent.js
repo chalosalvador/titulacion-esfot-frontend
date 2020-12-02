@@ -10,6 +10,8 @@ import { useAuth } from '../providers/Auth';
 import StepsSider from './StepsSider';
 import withAuth from '../hocs/withAuth';
 import '../styles/home-student.css';
+import { useStudentProject } from '../data/useStudentProjects';
+import Loading from './Loading';
 
 const { Title } = Typography;
 const { Content, Sider } = Layout;
@@ -18,6 +20,8 @@ const { Content, Sider } = Layout;
 const HomeStudent = () => {
 
   let location = useLocation();
+
+  const { projects, isLoading } = useStudentProject();
 
   const [ menuState, setMenuState ] = useState( {
     current: location.pathname, // set the current selected item in menu, by default the current page
@@ -41,6 +45,10 @@ const HomeStudent = () => {
       current: location.pathname
     } );
   }, [ location, isAuthenticated ] );
+
+  if( isLoading ) {
+    return <Loading />;
+  }
 
   const userMenu = <Menu onClick={ handleClick }>
     <Menu.Item key='password'>Cambiar clave</Menu.Item>
@@ -117,7 +125,17 @@ const HomeStudent = () => {
                           Sube tu proyecto de titulación
                         </div>
                         <div>
-                          <Button>Subir proyecto</Button>
+                          <Button disabled={ projects[ 0 ] && !(projects[ 0 ].status === 'plan_approved_commission' ||
+                            projects[ 0 ].status === 'project_uploaded' ||
+                            projects[ 0 ].status === 'project_review_teacher' ||
+                            projects[ 0 ].status === 'project_corrections_done' ||
+                            projects[ 0 ].status === 'project_approved_director' ||
+                            projects[ 0 ].status === 'san_curriculum_2' ||
+                            projects[ 0 ].status === 'tribunal_assigned' ||
+                            projects[ 0 ].status === 'project_graded' ||
+                            projects[ 0 ].status === 'test_defense_apt' ||
+                            projects[ 0 ].status === 'date_defense_assigned' ||
+                            projects[ 0 ].status === 'project_completed') }>Subir proyecto</Button>
                         </div>
                       </Space>
                     </Card>
@@ -132,7 +150,8 @@ const HomeStudent = () => {
                           Mira la fecha de tu defensa de grado
                         </div>
                         <div>
-                          <Button>Ver fecha</Button>
+                          <Button disabled={ projects[ 0 ] && !(projects[ 0 ].status === 'date_defense_assigned' ||
+                            projects[ 0 ].status === 'project_completed') }>Ver fecha</Button>
                         </div>
                       </Space>
                     </Card>
