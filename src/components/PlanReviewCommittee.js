@@ -46,8 +46,10 @@ const PlanFormCommittee = ( {
     const [ imageUrl, setImageUrl ] = useState( null );
     const [ fileList, setFileList ] = useState( [] );
     const [ sending, setSending ] = useState( false );
+    const [ checked, setChecked ] = useState( false );
+    const [ sendingPlan, setSendingPlan ] = useState( false );
     const [ approvePlan, setApprovePlan ] = useState( false );
-  // const [ rejectPlan, setRejectPlan ] = useState( false );
+    // const [ rejectPlan, setRejectPlan ] = useState( false );
     const [ isFinished, setIsFinished ] = useState( false );
     const [ showComments, showAddCommentsModal ] = useState( false );
     const [ comments, setComments ] = useState( ' ' );
@@ -163,38 +165,38 @@ const PlanFormCommittee = ( {
       } );
     };
 
-  const modalReject = () => {
-    confirm( {
-      icon: <ExclamationCircleOutlined />,
-      title: '¿Estás seguro de rechazar el plan?',
-      content: 'Una vez rechazado no podrá deshacer la acción.',
-      okText: 'Si',
-      cancelText: 'No',
-      onOk() {
-        onReject();
-      },
-      onCancel() {
-        console.log( 'Cancel' );
-      },
-      okButtonProps: { style: { backgroundColor: '#034c70' } }
-    } );
-  };
+    const modalReject = () => {
+      confirm( {
+        icon: <ExclamationCircleOutlined />,
+        title: '¿Estás seguro de rechazar el plan?',
+        content: 'Una vez rechazado no podrá deshacer la acción.',
+        okText: 'Si',
+        cancelText: 'No',
+        onOk() {
+          onReject();
+        },
+        onCancel() {
+          console.log( 'Cancel' );
+        },
+        okButtonProps: { style: { backgroundColor: '#034c70' } }
+      } );
+    };
 
-  const modalChanges = () => {
-    confirm( {
-      icon: <ExclamationCircleOutlined />,
-      title: '¿Estás seguro de solicitar cambios?',
-      okText: 'Si',
-      cancelText: 'No',
-      onOk() {
-        onSentComments();
-      },
-      onCancel() {
-        console.log( 'Cancel' );
-      },
-      okButtonProps: { style: { backgroundColor: '#034c70' } }
-    } );
-  };
+    const modalChanges = () => {
+      confirm( {
+        icon: <ExclamationCircleOutlined />,
+        title: '¿Estás seguro de solicitar cambios?',
+        okText: 'Si',
+        cancelText: 'No',
+        onOk() {
+          onSentComments();
+        },
+        onCancel() {
+          console.log( 'Cancel' );
+        },
+        okButtonProps: { style: { backgroundColor: '#034c70' } }
+      } );
+    };
 
     const modalProps = {
 
@@ -206,11 +208,12 @@ const PlanFormCommittee = ( {
       width: 600,
       style: { borderRadius: 25 },
       okButtonProps: {
+        loading: sendingPlan,
         style: {
           marginRight: 250,
           backgroundColor: '#034c70'
         },
-        // disabled: true
+        disabled: !checked
       },
       onOk() {
         modal();
@@ -222,6 +225,11 @@ const PlanFormCommittee = ( {
     };
     const onChange = ( checkedValue ) => {
       console.log( checkedValue );
+      if( checkedValue.length === 18 ) {
+        setChecked( true );
+      }else {
+        setChecked(false);
+      }
     };
 
     const contentApproveModal =
@@ -298,7 +306,7 @@ const PlanFormCommittee = ( {
           </Row>
           <Row>
             <Col>
-              <Checkbox style={ { marginLeft: 8 } } value={ '13' }>Describe las actividades que se realizarán
+              <Checkbox style={ { marginLeft: 8 } } value={ '14' }>Describe las actividades que se realizarán
                 durante <br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;la ejecución del trabajo de titulación.</Checkbox>
             </Col>
@@ -310,7 +318,7 @@ const PlanFormCommittee = ( {
           </Row>
           <Row>
             <Col>
-              <Checkbox style={ { marginLeft: 8 } } value={ '14' }>Detalla las etapas macro de trabajo de
+              <Checkbox style={ { marginLeft: 8 } } value={ '15' }>Detalla las etapas macro de trabajo de
                 titulación.</Checkbox>
             </Col>
           </Row>
@@ -321,7 +329,7 @@ const PlanFormCommittee = ( {
           </Row>
           <Row>
             <Col>
-              <Checkbox style={ { marginLeft: 8 } } value={ '13' }>Describe las etapas del trabajo de titulación
+              <Checkbox style={ { marginLeft: 8 } } value={ '16' }>Describe las etapas del trabajo de titulación
                 con <br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sus respectivos tiempos de ejecución.</Checkbox>
             </Col>
@@ -333,10 +341,10 @@ const PlanFormCommittee = ( {
           </Row>
           <Row>
             <Col>
-              <Checkbox style={ { marginLeft: 8 } } value={ '12' }>Las referencias bibliográficas tienen valor
+              <Checkbox style={ { marginLeft: 8 } } value={ '17' }>Las referencias bibliográficas tienen valor
                 académico <br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y son contemporáneas a pertinentes.</Checkbox>
-              <Checkbox value={ '13' }>Las fuentes citadas son de apoyo para sustentar el trabajo de
+              <Checkbox value={ '18' }>Las fuentes citadas son de apoyo para sustentar el trabajo de
                 titulación.</Checkbox>
             </Col>
           </Row>
@@ -344,14 +352,25 @@ const PlanFormCommittee = ( {
       </>;
 
     const onFinish = async() => {
+      setSendingPlan( true );
       const data = form.getFieldsValue();
       let dataToSent = {
         ...data,
-        status: 'plan_approved_commission'
+        status: 'plan_approved_commission',
+        title_comment: '',
+        problem_comment: '',
+        general_objective_comment: '',
+        specifics_objectives_comment: '',
+        hypothesis_comment: '',
+        justification_comment: '',
+        methodology_comment: '',
+        work_plan_comment: '',
+        schedule_comment: '',
+        bibliography_comment: ''
       };
       try {
         await API.post( `/projects/${ plan.id }`, dataToSent ); // put data to server
-        setSending( false );
+        setSendingPlan( false );
         confirm( {
           icon: <CheckCircleOutlined />,
           title: <Title level={ 3 } style={ { color: '#034c70' } }>¡Buen trabajo!</Title>,
@@ -390,52 +409,52 @@ const PlanFormCommittee = ( {
 
     };
 
-  const onReject = async() => {
-    const data = form.getFieldsValue();
-    let dataToSent = {
-      ...data,
-      status: 'plan_rejected'
+    const onReject = async() => {
+      const data = form.getFieldsValue();
+      let dataToSent = {
+        ...data,
+        status: 'plan_rejected'
+      };
+      try {
+        await API.post( `/projects/${ plan.id }`, dataToSent ); // put data to server
+        setSending( false );
+        confirm( {
+          icon: <CheckCircleOutlined />,
+          title: <Title level={ 3 } style={ { color: '#034c70' } }>¡Listo!</Title>,
+          content:
+            <>
+              <Row justify='center'>
+                <Col>
+                  <Image src='boy.png' width={ 100 } /><Image src='girl.png' width={ 100 } />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <p style={ { color: '#034c70' } }>
+                    Se ha rechazo este plan,
+                    <br />
+                    <strong>han sido enviadas las notificaciones</strong>.
+                  </p>
+                </Col>
+              </Row>
+            </>,
+          okText: 'Entendido',
+          okButtonProps: {
+            href: Routes.HOME,
+            style: {
+              backgroundColor: '#034c70',
+              marginRight: 125
+            }
+          },
+          cancelButtonProps: { hidden: true }
+        } );
+      } catch( e ) {
+        console.log( 'ERROR', e );
+        message.error( `No se guardaron los datos:¨${ e }` );
+      }
+
     };
-    try {
-      await API.post( `/projects/${ plan.id }`, dataToSent ); // put data to server
-      setSending( false );
-      confirm( {
-        icon: <CheckCircleOutlined />,
-        title: <Title level={ 3 } style={ { color: '#034c70' } }>¡Listo!</Title>,
-        content:
-          <>
-            <Row justify='center'>
-              <Col>
-                <Image src='boy.png' width={ 100 } /><Image src='girl.png' width={ 100 } />
-              </Col>
-            </Row>
-
-            <Row>
-              <Col>
-                <p style={ { color: '#034c70' } }>
-                  Se ha rechazo este plan,
-                  <br />
-                  <strong>han sido enviadas las notificaciones</strong>.
-                </p>
-              </Col>
-            </Row>
-          </>,
-        okText: 'Entendido',
-        okButtonProps: {
-          href: Routes.HOME,
-          style: {
-            backgroundColor: '#034c70',
-            marginRight: 125
-          }
-        },
-        cancelButtonProps: { hidden: true }
-      } );
-    } catch( e ) {
-      console.log( 'ERROR', e );
-      message.error( `No se guardaron los datos:¨${ e }` );
-    }
-
-  };
 
 
     const normPhotoFile = e => {
@@ -786,7 +805,7 @@ const PlanFormCommittee = ( {
                       </Button>
                       <Button className={ 'submit' }
                               disabled={ !(plan.status === 'san_curriculum_1' || plan.status === 'plan_corrections_done2') }
-                        onClick={ modalReject }
+                              onClick={ modalReject }
                       >
                         <CloseOutlined /> Rechazar Plan
                       </Button>

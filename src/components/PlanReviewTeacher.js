@@ -46,6 +46,8 @@ const PlanFormTeacher = ( {
     const [ imageUrl, setImageUrl ] = useState( null );
     const [ fileList, setFileList ] = useState( [] );
     const [ sending, setSending ] = useState( false );
+    const [ sendingPlan, setSendingPlan ] = useState( false );
+    const [ checked, setChecked ] = useState( false );
     const [ approvePlan, setApprovePlan ] = useState( false );
     const [ isFinished, setIsFinished ] = useState( false );
     const [ showComments, showAddCommentsModal ] = useState( false );
@@ -172,11 +174,12 @@ const PlanFormTeacher = ( {
       width: 600,
       style: { borderRadius: 25 },
       okButtonProps: {
+        loading: sendingPlan,
         style: {
           marginRight: 250,
           backgroundColor: '#034c70'
         },
-        // disabled: true
+        disabled: !checked
       },
       onOk() {
         modal();
@@ -188,6 +191,11 @@ const PlanFormTeacher = ( {
     };
     const onChange = ( checkedValue ) => {
       console.log( checkedValue );
+      if( checkedValue.length === 18 ) {
+        setChecked( true );
+      } else {
+        setChecked( false );
+      }
     };
 
     const contentApproveModal =
@@ -264,7 +272,7 @@ const PlanFormTeacher = ( {
           </Row>
           <Row>
             <Col>
-              <Checkbox style={ { marginLeft: 8 } } value={ '13' }>Describe las actividades que se realizarán
+              <Checkbox style={ { marginLeft: 8 } } value={ '14' }>Describe las actividades que se realizarán
                 durante <br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;la ejecución del trabajo de titulación.</Checkbox>
             </Col>
@@ -276,7 +284,7 @@ const PlanFormTeacher = ( {
           </Row>
           <Row>
             <Col>
-              <Checkbox style={ { marginLeft: 8 } } value={ '14' }>Detalla las etapas macro de trabajo de
+              <Checkbox style={ { marginLeft: 8 } } value={ '15' }>Detalla las etapas macro de trabajo de
                 titulación.</Checkbox>
             </Col>
           </Row>
@@ -287,7 +295,7 @@ const PlanFormTeacher = ( {
           </Row>
           <Row>
             <Col>
-              <Checkbox style={ { marginLeft: 8 } } value={ '13' }>Describe las etapas del trabajo de titulación
+              <Checkbox style={ { marginLeft: 8 } } value={ '16' }>Describe las etapas del trabajo de titulación
                 con <br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sus respectivos tiempos de ejecución.</Checkbox>
             </Col>
@@ -299,10 +307,10 @@ const PlanFormTeacher = ( {
           </Row>
           <Row>
             <Col>
-              <Checkbox style={ { marginLeft: 8 } } value={ '12' }>Las referencias bibliográficas tienen valor
+              <Checkbox style={ { marginLeft: 8 } } value={ '17' }>Las referencias bibliográficas tienen valor
                 académico <br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y son contemporáneas a pertinentes.</Checkbox>
-              <Checkbox value={ '13' }>Las fuentes citadas son de apoyo para sustentar el trabajo de
+              <Checkbox value={ '18' }>Las fuentes citadas son de apoyo para sustentar el trabajo de
                 titulación.</Checkbox>
             </Col>
           </Row>
@@ -310,6 +318,7 @@ const PlanFormTeacher = ( {
       </>;
 
     const onFinish = async() => {
+      setSendingPlan( true );
       const data = form.getFieldsValue();
       let dataToSent = {
         ...data,
@@ -327,7 +336,7 @@ const PlanFormTeacher = ( {
       };
       try {
         await API.post( `/projects/${ plan.id }`, dataToSent ); // put data to server
-        setSending( false );
+        setSendingPlan( false );
         confirm( {
           icon: <CheckCircleOutlined />,
           title: <Title level={ 3 } style={ { color: '#034c70' } }>¡Buen trabajo!</Title>,

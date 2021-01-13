@@ -93,7 +93,6 @@ const PlanForm = ( {
   const onCreate = async( values ) => {
 
     console.log( 'Received values of form: ', values );
-    setSending( true );
 
     // form.validateFields()
     //   .then( async( values ) => {
@@ -151,18 +150,15 @@ const PlanForm = ( {
     try {
       await API.post( '/students/projects', data ); // post data to server
       setImageUrl( null );
-      setSending( false );
       message.success( 'Cambios guardados correctamente!' );
     } catch( e ) {
       console.log( 'ERROR', e );
       message.error( `No se guardaron los datos:¨${ e }` );
-      setSending( false );
     }
   };
 
   const onUpdate = async() => {
     const formData = form.getFieldsValue();
-    setSending( true );
     const data = { ...formData };
 
     console.log( 'DATOS', data );
@@ -170,7 +166,6 @@ const PlanForm = ( {
     if( projects.length > 0 ) {
       try {
         await API.post( `/projects/${ projects[ 0 ].id }`, data ); // put data to server
-        setSending( false );
       } catch( e ) {
         console.log( 'ERROR', e );
         message.error( `No se guardaron los datos:¨${ e }` );
@@ -225,6 +220,7 @@ const PlanForm = ( {
   };
 
   const onFinish = async() => {
+    setSending( true );
     const data = form.getFieldsValue();
     let dataToSent = {};
 
@@ -446,13 +442,13 @@ const PlanForm = ( {
                         <Input
                           style={ { width: 300 } }
                           placeholder='Nombre del co-director'
-                          disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
+                          disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
                       <Form.Item name='partner' label='Seleccione su compañero'>
                         <Select placeholder='Seleccione'
                                 style={ { width: 300 } }
-                                disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }>
+                                disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }>
                           <Option value='jack'>Jack</Option>
                           <Option value='lucy'>Lucy</Option>
                           <Option value='Yiminghe'>yiminghe</Option>
@@ -461,7 +457,7 @@ const PlanForm = ( {
                       <Form.Item name='project_type' label='Tipo de proyecto'>
                         <Select placeholder='Seleccione'
                                 style={ { width: 300 } }
-                                disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }>
+                                disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }>
                           <Option value='areaInvestigation'>Investigación de campo</Option>
                           <Option value='documentalInvestigation'>Investigación documental</Option>
                         </Select>
@@ -470,7 +466,7 @@ const PlanForm = ( {
                                  label='Línea de investigación'>
                         <Select placeholder='Seleccione'
                                 style={ { width: 300 } }
-                                disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }>
+                                disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }>
                           <Option value='jack'>Jack</Option>
                           <Option value='lucy'>Lucy</Option>
                           <Option value='Yiminghe'>yiminghe</Option>
@@ -480,7 +476,7 @@ const PlanForm = ( {
                                  label='Área de investigación'>
                         <Select placeholder='Seleccione'
                                 style={ { width: 300 } }
-                                disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }>
+                                disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }>
                           <Option value='jack'>Jack</Option>
                           <Option value='lucy'>Lucy</Option>
                           <Option value='Yiminghe'>yiminghe</Option>
@@ -502,7 +498,7 @@ const PlanForm = ( {
 
                   <Row justify={ 'left' }>
                     <Col>{
-                      projects[ 0 ] && projects[ 0 ].title_comment !== undefined && (projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission')
+                      projects[ 0 ] && projects[ 0 ].title_comment && (projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission')
                         ? <CommentOutlined style={ {
                           color: '#034c70',
                           fontSize: 25,
@@ -524,7 +520,7 @@ const PlanForm = ( {
                             minRows: 2,
                             maxRows: 5
                           } }
-                          disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
+                          disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
@@ -551,7 +547,7 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 15
                                   } }
-                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
+                                  disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
@@ -576,7 +572,7 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 15
                                   } }
-                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
+                                  disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
@@ -602,7 +598,7 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 15
                                   } }
-                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
+                                  disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
@@ -629,7 +625,7 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 7
                                   } }
-                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
+                                  disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
@@ -654,7 +650,7 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 15
                                   } }
-                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
+                                  disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
@@ -679,7 +675,7 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 15
                                   } }
-                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
+                                  disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
@@ -704,7 +700,7 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 15
                                   } }
-                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
+                                  disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
 
@@ -731,7 +727,7 @@ const PlanForm = ( {
                                 showUploadList={ false }
                                 beforeUpload={ () => false }
                                 fileList={ fileList }
-                                disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
+                                disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         >
                           { imageUrl
                             ? <img src={ imageUrl } alt='Foto' style={ { width: '100px' } } />
@@ -763,7 +759,7 @@ const PlanForm = ( {
                                     minRows: 4,
                                     maxRows: 7
                                   } }
-                                  disabled={ projects [0] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
+                                  disabled={ projects [ 0 ] && !(projects[ 0 ].status === 'plan_saved' || projects[ 0 ].status === 'plan_review_teacher' || projects[ 0 ].status === 'plan_review_commission') }
                         />
                       </Form.Item>
                       <Form.Item { ...tailLayout }>
@@ -776,7 +772,8 @@ const PlanForm = ( {
                             <Button className={ 'submit' }
                                     onClick={ modal }
                                     disabled={ !isFinished }
-                                    style={ { marginLeft: 10 } }>
+                                    style={ { marginLeft: 10 } }
+                                    loading={ sending }>
                               <SendOutlined /> Enviar plan
                             </Button>
                           </Col>
