@@ -18,6 +18,7 @@ const privateRoutes = {
   TEACHER_PANEL: '/panel-profesor',
   TEACHERS_PLANS:'/profesor-ideas',
   PLANFORM: '/plan-titulacion',
+  PROJECTS_LIST_SECRETARY: '/listado-proyectos',
   COMMITTEE_PLANS: '/proyectos-comision'
 };
 
