@@ -26,6 +26,8 @@ const ProjectDetailSecretary = ( { id } ) => {
     return <h1>loading...</h1>;
   }
 
+
+
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 8 },
@@ -99,26 +101,29 @@ const ProjectDetailSecretary = ( { id } ) => {
                color: '#034c70',
                marginLeft: 30
              } }>Datos Generales</Title>
-      <Form { ...layout } name='nest-messages' onFinish={ onFinish } validateMessages={ validateMessages }>
-        <Form.Item name={ [ 'user', 'name' ] } label='Director' rules={ [ { required: true } ] }>
+      <Form { ...layout } name='nest-messages'
+            onFinish={ onFinish }
+            validateMessages={ validateMessages }
+            initialValues={ plan }>
+        <Form.Item name='teacher_name' label='Director' rules={ [ { required: true } ] }>
           <Input />
         </Form.Item>
-        <Form.Item name={ [ 'user', 'email' ] } label='Coodirector' rules={ [ { type: 'email' } ] }>
+        <Form.Item name='coodirector' label='Coodirector' rules={ [ { type: 'email' } ] }>
           <Input />
         </Form.Item>
-        <Form.Item name={ [ 'user', 'website' ] } label='Compañero de titulación'>
+        <Form.Item name='partner' label='Compañero de titulación'>
           <Input />
         </Form.Item>
-        <Form.Item name={ [ 'user', 'introduction' ] } label='Tipo de proyecto'>
+        <Form.Item name='project_type' label='Tipo de proyecto'>
           <Input />
         </Form.Item>
-        <Form.Item name={ [ 'user', 'introduction' ] } label='Línea de investigación'>
+        <Form.Item name='research_line' label='Línea de investigación'>
           <Input />
         </Form.Item>
-        <Form.Item name={ [ 'user', 'introduction' ] } label='Área de investigación'>
+        <Form.Item name='knowledge_area' label='Área de investigación'>
           <Input />
         </Form.Item>
-        <Form.Item name={ [ 'user', 'introduction' ] } label='Título'>
+        <Form.Item name='title' label='Título'>
           <Input.TextArea />
         </Form.Item>
       </Form>
@@ -126,13 +131,14 @@ const ProjectDetailSecretary = ( { id } ) => {
         <Panel header='Curriculum saneado 1 (para ingreso plan de titulación)' key='1'>
           <Row>
             <Col>
-              <Checkbox onChange={ onChange }>Está tomando o ya tiene aprobado Metodología de la
+              <Checkbox onChange={ onChange } checked={ plan.status==='san_curriculum_1' }>Está tomando o ya tiene aprobado
+                Metodología de la
                 Investigación</Checkbox>
             </Col>
           </Row>
           <Row>
             <Col>
-              <Switch onChange={ onChangeSwitch } />
+              <Switch onChange={ onChangeSwitch } checked={ plan.status==='san_curriculum_1' } />
               <label>cuenta con más del 80% de materias aprobadas</label>
             </Col>
           </Row>
