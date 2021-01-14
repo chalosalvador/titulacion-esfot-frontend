@@ -125,7 +125,7 @@ const HomeSecretary = () => {
                           Revisa los planes y proyectos de titulación de la ESFOT
                         </div>
                         <div>
-                          <Button >Ver planes y proyectos</Button>
+                          <Button href={ Routes.PROJECTS_LIST_SECRETARY }>Ver planes y proyectos</Button>
                         </div>
                       </Space>
                     </Card>
