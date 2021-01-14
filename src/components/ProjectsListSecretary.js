@@ -8,7 +8,7 @@ import Tag from 'antd/es/tag';
 import ShowError from './ShowError';
 import Loading from './Loading';
 import {
-  BellOutlined, HomeOutlined, LoadingOutlined, LogoutOutlined, UserOutlined, PlusOutlined, SearchOutlined
+  BellOutlined, HomeOutlined, LoadingOutlined, LogoutOutlined, UserOutlined, LeftOutlined, SearchOutlined
 } from '@ant-design/icons';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../providers/Auth';
@@ -16,24 +16,39 @@ import Routes from '../constants/routes';
 import '../styles/home-teacher.css';
 import SearchColumnFilter from './SearchColumnFilter';
 import PlanReview from './PlansReviewCollapse';
-import {useProjects} from '../data/useProjects';
+import ProjectDetailSecretary from './ProjectDetailSecretary';
+import { useProjects } from '../data/useProjects';
 
-const { Content, Sider } = Layout;
+const {
+  Content,
+  Sider
+} = Layout;
 const { Title } = Typography;
 
 const ProjectsListSecretary = () => {
 
   const { Search } = Input;
-  const { projectsList, isLoading, isError} = useProjects();
+  const {
+    projectsList,
+    isLoading,
+    isError
+  } = useProjects();
 
   let location = useLocation();
-  const { isAuthenticated, isCheckingAuth, currentUser } = useAuth();
+  const {
+    isAuthenticated,
+    isCheckingAuth,
+    currentUser
+  } = useAuth();
 
   const [ menuState, setMenuState ] = useState( {
     current: location.pathname, // set the current selected item in menu, by default the current page
     collapsed: false,
     openKeys: []
   } );
+  const [ showProjectReview, setShowProjectReview ] = useState( false );
+  const [ projectId, setProjectId ] = useState( null );
+  console.log( 'project', projectsList );
 
   const handleClick = ( e ) => {
     console.log( 'click ', e );
@@ -73,17 +88,23 @@ const ProjectsListSecretary = () => {
     {
       title: 'Director(a)',
       dataIndex: 'teacher_name',
-      key:'teacher_name'
+      key: 'teacher_name'
     },
     {
       title: 'Estudiante(s)',
       dataIndex: 'student_name',
-      key:'student_name'
+      key: 'student_name'
     },
     {
       title: 'Título',
       dataIndex: 'title',
-      key: 'title'
+      key: 'title',
+      render: ( text, record ) => (
+        <a onClick={ () => {
+          setProjectId( record.id );
+          setShowProjectReview( true );
+        } }>{ text }</a>)
+
     },
     {
       title: 'Estado',
@@ -127,19 +148,52 @@ const ProjectsListSecretary = () => {
     showSizeChanger: false
   };
 
-  const getProjectsData = projectsList.map((project, index) => {
+  const getProjectsData = projectsList.map( ( project, index ) => {
     return {
-      key:index,
+      key: index,
+      id: project.id,
       teacher_name: project.teacher_name,
-      student_name: project['student'].length > 0
-        ? project['student'][0]['id']
-        :'',
+      student_name: project[ 'student' ].length > 0
+        ? project[ 'student' ][ 0 ][ 'id' ]
+        : '',
       title: project.title,
       status: project.status
-    }
-  });
+    };
+  } );
 
   const onSearch = value => console.log( value );
+  let content = '';
+
+  if( !showProjectReview ) {
+    content = <>
+      <Row>
+        <Col>
+          <br />
+          <Search
+            placeholder='búsqueda de tema o estudiantes'
+            onSearch={ onSearch }
+            enterButton=<Button
+            style={ {
+              backgroundColor: '#034c70',
+              color: 'white'
+            } }
+            icon={ <SearchOutlined /> } />
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <br />
+          <Table
+            columns={ columns }
+            dataSource={ getProjectsData } />
+        </Col>
+      </Row>
+    </>;
+  } else {
+    content = <ProjectDetailSecretary id={ projectId } />;
+  }
+
 
   return (
     <>
@@ -186,6 +240,9 @@ const ProjectsListSecretary = () => {
           </Card>
         </Sider>
         <Layout>
+          <Button icon={ <LeftOutlined /> }
+                  hidden={ !showProjectReview }
+                  onClick={ () => setShowProjectReview( false ) } />
           <PageHeader className='inner-menu'
                       title={ <Title level={ 1 } style={ {
                         color: '#034c70'
@@ -208,29 +265,7 @@ const ProjectsListSecretary = () => {
                       ] }
           />
           <Content style={ { padding: 30 } }>
-            <Row>
-              <Col>
-                <br />
-                <Search
-                  placeholder='búsqueda de tema o estudiantes'
-                  onSearch={ onSearch }
-                  enterButton=<Button
-                  style={ {
-                    backgroundColor: '#034c70',
-                    color: 'white'
-                  } }
-                  icon={ <SearchOutlined /> } />
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <br />
-                <Table
-                  columns={ columns }
-                  dataSource={ getProjectsData } />
-              </Col>
-            </Row>
+            { content }
           </Content>
         </Layout>
       </Layout>

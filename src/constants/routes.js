@@ -19,7 +19,8 @@ const privateRoutes = {
   TEACHERS_PLANS:'/profesor-ideas',
   PLANFORM: '/plan-titulacion',
   PROJECTS_LIST_SECRETARY: '/listado-proyectos',
-  COMMITTEE_PLANS: '/proyectos-comision'
+  COMMITTEE_PLANS: '/proyectos-comision',
+  PROJECT_DETAIL_SECRETARY: '/detalle-proyecto'
 };
 
 const Routes = {
