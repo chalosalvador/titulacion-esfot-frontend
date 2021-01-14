@@ -153,8 +153,8 @@ const ProjectsListSecretary = () => {
       key: index,
       id: project.id,
       teacher_name: project.teacher_name,
-      student_name: project[ 'student' ].length > 0
-        ? project[ 'student' ][ 0 ][ 'id' ]
+      student_name: project[ 'students' ].length > 0
+        ? project[ 'students' ][ 0 ][ 'id' ]
         : '',
       title: project.title,
       status: project.status

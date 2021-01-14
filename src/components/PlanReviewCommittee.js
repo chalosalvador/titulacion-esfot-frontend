@@ -151,8 +151,8 @@ const PlanFormCommittee = ( {
     const modal = () => {
       confirm( {
         icon: <ExclamationCircleOutlined />,
-        title: '¿Estás seguro de mandar el plan?',
-        content: 'Una vez aprobado se enviará a la comisión de titulación para su revisión.',
+        title: '¿Estás seguro de aprobar el plan?',
+        content: 'Una vez aprobado se enviará una notificación al estudiante y al director.',
         okText: 'Si',
         cancelText: 'No',
         onOk() {
@@ -387,8 +387,8 @@ const PlanFormCommittee = ( {
                   <p style={ { color: '#034c70' } }>
                     Gracias por tu esfuerzo en revisar el plan,
                     <br />
-                    <strong>ha sido enviado a la comisión</strong>.
-                  </p>
+                    <strong>el plan ha sido aprobado.</strong>.
+              </p>
                 </Col>
               </Row>
             </>,

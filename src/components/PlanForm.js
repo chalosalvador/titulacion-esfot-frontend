@@ -139,7 +139,7 @@ const PlanForm = ( {
       : '' );
     data.append( 'schedule', values.schedule
       ? values.schedule[ 0 ]
-      : 'https://lorempixel.com/400/300/' );
+      : null );
     data.append( 'bibliography', values.bibliography
       ? values.bibliography
       : '' );
@@ -153,7 +153,7 @@ const PlanForm = ( {
       message.success( 'Cambios guardados correctamente!' );
     } catch( e ) {
       console.log( 'ERROR', e );
-      message.error( `No se guardaron los datos:¨${ e }` );
+      //.error( `No se guardaron los datos:¨${ e }` );
     }
   };
 
@@ -168,7 +168,7 @@ const PlanForm = ( {
         await API.post( `/projects/${ projects[ 0 ].id }`, data ); // put data to server
       } catch( e ) {
         console.log( 'ERROR', e );
-        message.error( `No se guardaron los datos:¨${ e }` );
+        //message.error( `No se guardaron los datos:¨${ e }` );
       }
     } else {
       onCreate( data );
@@ -407,7 +407,7 @@ const PlanForm = ( {
               <Form.Provider onFormChange={ () => {
                 onCompleteForm();
                 setTimeout( () => {
-                  onUpdate().then( () => {message.success( 'Cambios guardados correctamente!' );} );
+                  onUpdate().then( () => {console.log( 'Cambios guardados correctamente!' );} );
                 }, 2000 );
               } }>
                 <Form { ...layout }
