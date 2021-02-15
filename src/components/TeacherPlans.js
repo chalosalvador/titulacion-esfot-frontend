@@ -118,7 +118,7 @@ const TeacherPlans = () => {
           setIsSubmitting( true );
           const teacherPlanData = form.getFieldsValue();
           let planId = teacherPlanData.id;
-          teacherPlanData.status = 'idea_unassigned';
+          teacherPlanData.status = 'not_assigned';
           console.log( teacherPlanData );
 
           if( !planId ) {

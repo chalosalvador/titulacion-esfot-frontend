@@ -5,24 +5,10 @@ import API from '../data';
 import Cookies from 'js-cookie';
 
 const Logout = () => {
-  const { setAuthenticated, setCurrentUser } = useAuth();
+  const { logout } = useAuth();
   useEffect( () => {
-    async function doLogout() {
-      try {
-        console.log( 'loggin out' );
-        await API.post( '/logout' );
-        Cookies.remove( 'token' );
-        delete API.headers[ 'Authorization' ];
-        window.localStorage.setItem( 'login', JSON.stringify( false ) );
-        setAuthenticated( false );
-        setCurrentUser( null );
-      } catch( e ) {
-        console.log( 'e', e );
-      }
-    }
-
-    doLogout();
-  }, [ setAuthenticated ] );
+    logout();
+  }, [logout] );
   return <p>Logging out...</p>;
 };
 

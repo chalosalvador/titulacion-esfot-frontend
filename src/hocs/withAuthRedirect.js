@@ -25,21 +25,24 @@ export default function withAuthRedirect( {
   expectedAuth,
   location
 } ) {
-  const WithAuthRedirectWrapper = props => {
+  return props => {
 
-    const { isCheckingAuth, isAuthenticated } = useAuth();
+    const {
+      isCheckingAuth,
+      isAuthenticated
+    } = useAuth();
 
     if( isCheckingAuth ) {
       return <LoadingComponent />;
     }
-    if( expectedAuth !== isAuthenticated ) {
 
+    const shouldRedirect = expectedAuth !== isAuthenticated;
+    if (shouldRedirect) {
       return <Redirect to={ {
-        pathname:location || Routes.LOGIN,
-        state: { from: props.location }
-      } } />
+        pathname: location || Routes.LOGIN,
+        state: { from: props.location },
+      } }  />
     }
     return <WrappedComponent { ...props } />;
   };
-  return WithAuthRedirectWrapper;
 }

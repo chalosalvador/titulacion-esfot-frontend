@@ -1,8 +1,8 @@
 import useSWR from 'swr';
-import API from './index';
+import { fetcher } from './index';
 
 export const useStudentsList = () => {
-  const { data, error, mutate } = useSWR( '/students', API.fetcher );
+  const { data, error, mutate } = useSWR( '/students', fetcher );
   console.log("data",data);
   return {
     students: (data && data.data),

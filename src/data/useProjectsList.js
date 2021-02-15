@@ -2,10 +2,10 @@
  * Created by chalosalvador on 8/18/20
  */
 import useSWR from 'swr';
-import API from './index';
+import { fetcher } from './index';
 
 export const useProjectsList = () => {
-  const { data, error, mutate } = useSWR( '/teacher-projects', API.fetcher );
+  const { data, error, mutate } = useSWR( '/teacher-projects', fetcher );
   console.log("data",data);
   return {
     teachersProjects: (data && data.data),

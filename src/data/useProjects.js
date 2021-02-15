@@ -1,9 +1,9 @@
 import useSWR from 'swr';
-import API from './index';
+import { fetcher } from './index';
 
 
 export const useProjects = ()=>{
-  const { data, error, mutate } = useSWR( '/projects', API.fetcher );
+  const { data, error, mutate } = useSWR( '/projects', fetcher );
 
   return {
     projectsList: (data && data.data),

@@ -1,8 +1,12 @@
 import useSWR from 'swr';
-import API from './index';
+import { fetcher } from './index';
 
 export const useTeachers = () => {
-  const { data, error, mutate } = useSWR( '/teachers', API.fetcher );
+  const {
+    data,
+    error,
+    mutate
+  } = useSWR( '/teachers', fetcher );
 
   return {
     teachers: data && data.data,

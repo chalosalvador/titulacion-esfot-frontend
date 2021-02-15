@@ -64,5 +64,5 @@ export const translateMessage = ( type, params = {} ) => {
     'teacher-evaluation/argument-error': 'La función debe ser llamada con un argumento "teacherId".'
   };
 
-  return messageList[ type ] || type;
+  return messageList[ type ] ? messageList[ type ] : type;
 };
