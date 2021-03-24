@@ -1,5 +1,5 @@
-import React from 'react';
-import { Form, Input } from 'antd';
+import React from "react";
+import { Form, Input } from "antd";
 
 const formItemLayout = {
   labelCol: {
@@ -12,8 +12,7 @@ const formItemLayout = {
   },
 };
 
-
-const TeacherPlanForm = ( { form } ) => {
+const TeacherPlanForm = ({ form }) => {
   // const [ currentSpecifics, setCurrentSpecifics ] = useState( [] );
 
   // const handleChangeWideField = ( value ) => {
@@ -21,51 +20,61 @@ const TeacherPlanForm = ( { form } ) => {
   //   setCurrentSpecifics( specificFields[ wideFields.indexOf( value ) ] );
   // };
 
-
   return (
     <Form
-      { ...formItemLayout }
-      name='teacher_plan'
+      {...formItemLayout}
+      name="teacher_plan"
       // onFinish={ onSubmit }
-      form={ form }
+      form={form}
       // initialValues={ props.internship }
     >
-
-      <Form.Item name='title'
-                 label='Tema:'
-                 rules={ [
-                   {
-                     required: true,
-                     whitespace: true,
-                     message: 'Escribe el tema principal del proyecto',
-                   }
-                 ] }>
-        <Input.TextArea placeholder='Escribe el tema principal del proyecto'
-                        autoSize={ { maxRows: 4 } } />
+      <Form.Item
+        name="title"
+        label="Tema:"
+        rules={[
+          {
+            required: true,
+            whitespace: true,
+            message: "Escribe el tema principal del proyecto",
+          },
+        ]}
+      >
+        <Input.TextArea
+          placeholder="Escribe el tema principal del proyecto"
+          autoSize={{ maxRows: 4 }}
+        />
       </Form.Item>
-      <Form.Item name='problem'
-                 label='Problema a resolver:'
-                 rules={ [
-                   {
-                     required: true,
-                     whitespace: true,
-                     message: 'Detalla el problema que abarca el proyecto',
-                   }
-                 ] }>
-        <Input.TextArea placeholder='Detalla el problema que abarca el proyecto'
-                        autoSize={ { maxRows: 4 } } />
+      <Form.Item
+        name="problem"
+        label="Problema a resolver:"
+        rules={[
+          {
+            required: true,
+            whitespace: true,
+            message: "Detalla el problema que abarca el proyecto",
+          },
+        ]}
+      >
+        <Input.TextArea
+          placeholder="Detalla el problema que abarca el proyecto"
+          autoSize={{ maxRows: 4 }}
+        />
       </Form.Item>
-      <Form.Item name='solution'
-                 label='Solución: '
-                 rules={ [
-                   {
-                     required: true,
-                     whitespace: true,
-                     message: 'Propón una posible solución al problema',
-                   }
-                 ] }>
-        <Input.TextArea placeholder='Propón una posible solución al problema'
-                        autoSize={ { maxRows: 4 } } />
+      <Form.Item
+        name="solution"
+        label="Solución: "
+        rules={[
+          {
+            required: true,
+            whitespace: true,
+            message: "Propón una posible solución al problema",
+          },
+        ]}
+      >
+        <Input.TextArea
+          placeholder="Propón una posible solución al problema"
+          autoSize={{ maxRows: 4 }}
+        />
       </Form.Item>
       {/*<Form.Item justify='center'>*/}
       {/*  <Button type={ 'primary' } htmlType={ 'submit' }>*/}

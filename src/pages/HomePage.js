@@ -1,24 +1,23 @@
-import React from 'react';
-import { useAuth } from '../providers/Auth';
-import HomeTeacher from '../components/HomeTeacher';
-import HomeStudent from '../components/HomeStudent';
-import HomeSecretary from '../components/HomeSecretary';
+import React from "react";
+import { useAuth } from "../providers/Auth";
+import TeacherHome from "../components/TeacherHome";
+import SecretaryHome from "../components/SecretaryHome";
+import StudentHome from "../components/StudentHome";
+import SubLayout from "../components/SubLayout";
 
 const HomePage = () => {
   const { currentUser } = useAuth();
-
   return (
-    <>
-      {
-        currentUser.role === 'ROLE_TEACHER'
-          ? <HomeTeacher />
-          : currentUser.role === 'ROLE_STUDENT'
-          ? <HomeStudent /> //currentUser.role === 'ROLE_STUDENT'
-          : <HomeSecretary/>
-      }
-    </>
+    <SubLayout>
+      {currentUser.role === "ROLE_TEACHER" ? (
+        <TeacherHome />
+      ) : currentUser.role === "ROLE_SECRETARY" ? (
+        <SecretaryHome />
+      ) : (
+        <StudentHome />
+      )}
+    </SubLayout>
   );
-
 };
 
 export default HomePage;

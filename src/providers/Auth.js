@@ -1,11 +1,11 @@
 /**
  * Created by chalosalvador on 2/5/20
  */
-import React, { useEffect } from 'react';
-import api from '../data';
-import { message } from 'antd';
-import { translateMessage } from '../utils/translateMessage';
-import ErrorList from '../components/ErrorList';
+import React, { useEffect } from "react";
+import api from "../data";
+import { message } from "antd";
+import { translateMessage } from "../utils/translateMessage";
+import ErrorList from "../components/ErrorList";
 
 /**
  * Context está diseñado para compartir datos que pueden
@@ -16,11 +16,10 @@ import ErrorList from '../components/ErrorList';
  *
  * @type {React.Context<{setAuthenticated: setAuthenticated, isAuthenticated: boolean}>}
  */
-const AuthContext = React.createContext( {
+const AuthContext = React.createContext({
   isAuthenticated: false,
   setAuthenticated: () => {},
-} );
-
+});
 
 /**
  * El provider del contexto expone las siguientes variables que pueden ser usadas
@@ -36,23 +35,21 @@ const AuthContext = React.createContext( {
  * @returns {JSX.Element}
  * @constructor
  */
-export const AuthProvider = ( { children } ) => {
-  const [ isAuthenticated, setAuthenticated ] = React.useState( false );
-  const [ isCheckingAuth, setIsCheckingAuth ] = React.useState( true );
-  const [ currentUser, setCurrentUser ] = React.useState( null );
-
+export const AuthProvider = ({ children }) => {
+  const [isAuthenticated, setAuthenticated] = React.useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = React.useState(true);
+  const [currentUser, setCurrentUser] = React.useState(null);
 
   const handleUser = (user) => {
     if (user) {
-      setCurrentUser( user );
-      setAuthenticated( true );
-      localStorage.setItem( 'login', JSON.stringify( true ) ); // this is to sync auth state in local storage
-      setIsCheckingAuth( false );
+      setCurrentUser(user);
+      setAuthenticated(true);
+      setIsCheckingAuth(false);
       return user;
     } else {
-      setCurrentUser( false );
-      setAuthenticated( false );
-      setIsCheckingAuth( false );
+      setCurrentUser(false);
+      setAuthenticated(false);
+      setIsCheckingAuth(false);
       return false;
     }
   };
@@ -88,6 +85,7 @@ export const AuthProvider = ( { children } ) => {
   async function login(data) {
     try {
       const response = await api.post("/login", data);
+      localStorage.setItem("login", JSON.stringify(true)); // this is to sync auth state in local storage
       handleUser(response.data.user);
       return response;
     } catch (error) {
@@ -106,8 +104,13 @@ export const AuthProvider = ( { children } ) => {
       } else {
         // Something happened in setting up the request that triggered an Error
         console.log("Error", error.message);
-          const errorList = error.error && <ErrorList errors={ error.error } />;
-          message.error( <>{ translateMessage( error.message ) }{ errorList }</> );
+        const errorList = error.error && <ErrorList errors={error.error} />;
+        message.error(
+          <>
+            {translateMessage(error.message)}
+            {errorList}
+          </>
+        );
       }
       console.log(error.config);
     }
@@ -117,10 +120,11 @@ export const AuthProvider = ( { children } ) => {
     try {
       const response = await api.post("/logout");
       handleUser(null);
+      localStorage.removeItem("login");
+
       return response;
     } catch (error) {}
   }
-
 
   /**
    * Este efecto se lanza cuando se monta el contexto y
@@ -129,8 +133,8 @@ export const AuthProvider = ( { children } ) => {
    * las sesiones en las diferentes ventanas que tengan abierta la sesión
    */
   useEffect(() => {
-    window.addEventListener( 'storage', syncLogout );
-    console.log( 'added storage event' );
+    window.addEventListener("storage", syncLogout);
+    console.log("added storage event");
 
     async function getAuthenticatedUser() {
       try {
@@ -158,17 +162,13 @@ export const AuthProvider = ( { children } ) => {
         }
         console.log(error.config);
       }
-
-
     }
     getAuthenticatedUser();
 
-
     return () => {
-      console.log( 'remove storage event' );
+      console.log("remove storage event");
 
-      window.removeEventListener( 'storage', syncLogout );
-      localStorage.removeItem( 'login' );
+      window.removeEventListener("storage", syncLogout);
     };
   }, [isAuthenticated]);
 
@@ -179,27 +179,28 @@ export const AuthProvider = ( { children } ) => {
    *
    * @param event
    */
-  const syncLogout = event => {
-    console.log( 'event', event );
+  const syncLogout = (event) => {
+    console.log("event", event);
 
-    if( event.key === 'login' ) {
-      // if( event.newValue === 'true' ) {
-        console.log( 'login from storage!' );
-        // const token = Cookies.get( 'token' ); // check if the token exists
-        // setAuthenticated( true );
-        window.location.reload();
-      // } else {
-        // console.log( 'logged out from storage!' );
-        // Cookies.remove( 'token' );
-        // setCurrentUser( null );
-        // setAuthenticated( false );
-      // }
-    }
+    // if( event.key === 'login' ) {
+    // if( event.newValue === 'true' ) {
+    //   console.log( 'login from storage!' );
+    //   // const token = Cookies.get( 'token' ); // check if the token exists
+    //   setAuthenticated( true );
+    window.location.reload();
+    // }
+    // else {
+    //   console.log( 'logged out from storage!' );
+    //   // Cookies.remove( 'token' );
+    //   setCurrentUser( null );
+    //   setAuthenticated( false );
+    // }
+    // }
   };
 
   return (
     <AuthContext.Provider
-      value={ {
+      value={{
         isAuthenticated,
         isCheckingAuth,
         setAuthenticated,
@@ -207,10 +208,10 @@ export const AuthProvider = ( { children } ) => {
         setCurrentUser,
         login,
         // register,
-        logout
-      } }
+        logout,
+      }}
     >
-      { children }
+      {children}
     </AuthContext.Provider>
   );
 };
@@ -222,9 +223,9 @@ export const AuthProvider = ( { children } ) => {
  * @returns {{setAuthenticated: setAuthenticated, isAuthenticated: boolean}}
  */
 export function useAuth() {
-  const context = React.useContext( AuthContext );
-  if( context === undefined ) {
-    throw new Error( 'useAuth must be used within an AuthProvider' );
+  const context = React.useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }

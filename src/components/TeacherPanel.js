@@ -1,95 +1,96 @@
-import { Row, Card, Col, Button, Layout, Typography, PageHeader, Dropdown, Menu } from 'antd';
-import React, { useState } from 'react';
-import '../styles/teacher-panel.css';
-import Table from 'antd/es/table';
-import Tag from 'antd/es/tag';
-import { useProjectsList } from '../data/useProjectsList';
-import ShowError from './ShowError';
-import Loading from './Loading';
-import { BellOutlined, HomeOutlined, LoadingOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../providers/Auth';
-import Routes from '../constants/routes';
-import '../styles/home-teacher.css';
-import SearchColumnFilter from './SearchColumnFilter';
-import PlanReview from './PlansReviewCollapse';
+import { Col, Layout, Menu, Row, Typography } from "antd";
+import React, { useState } from "react";
+import "../styles/teacher-panel.css";
+import Table from "antd/es/table";
+import Tag from "antd/es/tag";
+import { useProjectsList } from "../data/useProjectsList";
+import ShowError from "./ShowError";
+import Loading from "./Loading";
+import { LoadingOutlined, LogoutOutlined } from "@ant-design/icons";
+import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../providers/Auth";
+import Routes from "../constants/routes";
+import "../styles/home-teacher.css";
+import SearchColumnFilter from "./SearchColumnFilter";
+import PlanReview from "./PlansReviewCollapse";
 
 const { Content, Sider } = Layout;
 const { Title } = Typography;
 
-
 const TeacherPanel = () => {
-
-
-  const [ state, setState ] = useState( {
+  const [state, setState] = useState({
     idPlan: null,
-    showPlanReview: false
-  } );
+    showPlanReview: false,
+  });
   let location = useLocation();
   const { isAuthenticated, isCheckingAuth, currentUser } = useAuth();
   const { teachersProjects, meta, isLoading, isError } = useProjectsList();
 
-  const [ menuState, setMenuState ] = useState( {
+  const [menuState, setMenuState] = useState({
     current: location.pathname, // set the current selected item in menu, by default the current page
     collapsed: false,
-    openKeys: []
-  } );
-  const handleClick = ( e ) => {
-    console.log( 'click ', e );
-    setMenuState( {
+    openKeys: [],
+  });
+  const handleClick = (e) => {
+    console.log("click ", e);
+    setMenuState({
       ...menuState,
-      current: e.key
-    } );
+      current: e.key,
+    });
   };
   //
-  React.useEffect( () => {
-    setMenuState( {
+  React.useEffect(() => {
+    setMenuState({
       ...menuState,
-      current: location.pathname
-    } );
-  }, [ location, isAuthenticated ] );
-
+      current: location.pathname,
+    });
+  }, [location, isAuthenticated]);
 
   const columns = [
     {
-      title: 'Nombre del Estudiante',
-      dataIndex: 'student_name',
-      key: 'student_name',
+      title: "Nombre del Estudiante",
+      dataIndex: "student_name",
+      key: "student_name",
       width: 250,
-      ...SearchColumnFilter( 'student_name' )
+      ...SearchColumnFilter("student_name"),
     },
     {
-      title: 'Tema',
-      dataIndex: 'title',
-      key: 'title',
+      title: "Tema",
+      dataIndex: "title",
+      key: "title",
       width: 800,
-      ...SearchColumnFilter( 'title' )
+      ...SearchColumnFilter("title"),
     },
     {
-      title: 'Estado',
-      dataIndex: 'status',
-      key: 'status',
+      title: "Estado",
+      dataIndex: "status",
+      key: "status",
       width: 125,
-      render: status => {
-        let color = '';
-        let name = '';
+      render: (status) => {
+        let color = "";
+        let name = "";
         {
-          if( status === 'plan_sent' || status === 'plan_corrections_done' ) {
-            color = 'blue';
-            name = 'Por revisar';
-          } else if(status === 'plan_review_teacher') {
-            color = 'red';
-            name = 'Correcciones enviadas';
-          } else if( status === 'plan_approved_director' || status === 'san_curriculum_1' || status === 'plan_review_commission' || status === 'plan_corrections_done2' ) {
-            color = 'green';
-            name = 'Plan aprobado';
-          } else if ( status === 'plan_approved_commission' ) {
-            color = 'purple';
-            name = 'Plan Aprobado por comisión';
+          if (status === "plan_sent" || status === "plan_corrections_done") {
+            color = "blue";
+            name = "Por revisar";
+          } else if (status === "plan_review_teacher") {
+            color = "red";
+            name = "Correcciones enviadas";
+          } else if (
+            status === "plan_approved_director" ||
+            status === "san_curriculum_1" ||
+            status === "plan_review_commission" ||
+            status === "plan_corrections_done2"
+          ) {
+            color = "green";
+            name = "Plan aprobado";
+          } else if (status === "plan_approved_commission") {
+            color = "purple";
+            name = "Plan Aprobado por comisión";
           }
           return (
-            <Tag color={ color } key={ status }>
-              { name.toUpperCase() }
+            <Tag color={color} key={status}>
+              {name.toUpperCase()}
             </Tag>
           );
         }
@@ -97,158 +98,100 @@ const TeacherPanel = () => {
     },
   ];
 
-  const userMenu = <Menu onClick={ handleClick }>
-    <Menu.Item key='password'>Cambiar clave</Menu.Item>
-    <Menu.Item key={ Routes.LOGIN }>
-      <Link to={ Routes.LOGOUT } className='logout-link'>
-        {
-          isCheckingAuth
-            ? <LoadingOutlined />
-            : <><LogoutOutlined /> Cerrar sesión </>
-        }
-      </Link>
-    </Menu.Item>
-  </Menu>;
-
+  const userMenu = (
+    <Menu onClick={handleClick}>
+      <Menu.Item key="password">Cambiar clave</Menu.Item>
+      <Menu.Item key={Routes.LOGIN}>
+        <Link to={Routes.LOGOUT} className="logout-link">
+          {isCheckingAuth ? (
+            <LoadingOutlined />
+          ) : (
+            <>
+              <LogoutOutlined /> Cerrar sesión{" "}
+            </>
+          )}
+        </Link>
+      </Menu.Item>
+    </Menu>
+  );
 
   let pagination = {
     current: 1,
     pageSize: 10,
     total: 10,
-    showSizeChanger: false
+    showSizeChanger: false,
   };
-  if( isLoading ) {
+  if (isLoading) {
     return <Loading />;
   }
 
-  if( isError ) {
-    return <ShowError error={ isError } />;
+  if (isError) {
+    return <ShowError error={isError} />;
   }
 
-  console.log( teachersProjects );
+  console.log(teachersProjects);
 
-
-  const data = teachersProjects.map( ( project, index ) => {
+  const data = teachersProjects.map((project, index) => {
     return {
       key: index,
       title: project.title,
-      student_name: project[ 'students' ].length > 0
-        ? project[ 'students' ][ 0 ][ 'name' ]
-        : '',
+      student_name:
+        project["students"].length > 0 ? project["students"][0]["name"] : "",
       status: project.status,
       id: project.id,
     };
-  } );
+  });
 
-  if( meta ) {
+  if (meta) {
     pagination = {
       current: meta.current_page,
       pageSize: meta.per_page,
       total: meta.total,
-      showSizeChanger: false
+      showSizeChanger: false,
     };
   }
 
-  let content = '';
-  let titleTable = '';
-  if( !state.showPlanReview ) {
-    titleTable =
-      <Title level={ 3 } style={ { color: '#034c70' } }>Planes y proyectos de titulación</Title>;
+  let content = "";
+  let titleTable = "";
+  if (!state.showPlanReview) {
+    titleTable = (
+      <Title level={3} style={{ color: "#034c70" }}>
+        Planes y proyectos de titulación
+      </Title>
+    );
 
-    content =
+    content = (
       <Table
-        dataSource={ data }
-        columns={ columns }
-        rowKey={ data => data.id }
-        onRow={ ( record ) => {
+        dataSource={data}
+        columns={columns}
+        rowKey={(data) => data.id}
+        onRow={(record) => {
           return {
-            onClick: event => {
+            onClick: (event) => {
               event.stopPropagation();
-              setState( {
+              setState({
                 idPlan: record.id,
-                showPlanReview: true
-              } );
-            }
+                showPlanReview: true,
+              });
+            },
           };
-        } }
-      />;
+        }}
+      />
+    );
   } else {
-    content = <PlanReview planId={ state.idPlan } />;
+    content = <PlanReview planId={state.idPlan} />;
   }
 
   // console.log("Pilas",getDataSource());
 
   return (
     <>
-      <Layout>
-        <Sider theme='light'
-               width={ 300 }
-               style={ {
-                 backgroundColor: '#dddddd',
-                 padding: 40
-               } }>
-          <Title level={ 3 } style={ { color: '#034c70' } }>Director</Title>
-          <Card className={ 'statistics-content' } title='Tesis dirigidas' bordered={ false }>
-            <Title level={ 2 }>10</Title>
-          </Card>
-
-          <Card className={ 'statistics-content' } title='Planes por revisar' bordered={ false }>
-            <Title level={ 2 }>2</Title>
-          </Card>
-
-          <Card className={ 'statistics-content' } title='Proyectos por revisar' bordered={ false }>
-            <Title level={ 2 }>2</Title>
-          </Card>
-
-          <Title level={ 3 }
-                 style={ {
-                   color: '#034c70',
-                   marginTop: 40
-                 } }>Jurado</Title>
-
-          <Card className={ 'statistics-content' } title='Proyectos por revisar' bordered={ false }>
-            <Title level={ 2 }>10</Title>
-          </Card>
-        </Sider>
-        <Layout>
-          <PageHeader className='inner-menu'
-                      title={ <Title level={ 1 } style={ {
-                        color: '#034c70'
-                      } }>Director:</Title> }
-                      extra={ [
-                        <Button key='home' type='text' style={ { color: '#034c70' } }>
-                          <Link to={ Routes.HOME }>
-                            <HomeOutlined />
-                          </Link>
-                        </Button>,
-                        <Button key='notifications'
-                                type='text'
-                                style={ { color: '#034c70' } }
-                                icon={ <BellOutlined /> } />,
-                        <Dropdown key='user-menu' overlay={ userMenu } placement='bottomLeft'>
-                          <Button type='text' style={ { color: '#034c70' } } icon={ <UserOutlined /> }>
-                            { currentUser && currentUser.name }
-                          </Button>
-                        </Dropdown>,
-                      ] }
-          />
-          <Content style={ { padding: 50 } }>
-            <Row>
-              <Col>
-                { titleTable }
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                { content }
-              </Col>
-            </Row>
-          </Content>
-
-
-        </Layout>
-      </Layout>
-
+      <Row>
+        <Col>{titleTable}</Col>
+      </Row>
+      <Row>
+        <Col>{content}</Col>
+      </Row>
     </>
   );
 
@@ -358,7 +301,6 @@ const TeacherPanel = () => {
   // <Card className={ 'options-commission' } title='Planes Comisión' bordered={ false }> <div> <SelectOutlined
   // className={ 'big-icon' } /> </div> <br /> Revisa los planes que llegan a la comisión de titulación<br /><br />
   // <Button>Ver planes</Button> </Card> </Col> <Col span={ 6 } /> <Col span={ 6 } /> </Row> </Col> </Row> </div>
-
 };
 
-export default (TeacherPanel);
+export default TeacherPanel;

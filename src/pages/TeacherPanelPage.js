@@ -1,16 +1,14 @@
-import React from 'react';
-import TeacherPanel from '../components/TeacherPanel';
-import withAuth from '../hocs/withAuth';
+import React from "react";
+import TeacherPanel from "../components/TeacherPanel";
+import withAuth from "../hocs/withAuth";
+import SubLayout from "../components/SubLayout";
 
 const TeacherPanelPage = () => {
   return (
-    <>
-      {
-        <TeacherPanel />
-      }
-    </>
+    <SubLayout>
+      <TeacherPanel />
+    </SubLayout>
   );
-
 };
 
 export default withAuth(TeacherPanelPage);

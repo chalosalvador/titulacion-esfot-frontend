@@ -1,38 +1,10 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import loadable from '@loadable/component';
-import PublicRoute from './PublicRoute';
-import PrivateRoute from './PrivateRoute';
-import Routes from '../constants/routes';
-import NotFoundPage from '../pages/NotFoundPage';
-import Loading from '../components/Loading';
-
-/**
- * El módulo loadable (https://loadable-components.com/docs/code-splitting/)
- * Permite dividir los componentes en diferentes "bundles" (archivos js compilados)
- * de esta manera la aplicación puede ir cargando los compoenentes bajo demanda.
- * Solo cargará los componentes que sean utilizados por el usuario.
- *
- * Esto acelera la carga de la aplicación ya que de lo contrario tendríamos un solo
- * bundle de gran tamaño y el navegador demoraría en descargarlo para renderizar la aplicación.
- *
- * @type {{fallback: JSX.Element}}
- */
-const loadableOptions = { fallback: <Loading /> };
-
-const AsyncHome = loadable( () => import( '../pages/Index' ), loadableOptions );
-const AsyncLogin = loadable( () => import( '../pages/Login' ), loadableOptions );
-const AsyncHomeTeacher = loadable( () => import( '../pages/HomePage' ), loadableOptions );
-const AsyncTeacherPanel = loadable( () => import('../pages/TeacherPanelPage'), loadableOptions );
-const AsyncTeachersIdeas = loadable( () => import( '../pages/TeacherIdeasPage' ), loadableOptions );
-const AsyncTeachersPlans = loadable( () => import( '../pages/TeacherPlansPage' ), loadableOptions );
-const AsyncProjectsList = loadable( () => import('../pages/ProjectsListSecretaryPage'), loadableOptions );
-const AsyncProjectDetailSecretary = loadable( () => import('../pages/ProjectDetailSecretaryPage') );
-const AsyncCommitteePlans = loadable( () => import( '../pages/CommitteePlansPage' ), loadableOptions );
-const AsyncPlanForm = loadable( () => import('../pages/PlanFormPage'), loadableOptions );
-const AsyncAbout = loadable( () => import( '../pages/About' ), loadableOptions );
-const AsyncLogout = loadable( () => import( '../pages/Logout' ), loadableOptions );
-
+import React from "react";
+import Loading from "../components/Loading";
+import TeacherRouter from "./TeacherRouter";
+import SecretaryRouter from "./SecretaryRouter";
+import AuthRouter from "./AuthRouter";
+import { useAuth } from "../providers/Auth";
+import StudentRouter from "./StudentRouter";
 
 /**
  * Este es el componente que se encarga de renderizar el componente adecuado
@@ -45,23 +17,60 @@ const AsyncLogout = loadable( () => import( '../pages/Logout' ), loadableOptions
  * @returns {JSX.Element}
  * @constructor
  */
-const AppRouter = () => (
-  <Switch>
-    <PublicRoute exact path={ Routes.INDEX } component={ AsyncHome } />
-    <PublicRoute path={ Routes.LOGIN } component={ AsyncLogin } />
-    <PrivateRoute path={ Routes.HOME } component={ AsyncHomeTeacher } />
-    <PrivateRoute path={ Routes.TEACHER_PANEL } component={ AsyncTeacherPanel } />
-    <PrivateRoute path={ Routes.TEACHERS_IDEAS } component={ AsyncTeachersIdeas } />
-    <PrivateRoute path={ Routes.TEACHERS_PLANS } component={ AsyncTeachersPlans } />
-    <PrivateRoute path={ Routes.PROJECTS_LIST_SECRETARY } component={ AsyncProjectsList } />
-    <PrivateRoute path={ Routes.PROJECT_DETAIL_SECRETARY } component={ AsyncProjectDetailSecretary } />
-    <PrivateRoute path={ Routes.COMMITTEE_PLANS } component={ AsyncCommitteePlans } />
-    <PrivateRoute path={ Routes.PLANFORM } component={ AsyncPlanForm } />
-    <PublicRoute path={ Routes.ABOUT } component={ AsyncAbout } />
-    <PrivateRoute path={ Routes.LOGOUT } component={ AsyncLogout } />
+const AppRouter = () => {
+  const { currentUser, isCheckingAuth, isAuthenticated } = useAuth();
 
-    <Route component={ NotFoundPage } />
-  </Switch>
-);
+  return isCheckingAuth ? (
+    <Loading />
+  ) : !isAuthenticated ? (
+    <AuthRouter />
+  ) : currentUser.role === "ROLE_TEACHER" ? (
+    <TeacherRouter />
+  ) : currentUser.role === "ROLE_SECRETARY" ? (
+    <SecretaryRouter />
+  ) : (
+    <StudentRouter />
+  );
+};
 
 export default AppRouter;
+
+/*
+
+ <Switch>
+ <PublicRoute exact path={Routes.INDEX} component={AsyncIndex} />
+ <PublicRoute path={Routes.LOGIN} component={AsyncLogin} />
+
+ <PrivateRoute path={Routes.HOME} component={AsyncHome} />
+ <PrivateRoute path={Routes.TEACHER_PANEL} component={AsyncTeacherPanel} />
+ <PrivateRoute
+ path={Routes.TEACHERS_IDEAS}
+ component={AsyncTeachersIdeas}
+ />
+ <PrivateRoute
+ path={Routes.TEACHERS_PLANS}
+ component={AsyncTeachersPlans}
+ />
+
+ <PrivateRoute
+ path={Routes.PROJECTS_LIST_SECRETARY}
+ component={AsyncSecretaryProjectsList}
+ />
+ <PrivateRoute
+ path={Routes.PROJECT_DETAIL_SECRETARY}
+ component={AsyncSecretaryProjectDetail}
+ />
+
+ <PrivateRoute
+ path={Routes.COMMITTEE_PLANS}
+ component={AsyncCommitteePlans}
+ />
+
+ <PrivateRoute path={Routes.PLAN_FORM} component={AsyncPlanForm} />
+
+ <PrivateRoute path={Routes.LOGOUT} component={AsyncLogout} />
+ <PublicRoute path={Routes.ABOUT} component={AsyncAbout} />
+
+ <Route component={NotFoundPage} />
+ </Switch>
+ */

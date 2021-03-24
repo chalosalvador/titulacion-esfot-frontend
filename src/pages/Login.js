@@ -1,29 +1,25 @@
-import React from 'react';
-import Routes from '../constants/routes';
-import { useAuth } from '../providers/Auth';
-import { Checkbox, Col, Form, Input, Row, Button, message } from 'antd';
-import { LockOutlined, UserOutlined, EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons/lib';
-import API from '../data';
-import withoutAuth from '../hocs/withoutAuth';
-import Cookies from 'js-cookie';
-import { translateMessage } from '../utils/translateMessage';
-import { Link } from 'react-router-dom';
-import '../styles/login.css';
-import ErrorList from '../components/ErrorList';
+import React from "react";
+import Routes from "../constants/routes";
+import { useAuth } from "../providers/Auth";
+import { Button, Checkbox, Col, Form, Input, Row } from "antd";
+import {
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  LockOutlined,
+  UserOutlined,
+} from "@ant-design/icons/lib";
+import withoutAuth from "../hocs/withoutAuth";
+import { Link } from "react-router-dom";
+import "../styles/login.css";
 
 const Login = () => {
-  const {
-    setAuthenticated,
-    setCurrentUser,
-    login
-  } = useAuth();
+  const { setAuthenticated, setCurrentUser, login } = useAuth();
 
-  const onFinish = async( userData ) => {
-
-    login( {
+  const onFinish = async (userData) => {
+    login({
       email: userData.username,
-      password: userData.password
-    } );
+      password: userData.password,
+    });
     // try {
     //   const response = await API.post( '/login', {
     //     email: userData.username,
@@ -47,70 +43,79 @@ const Login = () => {
   return (
     <>
       {
-        <Row justify='center' className='login'>
-          <Col span={ 8 }>
+        <Row justify="center" className="login">
+          <Col span={8}>
             <div>
               <Form
-                name='login-form'
-                className='login-form'
-                initialValues={ {
+                name="login-form"
+                className="login-form"
+                initialValues={{
                   remember: true,
-                  username: '',
-                  password: ''
-                } }
-                onFinish={ onFinish }
+                  username: "",
+                  password: "",
+                }}
+                onFinish={onFinish}
               >
                 <Form.Item
-                  name='username'
-                  rules={ [
+                  name="username"
+                  rules={[
                     {
                       required: true,
-                      message: 'Ingresa tu nombre de usuario'
+                      message: "Ingresa tu nombre de usuario",
                     },
                     {
-                      type: 'email',
-                      message: 'Ingresa un correo válido'
-                    }
-                  ] }
+                      type: "email",
+                      message: "Ingresa un correo válido",
+                    },
+                  ]}
                 >
-                  <Input prefix={ <UserOutlined className='site-form-item-icon' /> }
-                         placeholder='Email'
-                         autoComplete='email' />
-                </Form.Item>
-
-                <Form.Item
-                  name='password'
-                  rules={ [
-                    {
-                      required: true,
-                      message: 'Ingresa tu clave'
-                    }
-                  ] }
-                >
-                  <Input.Password
-                    prefix={ <LockOutlined className='site-form-item-icon' /> }
-                    iconRender={ visible => (visible
-                      ? <EyeTwoTone />
-                      : <EyeInvisibleOutlined />) }
-                    placeholder='Password' autoComplete='password'
+                  <Input
+                    prefix={<UserOutlined className="site-form-item-icon" />}
+                    placeholder="Email"
+                    autoComplete="email"
                   />
                 </Form.Item>
 
-                <Form.Item name='remember' valuePropName='checked' noStyle>
+                <Form.Item
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Ingresa tu clave",
+                    },
+                  ]}
+                >
+                  <Input.Password
+                    prefix={<LockOutlined className="site-form-item-icon" />}
+                    iconRender={(visible) =>
+                      visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                    }
+                    placeholder="Password"
+                    autoComplete="password"
+                  />
+                </Form.Item>
+
+                <Form.Item name="remember" valuePropName="checked" noStyle>
                   <Checkbox>Recordarme</Checkbox>
                 </Form.Item>
 
                 <Form.Item>
-                  <Link className='login-form-forgot' to=''>
+                  <Link className="login-form-forgot" to="">
                     ¡Olvidé mi clave!
                   </Link>
                 </Form.Item>
 
                 <Form.Item>
-                  <Button type='primary' htmlType='submit' className='login-form-button'>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="login-form-button"
+                  >
                     Ingresar
                   </Button>
-                  <div>Soy nuevo, <Link to={ Routes.REGISTER }>registrarme</Link></div>
+                  <div>
+                    Soy nuevo, <Link to={Routes.REGISTER}>registrarme</Link>
+                  </div>
                 </Form.Item>
               </Form>
             </div>
@@ -121,4 +126,4 @@ const Login = () => {
   );
 };
 
-export default withoutAuth( Login );
+export default withoutAuth(Login);

@@ -4,7 +4,7 @@
 // import API from './index';
 // import Routes from '../constants/routes';
 // import {history} from 'react-router-dom';
- // import { translateMessage } from '../helpers/translateMessage';
+// import { translateMessage } from '../helpers/translateMessage';
 //
 //
 // /**

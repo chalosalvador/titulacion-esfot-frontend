@@ -1,181 +1,217 @@
+import React from "react";
+import { useAuth } from "../providers/Auth";
+import { Button, Col, Popover, Row, Typography } from "antd";
+import "../styles/headers.css";
+import logoEPN from "../images/Logotipo-ESFOT.png";
+import logoESFOT from "../images/Logotipo-ESFOT2.png";
+import logoEPNB from "../images/epnblanco.png";
+import logoESFOTB from "../images/esfotblanco.png";
 
-import React, { useState } from 'react';
-
-import Routes from '../constants/routes';
-import { useAuth } from '../providers/Auth';
-import { Button, Col, Menu, Popover, Row, Typography } from 'antd';
-import '../styles/headers.css';
-import logoEPN from '../images/Logotipo-ESFOT.png';
-import logoESFOT from '../images/Logotipo-ESFOT2.png';
-import logoEPNB from '../images/epnblanco.png';
-import logoESFOTB from '../images/esfotblanco.png';
-
-const linkStyle = {};
 const { Title } = Typography;
 
 const Headers = () => {
-
-  const { isAuthenticated, isCheckingAuth, currentUser } = useAuth();
-
+  const { isAuthenticated, currentUser } = useAuth();
 
   return (
     <>
-      {
-        !isAuthenticated
-        ?
-          <Row type='flex' justify='space-between' align='bottom'>
-            <Col xs={ 24 } md={ 6 } className='logo-wrapper'>
-              <a href='https://www.epn.edu.ec/'>
-                <img className='logo' src={ logoEPN } alt='' /></a>
-            </Col>
+      {!isAuthenticated ? (
+        <Row type="flex" justify="space-between" align="bottom">
+          <Col xs={24} md={6} className="logo-wrapper">
+            <a href="https://www.epn.edu.ec/">
+              <img className="logo" src={logoEPN} alt="" />
+            </a>
+          </Col>
 
-            {/*<Col md={ 14 } align='right' className='main-menu'>*/}
-            {/*  <Navigation mode='horizontal' />*/}
-            {/*</Col>*/}
+          {/*<Col md={ 14 } align='right' className='main-menu'>*/}
+          {/*  <Navigation mode='horizontal' />*/}
+          {/*</Col>*/}
 
-            <Col xs={ 2 } align='right' className='responsive-menu-button'>
-              <Popover
-                       trigger='click'
-                       placement='rightTop'
-                       overlayClassName='responsive-menu-wrapper'>
-                <Button type='primary'>
-                  <svg viewBox='64 64 896 896'
-                       focusable='false'
-                       className=''
-                       data-icon='menu'
-                       width='1em'
-                       height='1em'
-                       fill='currentColor'
-                       aria-hidden='true'>
-                    <path d='M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z'></path>
-                  </svg>
-                </Button>
-              </Popover>
-            </Col>
+          <Col xs={2} align="right" className="responsive-menu-button">
+            <Popover
+              trigger="click"
+              placement="rightTop"
+              overlayClassName="responsive-menu-wrapper"
+            >
+              <Button type="primary">
+                <svg
+                  viewBox="64 64 896 896"
+                  focusable="false"
+                  className=""
+                  data-icon="menu"
+                  width="1em"
+                  height="1em"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path>
+                </svg>
+              </Button>
+            </Popover>
+          </Col>
 
-            <Col xs={ 22 } md={ 4 } className='logos-social-header' align='right'>
-              <a href='https://esfot.epn.edu.ec/'>
-                <img className='logo' src={ logoESFOT } alt='' /></a>
-            </Col>
-          </Row>
-          :
+          <Col xs={22} md={4} className="logos-social-header" align="right">
+            <a href="https://esfot.epn.edu.ec/">
+              <img className="logo" src={logoESFOT} alt="" />
+            </a>
+          </Col>
+        </Row>
+      ) : currentUser.role === "ROLE_TEACHER" ? (
+        <Row
+          type="flex"
+          justify="space-between"
+          align="bottom"
+          className={"header-auth"}
+        >
+          <Col xs={24} md={6} className="logo-wrapper">
+            <Title level={2} className={"titles"}>
+              PANEL PROFESOR
+            </Title>
+          </Col>
 
-            currentUser.role === 'ROLE_TEACHER'
-            ?
-              <Row type='flex' justify='space-between' align='bottom' className={'header-auth'}>
-                <Col xs={ 24 } md={ 6 } className='logo-wrapper'>
-                  <Title level={2} className={'titles'}>
-                    PANEL PROFESOR
-                  </Title>
-                </Col>
+          <Col xs={2} align="right" className="responsive-menu-button">
+            <Popover
+              trigger="click"
+              placement="rightTop"
+              overlayClassName="responsive-menu-wrapper"
+            >
+              <Button type="primary">
+                <svg
+                  viewBox="64 64 896 896"
+                  focusable="false"
+                  className=""
+                  data-icon="menu"
+                  width="1em"
+                  height="1em"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path>
+                </svg>
+              </Button>
+            </Popover>
+          </Col>
+          <Col
+            xs={22}
+            md={4}
+            offset={10}
+            align="right"
+            className="logo-wrapper"
+          >
+            <a href="https://www.epn.edu.ec/">
+              <img className="logo-epn" src={logoEPNB} alt="" />
+            </a>
+          </Col>
+          <Col xs={22} md={4} className="logos-social-header" align="right">
+            <a href="https://esfot.epn.edu.ec/">
+              <img className="logo" src={logoESFOTB} alt="" />
+            </a>
+          </Col>
+        </Row>
+      ) : currentUser.role === "ROLE_STUDENT" ? (
+        <Row
+          type="flex"
+          justify="space-between"
+          align="bottom"
+          className={"header-auth"}
+        >
+          <Col xs={24} md={6} className="logo-wrapper">
+            <Title level={2} className={"titles"}>
+              PANEL ESTUDIANTE
+            </Title>
+          </Col>
 
+          <Col xs={2} align="right" className="responsive-menu-button">
+            <Popover
+              trigger="click"
+              placement="rightTop"
+              overlayClassName="responsive-menu-wrapper"
+            >
+              <Button type="primary">
+                <svg
+                  viewBox="64 64 896 896"
+                  focusable="false"
+                  className=""
+                  data-icon="menu"
+                  width="1em"
+                  height="1em"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path>
+                </svg>
+              </Button>
+            </Popover>
+          </Col>
+          <Col
+            xs={22}
+            md={4}
+            offset={10}
+            align="right"
+            className="logo-wrapper"
+          >
+            <a href="https://www.epn.edu.ec/">
+              <img className="logo-epn" src={logoEPNB} alt="" />
+            </a>
+          </Col>
+          <Col xs={22} md={4} className="logos-social-header" align="right">
+            <a href="https://esfot.epn.edu.ec/">
+              <img className="logo" src={logoESFOTB} alt="" />
+            </a>
+          </Col>
+        </Row>
+      ) : (
+        <Row
+          type="flex"
+          justify="space-between"
+          align="bottom"
+          className={"header-auth"}
+        >
+          <Col xs={24} md={6} className="logo-wrapper">
+            <Title level={2} className={"titles"}>
+              PANEL SECRETARÍA
+            </Title>
+          </Col>
 
-                <Col xs={ 2 } align='right' className='responsive-menu-button'>
-                  <Popover
-                           trigger='click'
-                           placement='rightTop'
-                           overlayClassName='responsive-menu-wrapper'>
-                    <Button type='primary'>
-                      <svg viewBox='64 64 896 896'
-                           focusable='false'
-                           className=''
-                           data-icon='menu'
-                           width='1em'
-                           height='1em'
-                           fill='currentColor'
-                           aria-hidden='true'>
-                        <path d='M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z'></path>
-                      </svg>
-                    </Button>
-                  </Popover>
-                </Col>
-                <Col xs={ 22 } md={ 4 } offset={10} align='right' className='logo-wrapper'>
-                  <a href='https://www.epn.edu.ec/'>
-                    <img className='logo-epn' src={ logoEPNB } alt='' /></a>
-                </Col>
-                <Col xs={ 22 } md={ 4 } className='logos-social-header' align='right'>
-                  <a href='https://esfot.epn.edu.ec/'>
-                    <img className='logo' src={ logoESFOTB } alt='' /></a>
-                </Col>
-              </Row>
-              : currentUser.role === 'ROLE_STUDENT'
-                ?
-              <Row type='flex' justify='space-between' align='bottom' className={'header-auth'}>
-                <Col xs={ 24 } md={ 6 } className='logo-wrapper'>
-                  <Title level={2} className={'titles'}>
-                    PANEL ESTUDIANTE
-                  </Title>
-                </Col>
-
-
-                <Col xs={ 2 } align='right' className='responsive-menu-button'>
-                  <Popover
-                    trigger='click'
-                    placement='rightTop'
-                    overlayClassName='responsive-menu-wrapper'>
-                    <Button type='primary'>
-                      <svg viewBox='64 64 896 896'
-                           focusable='false'
-                           className=''
-                           data-icon='menu'
-                           width='1em'
-                           height='1em'
-                           fill='currentColor'
-                           aria-hidden='true'>
-                        <path d='M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z'></path>
-                      </svg>
-                    </Button>
-                  </Popover>
-                </Col>
-                <Col xs={ 22 } md={ 4 } offset={10} align='right' className='logo-wrapper'>
-                  <a href='https://www.epn.edu.ec/'>
-                    <img className='logo-epn' src={ logoEPNB } alt='' /></a>
-                </Col>
-                <Col xs={ 22 } md={ 4 } className='logos-social-header' align='right'>
-                  <a href='https://esfot.epn.edu.ec/'>
-                    <img className='logo' src={ logoESFOTB } alt='' /></a>
-                </Col>
-              </Row>
-              :<Row type='flex' justify='space-between' align='bottom' className={'header-auth'}>
-                <Col xs={ 24 } md={ 6 } className='logo-wrapper'>
-                  <Title level={2} className={'titles'}>
-                    PANEL SECRETARÍA
-                  </Title>
-                </Col>
-
-
-                <Col xs={ 2 } align='right' className='responsive-menu-button'>
-                  <Popover
-                    trigger='click'
-                    placement='rightTop'
-                    overlayClassName='responsive-menu-wrapper'>
-                    <Button type='primary'>
-                      <svg viewBox='64 64 896 896'
-                           focusable='false'
-                           className=''
-                           data-icon='menu'
-                           width='1em'
-                           height='1em'
-                           fill='currentColor'
-                           aria-hidden='true'>
-                        <path d='M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z'></path>
-                      </svg>
-                    </Button>
-                  </Popover>
-                </Col>
-                <Col xs={ 22 } md={ 4 } offset={10} align='right' className='logo-wrapper'>
-                  <a href='https://www.epn.edu.ec/'>
-                    <img className='logo-epn' src={ logoEPNB } alt='' /></a>
-                </Col>
-                <Col xs={ 22 } md={ 4 } className='logos-social-header' align='right'>
-                  <a href='https://esfot.epn.edu.ec/'>
-                    <img className='logo' src={ logoESFOTB } alt='' /></a>
-                </Col>
-              </Row>
-
-
-
-      }
+          <Col xs={2} align="right" className="responsive-menu-button">
+            <Popover
+              trigger="click"
+              placement="rightTop"
+              overlayClassName="responsive-menu-wrapper"
+            >
+              <Button type="primary">
+                <svg
+                  viewBox="64 64 896 896"
+                  focusable="false"
+                  className=""
+                  data-icon="menu"
+                  width="1em"
+                  height="1em"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path>
+                </svg>
+              </Button>
+            </Popover>
+          </Col>
+          <Col
+            xs={22}
+            md={4}
+            offset={10}
+            align="right"
+            className="logo-wrapper"
+          >
+            <a href="https://www.epn.edu.ec/">
+              <img className="logo-epn" src={logoEPNB} alt="" />
+            </a>
+          </Col>
+          <Col xs={22} md={4} className="logos-social-header" align="right">
+            <a href="https://esfot.epn.edu.ec/">
+              <img className="logo" src={logoESFOTB} alt="" />
+            </a>
+          </Col>
+        </Row>
+      )}
 
       {/*<Menu*/}
       {/*  mode={ props.mode }*/}

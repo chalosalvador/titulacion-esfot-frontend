@@ -1,20 +1,13 @@
-import React from 'react';
-import { useAuth } from '../providers/Auth';
-import TeacherPlans from '../components/TeacherPlans';
+import React from "react";
+import TeacherPlans from "../components/TeacherPlans";
+import SubLayout from "../components/SubLayout";
 
 const TeacherPlansPage = () => {
-  const { currentUser } = useAuth();
-
   return (
-    <>
-      {
-        currentUser.role === 'ROLE_TEACHER'
-          ? <TeacherPlans />
-          : []
-      }
-    </>
+    <SubLayout>
+      <TeacherPlans />
+    </SubLayout>
   );
-
 };
 
 export default TeacherPlansPage;

@@ -10,26 +10,26 @@ const api = axios.create({
 api.interceptors.response.use(
   function (response) {
     // Do something with response data
-      return {
-        status: response.status,
-        data: response.data.data || response.data
-      };
+    return {
+      status: response.status,
+      data: response.data.data || response.data,
+    };
     // return response;
   },
   function (error) {
     // Do something with response error
     console.log("INTERCEPTED", error);
-        return Promise.reject( {
-          message: error.message,
-          error: error.error || error.errors,
-          status: error.status
-        } );
+    return Promise.reject({
+      message: error.message,
+      error: error.error || error.errors,
+      status: error.status,
+    });
     // return Promise.reject(error);
   }
 );
 
-export const fetcher = async( ...args ) => {
-  return await api.get( ...args );
+export const fetcher = async (...args) => {
+  return await api.get(...args);
 };
 
 export default api;

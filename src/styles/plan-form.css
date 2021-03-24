@@ -33,7 +33,8 @@
   color: #034c70;
 }
 
-.menus .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+.menus .ant-menu-item .anticon,
+.ant-menu-submenu-title .anticon {
   font-size: 35px;
 }
 
