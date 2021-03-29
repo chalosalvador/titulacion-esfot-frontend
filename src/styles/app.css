@@ -1,11 +1,11 @@
-@import '~antd/dist/antd.css';
+@import "~antd/dist/antd.css";
 
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-  Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 * {
@@ -60,7 +60,7 @@ body {
   line-height: 64px;
   padding: 0 24px;
   cursor: pointer;
-  transition: color .3s;
+  transition: color 0.3s;
 }
 
 .header__trigger:hover {
@@ -108,7 +108,7 @@ body {
 }
 
 .page-title {
-  font-size: 2.0rem;
+  font-size: 2rem;
   text-align: center;
   text-transform: uppercase;
   margin: 30px 0 20px;
@@ -133,9 +133,77 @@ code {
   border-radius: 5px;
   padding: 0.75rem;
   font-size: 1.1rem;
-  font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-  DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+    Bitstream Vera Sans Mono, Courier New, monospace;
 }
+
+
+.big-icon {
+  font-size: 30px;
+}
+
+.options {
+  text-align: center;
+  color: #ffffff;
+  font-size: 14px;
+  background: #034c70;
+  border-radius: 25px;
+  backdrop-filter: blur(5px);
+  width: 210px;
+  min-height: 100%;
+}
+
+.main-options {
+  background: #034c70;
+}
+
+.resources-options {
+  background: #407088;
+}
+
+.options .ant-card-head {
+  border: none;
+  color: #ffffff;
+}
+
+
+.statistics-content {
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-top: 20px;
+  margin-left: -5px;
+  padding: 0;
+  color: #034c70;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+
+  font-feature-settings: "tnum", "tnum";
+  position: relative;
+  background: #ededee;
+  border-radius: 25px;
+  backdrop-filter: blur(5px);
+  width: 210px;
+  height: 150px;
+}
+
+.statistics-content .ant-card-head {
+  min-height: 48px;
+  margin-bottom: -1px;
+  padding: 0 24px;
+  color: #034c70;
+  font-weight: 500;
+  font-size: 16px;
+  background: transparent;
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+}
+
+
+
+
 
 .footer {
   /*text-align: center;*/
@@ -183,7 +251,6 @@ code {
 }
 
 @media (min-width: 768px) {
-
   .main-menu {
     display: block;
   }
@@ -200,7 +267,8 @@ code {
     position: relative;
   }
 
-  .bars:after, .bars:before {
+  .bars:after,
+  .bars:before {
     content: attr(x);
     width: 20px;
     position: absolute;
@@ -244,7 +312,6 @@ code {
     text-align: left;
     margin-top: 50px;
     max-width: 100%;
-
   }
 
   .logos-social {
@@ -256,7 +323,6 @@ code {
     text-align: center;
   }
 }
-
 
 /*// Extra small devices (portrait phones, less than 576px)*/
 /*!*@media (max-width: 575.98px) { ... }*!*/
@@ -272,5 +338,3 @@ code {
 
 /*// Extra large devices (large desktops, 1200px and up)*/
 /*!*@media (min-width: 1200px) { ... }*!*/
-
-

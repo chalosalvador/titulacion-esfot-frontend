@@ -1,9 +1,9 @@
-import React from 'react';
-import { Button, Result } from 'antd';
-import { translateMessage } from '../utils/translateMessage';
+import React from "react";
+import { Button, Result } from "antd";
+import { translateMessage } from "../utils/translateMessage";
 
-const setStatus = ( status ) => {
-  switch( status ) {
+const setStatus = (status) => {
+  switch (status) {
     case 403:
     case 401:
       return 403;
@@ -12,17 +12,19 @@ const setStatus = ( status ) => {
     case 404:
       return 404;
     default:
-      return 'error';
+      return "error";
   }
 };
 
-const ShowError = ( { error } ) => {
-  console.log( 'props', error.error );
+const ShowError = ({ error }) => {
+  console.log("props", error.error);
   return (
-    <Result status={ setStatus( error.status ) }
-            title={ translateMessage( error.error ) }
-            subTitle={translateMessage(error.message)}
-            extra={ <Button type='primary'>Back Home</Button> } />
+    <Result
+      status={setStatus(error.status)}
+      title={translateMessage(error.error)}
+      subTitle={translateMessage(error.message)}
+      extra={<Button type="primary">Back Home</Button>}
+    />
   );
 };
 

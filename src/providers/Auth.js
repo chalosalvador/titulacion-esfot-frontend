@@ -1,9 +1,11 @@
 /**
  * Created by chalosalvador on 2/5/20
  */
-import React, { useEffect } from 'react';
-import API from '../data';
-import Cookies from 'js-cookie';
+import React, { useEffect } from "react";
+import api from "../data";
+import { message } from "antd";
+import { translateMessage } from "../utils/translateMessage";
+import ErrorList from "../components/ErrorList";
 
 /**
  * Context está diseñado para compartir datos que pueden
@@ -14,11 +16,10 @@ import Cookies from 'js-cookie';
  *
  * @type {React.Context<{setAuthenticated: setAuthenticated, isAuthenticated: boolean}>}
  */
-const AuthContext = React.createContext( {
+const AuthContext = React.createContext({
   isAuthenticated: false,
   setAuthenticated: () => {},
-} );
-
+});
 
 /**
  * El provider del contexto expone las siguientes variables que pueden ser usadas
@@ -34,10 +35,96 @@ const AuthContext = React.createContext( {
  * @returns {JSX.Element}
  * @constructor
  */
-export const AuthProvider = ( { children } ) => {
-  const [ isAuthenticated, setAuthenticated ] = React.useState( false );
-  const [ isCheckingAuth, setIsCheckingAuth ] = React.useState( true );
-  const [ currentUser, setCurrentUser ] = React.useState( null );
+export const AuthProvider = ({ children }) => {
+  const [isAuthenticated, setAuthenticated] = React.useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = React.useState(true);
+  const [currentUser, setCurrentUser] = React.useState(null);
+
+  const handleUser = (user) => {
+    if (user) {
+      setCurrentUser(user);
+      setAuthenticated(true);
+      setIsCheckingAuth(false);
+      return user;
+    } else {
+      setCurrentUser(false);
+      setAuthenticated(false);
+      setIsCheckingAuth(false);
+      return false;
+    }
+  };
+
+  // async function register(data) {
+  //   try {
+  //     const response = await api.post("/register", data);
+  //     console.log("rersponse", response);
+  //     handleUser(response.data);
+  //     return response;
+  //   } catch (error) {
+  //     if (error.response) {
+  //       // The request was made and the server responded with a status code
+  //       // that falls out of the range of 2xx
+  //       console.log(error.response.data);
+  //       console.log(error.response.status);
+  //       console.log(error.response.headers);
+  //       return Promise.reject(error.response);
+  //       // return error.response;
+  //     } else if (error.request) {
+  //       // The request was made but no response was received
+  //       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+  //       // http.ClientRequest in node.js
+  //       console.log(error.request);
+  //     } else {
+  //       // Something happened in setting up the request that triggered an Error
+  //       console.log("Error", error.message);
+  //     }
+  //     console.log(error.config);
+  //   }
+  // }
+
+  async function login(data) {
+    try {
+      const response = await api.post("/login", data);
+      localStorage.setItem("login", JSON.stringify(true)); // this is to sync auth state in local storage
+      handleUser(response.data.user);
+      return response;
+    } catch (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        return error.response;
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+        const errorList = error.error && <ErrorList errors={error.error} />;
+        message.error(
+          <>
+            {translateMessage(error.message)}
+            {errorList}
+          </>
+        );
+      }
+      console.log(error.config);
+    }
+  }
+
+  async function logout() {
+    try {
+      const response = await api.post("/logout");
+      handleUser(null);
+      localStorage.removeItem("login");
+
+      return response;
+    } catch (error) {}
+  }
 
   /**
    * Este efecto se lanza cuando se monta el contexto y
@@ -45,37 +132,45 @@ export const AuthProvider = ( { children } ) => {
    * También añade el evento storage para mantener sincronizadas
    * las sesiones en las diferentes ventanas que tengan abierta la sesión
    */
-  useEffect( () => {
-    const initializeAuth = async() => {
-      window.addEventListener( 'storage', syncLogout );
-      console.log( 'added storage event' );
+  useEffect(() => {
+    window.addEventListener("storage", syncLogout);
+    console.log("added storage event");
 
-      const token = !!Cookies.get( 'token' );
-      if( token ) {
-        try {
-          // TODO change to useSWR and revalidate
-          const currentUserResponse = await API.get( '/user' );
-          console.log( 'currentUserResponse', currentUserResponse );
-          setCurrentUser( currentUserResponse && currentUserResponse.data );
-          setAuthenticated( true );
-        } catch( e ) {
-          console.log( 'e', e );
-          setAuthenticated( false );
+    async function getAuthenticatedUser() {
+      try {
+        const response = await api.get("/user");
+        console.log("response user", response);
+        handleUser(response.data);
+        return response;
+      } catch (error) {
+        handleUser(false);
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          return error.response;
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
         }
+        console.log(error.config);
       }
-      setIsCheckingAuth( false );
+    }
+    getAuthenticatedUser();
 
-      return () => {
-        console.log( 'remove storage event' );
+    return () => {
+      console.log("remove storage event");
 
-        window.removeEventListener( 'storage', syncLogout );
-        window.localStorage.removeItem( 'login' );
-      };
+      window.removeEventListener("storage", syncLogout);
     };
-
-    initializeAuth();
-  }, [] );
-
+  }, [isAuthenticated]);
 
   /**
    * Esta es la función que se lanza en otras ventanas
@@ -84,35 +179,39 @@ export const AuthProvider = ( { children } ) => {
    *
    * @param event
    */
-  const syncLogout = event => {
-    console.log( 'event', event );
+  const syncLogout = (event) => {
+    console.log("event", event);
 
-    if( event.key === 'login' ) {
-      // if( event.newValue === 'true' ) {
-        console.log( 'login from storage!' );
-        // const token = Cookies.get( 'token' ); // check if the token exists
-        // setAuthenticated( true );
-        window.location.reload();
-      // } else {
-        // console.log( 'logged out from storage!' );
-        // Cookies.remove( 'token' );
-        // setCurrentUser( null );
-        // setAuthenticated( false );
-      // }
-    }
+    // if( event.key === 'login' ) {
+    // if( event.newValue === 'true' ) {
+    //   console.log( 'login from storage!' );
+    //   // const token = Cookies.get( 'token' ); // check if the token exists
+    //   setAuthenticated( true );
+    window.location.reload();
+    // }
+    // else {
+    //   console.log( 'logged out from storage!' );
+    //   // Cookies.remove( 'token' );
+    //   setCurrentUser( null );
+    //   setAuthenticated( false );
+    // }
+    // }
   };
 
   return (
     <AuthContext.Provider
-      value={ {
+      value={{
         isAuthenticated,
         isCheckingAuth,
         setAuthenticated,
         currentUser,
-        setCurrentUser
-      } }
+        setCurrentUser,
+        login,
+        // register,
+        logout,
+      }}
     >
-      { children }
+      {children}
     </AuthContext.Provider>
   );
 };
@@ -124,14 +223,9 @@ export const AuthProvider = ( { children } ) => {
  * @returns {{setAuthenticated: setAuthenticated, isAuthenticated: boolean}}
  */
 export function useAuth() {
-  const context = React.useContext( AuthContext );
-  if( context === undefined ) {
-    throw new Error( 'useAuth must be used within an AuthProvider' );
+  const context = React.useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
-
-// export function useIsAuthenticated() {
-//   const context = useAuth();
-//   return context.isAuthenticated;
-// }

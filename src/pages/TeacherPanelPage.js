@@ -1,18 +1,14 @@
-import React from 'react';
-// import { useAuth } from '../providers/Auth';
-import TeacherPanel from '../components/TeacherPanel';
+import React from "react";
+import TeacherPanel from "../components/TeacherPanel";
+import withAuth from "../hocs/withAuth";
+import SubLayout from "../components/SubLayout";
 
 const TeacherPanelPage = () => {
-  // const { currentUser } = useAuth();
-
   return (
-    <>
-      {
-        <TeacherPanel />
-      }
-    </>
+    <SubLayout>
+      <TeacherPanel />
+    </SubLayout>
   );
-
 };
 
-export default TeacherPanelPage;
+export default withAuth(TeacherPanelPage);

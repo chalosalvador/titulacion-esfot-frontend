@@ -1,8 +1,11 @@
-import React from 'react';
-import CommitteePlansTable from '../components/CommitteePlansTable';
+import React from "react";
+import CommitteePlansTable from "../components/CommitteePlansTable";
+import SubLayout from "../components/SubLayout";
 
 const CommitteePlansPage = () => (
-  <CommitteePlansTable />
+  <SubLayout>
+    <CommitteePlansTable />
+  </SubLayout>
 );
 
 export default CommitteePlansPage;

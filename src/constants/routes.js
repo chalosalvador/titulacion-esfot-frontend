@@ -3,28 +3,28 @@
  */
 
 const publicRoutes = {
-  LOGIN: '/ingreso',
-  USERS: '/usuarios',
+  LOGIN: "/ingreso",
+  USERS: "/usuarios",
   USERS_ID: `/usuario/:id`,
-  INDEX: '/',
-  ABOUT: '/acerca-de',
-  TEACHERS_IDEAS: '/ideas-profesores',
-  REGISTER: '/registrar'
+  INDEX: "/",
+  ABOUT: "/acerca-de",
+  TEACHERS_IDEAS: "/ideas-profesores",
+  REGISTER: "/registrar",
 };
 
 const privateRoutes = {
-  LOGOUT: '/logout',
-  HOME: '/inicio',
-  TEACHER_PANEL: '/panel-profesor',
-  TEACHERS_PLANS:'/profesor-ideas',
-  PLANFORM: '/plan-titulacion',
-  PROJECTS_LIST_SECRETARY: '/listado-proyectos',
-  COMMITTEE_PLANS: '/proyectos-comision',
-  PROJECT_DETAIL_SECRETARY: '/detalle-proyecto'
+  LOGOUT: "/logout",
+  HOME: "/inicio",
+  TEACHER_PANEL: "/panel-profesor",
+  TEACHERS_PLANS: "/profesor-ideas",
+  PLAN_FORM: "/plan-titulacion",
+  PROJECTS_LIST_SECRETARY: "/listado-proyectos",
+  COMMITTEE_PLANS: "/proyectos-comision",
+  PROJECT_DETAIL_SECRETARY: "/detalle-proyecto",
 };
 
 const Routes = {
   ...publicRoutes,
-  ...privateRoutes
+  ...privateRoutes,
 };
 export default Routes;
