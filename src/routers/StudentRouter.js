@@ -22,6 +22,10 @@ const AsyncPlanForm = loadable(
   () => import("../pages/PlanFormPage"),
   loadableOptions
 );
+const AsyncProjectUpload = loadable(
+  () => import("../pages/StudentProjectUploadPage"),
+  loadableOptions
+);
 
 /**
  * Este es el componente que se encarga de renderizar el componente adecuado
@@ -41,6 +45,7 @@ const StudentRouter = () => (
 
     <PrivateRoute path={Routes.HOME} component={AsyncHome} />
     <PrivateRoute path={Routes.PLAN_FORM} component={AsyncPlanForm} />
+    <PrivateRoute path={Routes.PROJECT_UPLOAD} component={AsyncProjectUpload} />
 
     <PrivateRoute path={Routes.LOGOUT} component={AsyncLogout} />
     <PublicRoute path={Routes.ABOUT} component={AsyncAbout} />
