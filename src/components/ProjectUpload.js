@@ -2,21 +2,36 @@ import React, { useState } from "react";
 import { Upload, message, Typography, Button } from "antd";
 import { InboxOutlined, DownloadOutlined } from "@ant-design/icons";
 import { useStudentProject } from "../data/useStudentProjects";
+import API from "../data";
 
 const { Dragger } = Upload;
 const { Title } = Typography;
 
 const ProjectUpload = () => {
-  const { projects, isLoading, isError } = useStudentProject();
+  const { projects } = useStudentProject();
+  const [pdf, setPdf] = useState("");
+
+  console.log("projects", JSON.stringify(projects[0]));
 
   const props = {
     name: "file",
-    multiple: true,
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+    multiple: false,
+    accept: "application/pdf",
+    action: async (file) => {
+      console.log("file", file);
+      try {
+        await API.post(`/projects/${projects[0].id}`, {
+          ...projects[0],
+        });
+      } catch (error) {
+        console.log("ERROR", error);
+      }
+    },
     onChange(info) {
       const { status } = info.file;
+      setPdf(info.file.type);
       if (status !== "uploading") {
-        console.log(info.file, info.fileList);
+        console.log("INFO", info);
       }
       if (status === "done") {
         message.success(`${info.file.name} archivo fue subido exitosamente.`);
@@ -26,11 +41,10 @@ const ProjectUpload = () => {
     },
   };
 
-  console.log("Project", projects);
   return (
     <>
       <Title
-        level={10}
+        level={1}
         style={{
           color: "#034c70",
         }}
@@ -61,7 +75,7 @@ const ProjectUpload = () => {
         Proyecto
       </Title>
 
-      <div style={{ textAlign: "center" }}>
+      <div style={{ marginLeft: "32%" }}>
         <Dragger {...props} style={{ width: 350, height: 250 }}>
           <p className="ant-upload-drag-icon">
             <InboxOutlined style={{ color: "#034c70" }} />
