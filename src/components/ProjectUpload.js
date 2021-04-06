@@ -27,7 +27,6 @@ const { confirm } = Modal;
 
 const ProjectUpload = () => {
   const { projects } = useStudentProject();
-  const [isUpload, setIsUpload] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [form] = Form.useForm();
 
@@ -44,7 +43,7 @@ const ProjectUpload = () => {
   const props = {
     name: "file",
     accept: "application/pdf",
-    // listType: "picture",
+    listType: "picture",
     maxCount: 1,
     showUploadList: {
       showPreviewIcon: true,
@@ -54,9 +53,6 @@ const ProjectUpload = () => {
       projects[0].status === "project_corrections_done"
     ),
     beforeUpload: () => false,
-    onRemove: () => {
-      setIsUpload(false);
-    },
   };
 
   const onFinish = async (formData) => {
