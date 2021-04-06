@@ -20,6 +20,7 @@ import {
   ExclamationCircleOutlined,
   PlusOutlined,
   SendOutlined,
+  DownloadOutlined,
 } from "@ant-design/icons";
 import Routes from "../constants/routes";
 import { useLocation } from "react-router-dom";
@@ -29,12 +30,15 @@ import { useTeachers } from "../data/useTeachers";
 import Loading from "./Loading";
 import API from "../data";
 import ViewComments from "./ViewComments";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 
 const { Option } = Select;
 const { TextArea } = Input;
 const { Title } = Typography;
 const { Sider } = Layout;
 const { confirm } = Modal;
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const getBase64 = (file, callback) => {
   console.log("file", file);
@@ -67,6 +71,7 @@ const PlanForm = ({ visible, update }) => {
   const { projects, isLoading } = useStudentProject();
   const { teachers } = useTeachers();
   const [imageUrl, setImageUrl] = useState(null);
+  const [pdfUrl, setPdfUrl] = useState(null);
   const [fileList, setFileList] = useState([]);
   const [sending, setSending] = useState(false);
   const [isFinished, setIsFinished] = useState(() => {
@@ -167,6 +172,8 @@ const PlanForm = ({ visible, update }) => {
   const onUpdate = async () => {
     const formData = form.getFieldsValue();
     const data = { ...formData };
+    data.schedule =
+      projects.length > 0 ? projects[0].schedule : formData.schedule;
 
     console.log("DATOS", data);
 
@@ -255,10 +262,14 @@ const PlanForm = ({ visible, update }) => {
         ...data,
         status: "plan_sent",
       };
+      console.log("algo");
     }
+
+    console.log("dataToSent", dataToSent);
 
     try {
       await API.post(`/projects/${projects[0].id}`, dataToSent); // put data to server
+      // await console.log("project[0]", projects[0].id, dataToSent);
       setSending(false);
       confirm({
         icon: <CheckCircleOutlined />,
@@ -312,6 +323,7 @@ const PlanForm = ({ visible, update }) => {
     } catch (e) {
       console.log("ERROR", e);
       message.error(`No se guardaron los datos:¨${e}`);
+      // setSending(false);
     }
   };
 
@@ -350,6 +362,322 @@ const PlanForm = ({ visible, update }) => {
     setFileList([file]);
 
     return e && [e.file];
+  };
+
+  const downloadPDF = () => {
+    const data = form.getFieldsValue();
+    console.log("data", data);
+    const docDefinition = {
+      header: {
+        columns: [
+          {
+            text:
+              "ESCUELA POLITÉCNICA NACIONAL\n" + "VICERRECTORADO DE DOCENCIA",
+            style: "header",
+          },
+        ],
+      },
+      content: [
+        {
+          text: "F_AA_225",
+          alignment: "right",
+          bold: true,
+          fontSize: 10,
+        },
+        {
+          text:
+            "ESCUELA DE FORMACIÓN DE TECNÓLOGOS\n" +
+            "CARRERA DE ANÁLISIS DE SISTEMAS INFORMÁTICOS",
+          style: "title",
+        },
+        {
+          text: "PLAN DE TRABAJO DE TITULACIÓN",
+          style: "subTitle",
+        },
+        {
+          text: "TIPO DE TRABAJO DE TITULACIÓN: PROYECTO INTEGRADOR",
+          style: "subTitle",
+        },
+        {
+          style: "tableExample",
+          color: "#444444",
+          table: {
+            widths: [230, 115, 115],
+            headerRows: 0,
+            keepWithHeaderRows: 0,
+            body: [
+              [
+                {
+                  text: "I.- INFORMACIÓN BÁSICA",
+                  style: "tableHeader",
+                  colSpan: 3,
+                  alignment: "left",
+                },
+                {},
+                {},
+              ],
+              [
+                {
+                  rowSpan: 2,
+                  text: "PROPUESTO POR:",
+                  style: "tableHeader",
+                  alignment: "left",
+                },
+                {
+                  text: "LÍNEA DE INVESTIGACIÓN: ",
+                  style: "tableHeader",
+                  alignment: "left",
+                  border: [true, true, true, false],
+                  colSpan: 2,
+                },
+                {},
+              ],
+              [
+                {},
+                {
+                  text: "ÁREA DE CONOCIMIENTO:",
+                  style: "tableHeader",
+                  alignment: "left",
+                  border: [true, false, true, true],
+                  colSpan: 2,
+                },
+                {},
+              ],
+              [
+                {
+                  text: "AUSPICIADO POR:",
+                  style: "tableHeader",
+                  alignment: "left",
+                },
+                {
+                  colSpan: 2,
+                  text: "FECHA:",
+                  style: "tableHeader",
+                  alignment: "left",
+                },
+              ],
+              [
+                {
+                  text: "II.- INFORMACIÓN DEL TRABAJO DE TITULACIÓN",
+                  style: "tableHeader",
+                  colSpan: 3,
+                  alignment: "left",
+                },
+                {},
+                {},
+              ],
+              [
+                {
+                  text: "1. Título del Trabajo de Titulación",
+                  style: "tableHeader",
+                  colSpan: 3,
+                  border: [true, true, true, false],
+                  alignment: "left",
+                },
+                {},
+                {},
+              ],
+              [
+                {
+                  text: `${data.title}`,
+                  colSpan: 3,
+                  style: "content",
+                  border: [true, false, true, true],
+                },
+              ],
+              [
+                {
+                  text: "2. Planteamiento del Problema",
+                  style: "tableHeader",
+                  colSpan: 3,
+                  border: [true, true, true, false],
+                  alignment: "left",
+                },
+                {},
+                {},
+              ],
+              [
+                {
+                  text: `${data.problem}`,
+                  colSpan: 3,
+                  style: "content",
+                  border: [true, false, true, true],
+                },
+              ],
+              [
+                {
+                  text: "3. Justificación",
+                  style: "tableHeader",
+                  colSpan: 3,
+                  border: [true, true, true, false],
+                  alignment: "left",
+                },
+                {},
+                {},
+              ],
+              [
+                {
+                  text: `${data.justification}`,
+                  colSpan: 3,
+                  style: "content",
+                  border: [true, false, true, true],
+                },
+              ],
+              [
+                {
+                  text: "4. Objetivo General",
+                  style: "tableHeader",
+                  colSpan: 3,
+                  border: [true, true, true, false],
+                  alignment: "left",
+                },
+                {},
+                {},
+              ],
+              [
+                {
+                  text: `${data.general_objective}`,
+                  colSpan: 3,
+                  style: "content",
+                  border: [true, false, true, true],
+                },
+              ],
+              [
+                {
+                  text: "5. Objetivos Específicos",
+                  style: "tableHeader",
+                  colSpan: 3,
+                  border: [true, true, true, false],
+                  alignment: "left",
+                },
+                {},
+                {},
+              ],
+              [
+                {
+                  text: `${data.specifics_objectives}`,
+                  colSpan: 3,
+                  style: "content",
+                  border: [true, false, true, true],
+                },
+              ],
+              [
+                {
+                  text: "6. Metodología",
+                  style: "tableHeader",
+                  colSpan: 3,
+                  border: [true, true, true, false],
+                  alignment: "left",
+                },
+                {},
+                {},
+              ],
+              [
+                {
+                  text: `${data.methodology}`,
+                  colSpan: 3,
+                  style: "content",
+                  border: [true, false, true, true],
+                },
+              ],
+              [
+                {
+                  text: "7. Plan de Trabajo.",
+                  style: "tableHeader",
+                  colSpan: 3,
+                  border: [true, true, true, false],
+                  alignment: "left",
+                },
+                {},
+                {},
+              ],
+              [
+                {
+                  text: `${data.work_plan}`,
+                  colSpan: 3,
+                  style: "content",
+                  border: [true, false, true, true],
+                },
+              ],
+              [
+                {
+                  text: "8. Cronograma",
+                  style: "tableHeader",
+                  colSpan: 3,
+                  border: [true, true, true, false],
+                  alignment: "left",
+                },
+                {},
+                {},
+              ],
+              [
+                {
+                  text: "algo x2",
+                  colSpan: 3,
+                  style: "content",
+                  border: [true, false, true, true],
+                },
+              ],
+              [
+                {
+                  text: "9. Bibliografía",
+                  style: "tableHeader",
+                  colSpan: 3,
+                  border: [true, true, true, false],
+                  alignment: "left",
+                },
+                {},
+                {},
+              ],
+              [
+                {
+                  text: `${data.bibliography}`,
+                  colSpan: 3,
+                  style: "content",
+                  border: [true, false, true, true],
+                },
+              ],
+            ],
+          },
+        },
+      ],
+
+      styles: {
+        header: {
+          bold: true,
+          alignment: "center",
+          margin: [0, 10, 0, 15],
+        },
+        title: {
+          bold: true,
+          fontSize: 16,
+          alignment: "center",
+          margin: [12, 0, 12, 15],
+        },
+        subTitle: {
+          bold: true,
+          fontSize: 13,
+          alignment: "center",
+          margin: [0, 8],
+        },
+        tableExample: {
+          margin: [20, 5, 20, 5],
+          alignment: "center",
+        },
+        tableHeader: {
+          bold: true,
+          fontSize: 14,
+          color: "black",
+        },
+        content: {
+          alignment: "justify",
+          margin: [15, 2],
+          color: "black",
+        },
+      },
+    };
+    const pdfDocGenerator = pdfMake.createPdf(docDefinition);
+    pdfDocGenerator.download("Plan-titulación");
   };
 
   if (isLoading) {
@@ -988,6 +1316,19 @@ const PlanForm = ({ visible, update }) => {
                         </Button>
                       </Col>
                     </Row>
+                  </Form.Item>
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      shape="round"
+                      icon={<DownloadOutlined />}
+                      size={"large"}
+                      onClick={downloadPDF}
+                      style={{
+                        marginLeft: 10,
+                        backgroundColor: "#034c70",
+                      }}
+                    />
                   </Form.Item>
                 </Col>
               </Row>
