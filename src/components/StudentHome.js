@@ -77,7 +77,7 @@ const StudentHomePage = () => {
                         )
                       }
                     >
-                      Subir proyecto
+                      <Link to={Routes.PROJECT_UPLOAD}>Subir proyecto</Link>
                     </Button>
                   </div>
                 </Space>
