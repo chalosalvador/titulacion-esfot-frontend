@@ -35,6 +35,8 @@ const SecretaryProjectsListPage = () => {
     );
   }
 
+  console.log("error", isError);
+
   if (isError) {
     return <ShowError error={isError} />;
   }
@@ -101,8 +103,7 @@ const SecretaryProjectsListPage = () => {
       key: index,
       id: project.id,
       teacher_name: project.teacher_name,
-      student_name:
-        project["students"].length > 0 ? project["students"][0]["id"] : "",
+      student_name: "",
       title: project.title,
       status: project.status,
     };

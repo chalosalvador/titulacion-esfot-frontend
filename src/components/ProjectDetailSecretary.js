@@ -20,9 +20,12 @@ const ProjectDetailSecretary = ({ id }) => {
   console.log("id", id);
 
   const [approveMethodology, setApproveMethodology] = useState(null);
+  const [approveSubject, setApproveSubject] = useState(null);
+  const [approveAll, setApproveAll] = useState(null);
   const [approve80, setApprove80] = useState(null);
+  const [checkSAEW, setCheckSAEW] = useState(null);
 
-  const { plan, isLoading } = usePlanContent(id);
+  const { plan, isLoading, isError } = usePlanContent(id);
 
   if (isLoading) {
     return <h1>loading...</h1>;
@@ -43,32 +46,57 @@ const ProjectDetailSecretary = ({ id }) => {
       range: "${label} must be between ${min} and ${max}",
     },
   };
-  console.log("plan", plan);
+  console.log("plan", plan, isError);
+
   const onFinish = (values) => {
     console.log(values);
   };
   const callback = (key) => {
     console.log(key);
   };
-  const onChange = async (e) => {
+  const onChange = async (e, option) => {
     console.log(`checked = ${e.target.checked}`);
-    setApproveMethodology(true);
     let planData = {};
-    planData = {
-      ...plan,
-      status: "san_curriculum_1",
-    };
-    if (e.target.checked && approve80) {
-      try {
-        await API.post(`/projects/${id}`, planData); // put data to server
-        message.success("Cambios guardados");
-      } catch (e) {
-        console.log("ERROR", e);
-        message.error(`No se guardaron los datos:¨${e}`);
-      }
+    switch (option) {
+      case "san_curriculum_1":
+        setApproveMethodology(true);
+        if (e.target.checked && approve80) {
+          planData = {
+            ...plan,
+            status: "san_curriculum_1",
+          };
+        }
+        break;
+      case "san_curriculum_2":
+        setApproveSubject(true);
+        if (e.target.checked && approveAll && checkSAEW) {
+          planData = {
+            ...plan,
+            status: "san_curriculum_2",
+          };
+        }
+        break;
+      case "san_curriculum_2_2":
+        setApproveAll(true);
+        if (e.target.checked && approveSubject && checkSAEW) {
+          planData = {
+            ...plan,
+            status: "san_curriculum_2",
+          };
+        }
+        break;
+      default:
+        console.log("opción no encontrada");
+    }
+    try {
+      await API.post(`/projects/${id}`, planData); // put data to server
+      message.success("Cambios guardados");
+    } catch (e) {
+      console.log("ERROR", e);
+      message.error(`No se guardaron los datos:¨${e}`);
     }
   };
-  const onChangeSwitch = async (checked) => {
+  const onChangeSwitchCurr1 = async (checked) => {
     console.log(`switch to ${checked}`);
     setApprove80(true);
     let planData = {};
@@ -149,8 +177,8 @@ const ProjectDetailSecretary = ({ id }) => {
           <Row>
             <Col>
               <Checkbox
-                onChange={onChange}
-                checked={plan.status === "san_curriculum_1"}
+                onChange={(e) => onChange(e, "san_curriculum_1")}
+                checked={plan.status && plan.status === "san_curriculum_1"}
               >
                 Está tomando o ya tiene aprobado Metodología de la Investigación
               </Checkbox>
@@ -159,18 +187,45 @@ const ProjectDetailSecretary = ({ id }) => {
           <Row>
             <Col>
               <Switch
-                onChange={onChangeSwitch}
-                checked={plan.status === "san_curriculum_1"}
+                onChange={onChangeSwitchCurr1}
+                checked={plan.status && plan.status === "san_curriculum_1"}
               />
               <label>cuenta con más del 80% de materias aprobadas</label>
             </Col>
           </Row>
         </Panel>
         <Panel header="Registro de plan en Saew" key="2">
-          <p>{text}</p>
+          <Switch
+            onChange={(checked) => setCheckSAEW(checked)}
+            checked={
+              plan.status &&
+              (plan.status === "san_curriculum_2" ||
+                plan.status === "tribunal_assigned")
+            }
+          />
+          <label>Está registrado en el SAEW</label>
         </Panel>
         <Panel header="Curriculum saneado 2" key="3">
-          <p>{text}</p>
+          <Checkbox
+            onChange={(e) => onChange(e, "san_curriculum_2")}
+            checked={
+              plan.status &&
+              (plan.status === "san_curriculum_2" ||
+                plan.status === "tribunal_assigned")
+            }
+          >
+            Haber aprobado la materia de Diseños de Proyectos de Titulación
+          </Checkbox>
+          <Checkbox
+            onChange={(e) => onChange(e, "san_curriculum_2_2")}
+            checked={
+              plan.status &&
+              (plan.status === "san_curriculum_2" ||
+                plan.status === "tribunal_assigned")
+            }
+          >
+            Tener 100% de aprobación de la malla curricular
+          </Checkbox>
         </Panel>
         <Panel header="Requisitos para declarar apta defensa oral" key="4">
           <p>{text}</p>
