@@ -16,13 +16,25 @@ import {
   ExclamationCircleOutlined,
   SendOutlined,
 } from "@ant-design/icons";
+// import PDFWorker from "worker-loader!pdfjs-dist/lib/pdf.worker";
+import {
+  PdfLoader,
+  PdfHighlighter,
+  Tip,
+  Highlight,
+  Popup,
+  AreaHighlight,
+  setPdfWorker,
+} from "react-pdf-highlighter";
 import { usePlanContent } from "../data/usePlan";
 import { useGetProjectPDF } from "../data/useGetProjectPDF";
 import API from "../data";
 import Routes from "../constants/routes";
-
+import Loading from "./Loading";
+import { Document, Page } from "react-pdf";
 const { Title } = Typography;
 const { confirm } = Modal;
+// setPdfWorker(PDFWorker);
 
 const ProjectReview = ({ idPlan }) => {
   const [approveProject, setApproveProject] = useState(false);
@@ -30,6 +42,10 @@ const ProjectReview = ({ idPlan }) => {
   const [checked, setChecked] = useState(false);
   const { plan, isLoading } = usePlanContent(idPlan);
   const { pdf, isLoading1, isError } = useGetProjectPDF(idPlan);
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const URL = "https://arxiv.org/pdf/1708.08021.pdf";
 
   if (isLoading && isLoading1) {
     return <h1>Loading...</h1>;
@@ -213,9 +229,24 @@ const ProjectReview = ({ idPlan }) => {
     </>
   );
 
+  const HighlightPopup = ({ comment }) =>
+    comment.text ? (
+      <div className="Highlight__popup">
+        {comment.emoji} {comment.text}
+      </div>
+    ) : null;
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+
   return (
     <>
-      <p>Aqui va el proyecto incrustado</p>
+      <Document
+        file="Informe_Prueba_Segovia_Zambrano.pdf"
+        onLoadSuccess={onDocumentLoadSuccess}
+      >
+        <Page pageNumber={pageNumber} />
+      </Document>
       <Row justify={"center"}>
         <Col>
           <Button
