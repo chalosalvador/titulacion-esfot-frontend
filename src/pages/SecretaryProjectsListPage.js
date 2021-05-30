@@ -11,6 +11,7 @@ import ProjectDetailSecretary from "../components/ProjectDetailSecretary";
 import SubLayout from "../components/SubLayout";
 
 const { Link } = Typography;
+const { Title } = Typography;
 
 const SecretaryProjectsListPage = () => {
   const { Search } = Input;
@@ -115,6 +116,19 @@ const SecretaryProjectsListPage = () => {
   if (!showProjectReview) {
     content = (
       <SubLayout>
+        <Row>
+          <Col>
+            <Title
+                level={3}
+                style={{
+                  color: "#034c70",
+                  marginLeft: -30,
+                }}
+            >
+              Planes y proyectos de titulación:
+            </Title>
+          </Col>
+        </Row>
         <Row>
           <Col>
             <br />

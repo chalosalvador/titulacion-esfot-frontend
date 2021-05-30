@@ -120,6 +120,19 @@ const TeacherPlans = () => {
 
   return (
     <>
+      <Row>
+        <Col>
+          <Title
+              level={3}
+              style={{
+                color: "#034c70",
+                marginLeft: -30,
+              }}
+          >
+            Listado de temas:
+          </Title>
+        </Col>
+      </Row>
       <TeacherPlanForm form={form} />
       <Row justify="center">
         <Col span={12}>
