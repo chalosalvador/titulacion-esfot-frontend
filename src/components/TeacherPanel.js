@@ -186,6 +186,19 @@ const TeacherPanel = () => {
   return (
     <>
       <Row>
+        <Col>
+          <Title
+              level={3}
+              style={{
+                color: "#034c70",
+                marginLeft: -30,
+              }}
+          >
+            Director:
+          </Title>
+        </Col>
+      </Row>
+      <Row>
         <Col>{titleTable}</Col>
       </Row>
       <Row>

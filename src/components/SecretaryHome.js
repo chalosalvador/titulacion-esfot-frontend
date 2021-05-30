@@ -16,6 +16,19 @@ const SecretaryHome = () => {
   return (
     <>
       <Row>
+        <Col>
+          <Title
+              level={3}
+              style={{
+                color: "#034c70",
+                marginLeft: -30,
+              }}
+          >
+            Panel Principal:
+          </Title>
+        </Col>
+      </Row>
+      <Row>
         <Col span={24}>
           <Row justify="right">
             <Col span={6}>
