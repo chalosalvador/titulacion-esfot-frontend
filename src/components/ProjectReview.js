@@ -353,8 +353,8 @@
 //
 // export default ProjectReview;
 import React, { Component } from "react";
-// import PDFWorker from "worker-loader!pdfjs-dist/lib/pdf.worker";
 
+// eslint-disable-next-line import/no-webpack-loader-syntax
 import PDFWorker from "worker-loader!pdfjs-dist/lib/pdf.worker";
 
 import {
