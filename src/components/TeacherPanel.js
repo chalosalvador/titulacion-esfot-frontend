@@ -182,7 +182,7 @@ const TeacherPanel = () => {
       />
     );
   } else {
-    content = <PlanReview planId={state.idPlan} status={state.status} />;
+    content = <PlanReview planId={state.idPlan} />;
   }
 
   // console.log("Pilas",getDataSource());
