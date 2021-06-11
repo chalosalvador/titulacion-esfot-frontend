@@ -70,7 +70,11 @@ const TeacherPanel = () => {
         let color = "";
         let name = "";
         {
-          if (status === "plan_sent" || status === "plan_corrections_done" || status === "plan_saved") {
+          if (
+            status === "plan_sent" ||
+            status === "plan_corrections_done" ||
+            status === "plan_saved"
+          ) {
             color = "blue";
             name = "Por revisar";
           } else if (status === "plan_review_teacher") {
@@ -135,7 +139,7 @@ const TeacherPanel = () => {
     return {
       key: index,
       title: project.title,
-      student_name:project.student_name,
+      student_name: project.student_name,
       status: project.status,
       id: project.id,
     };
@@ -178,7 +182,7 @@ const TeacherPanel = () => {
       />
     );
   } else {
-    content = <PlanReview planId={state.idPlan} />;
+    content = <PlanReview planId={state.idPlan} status={state.status} />;
   }
 
   // console.log("Pilas",getDataSource());

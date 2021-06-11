@@ -372,6 +372,8 @@ import testHighlights from "./test-highlights";
 import Spinner from "./Spinner";
 import Sidebar from "./Sidebar";
 
+import "../styles/pdf.css";
+
 setPdfWorker(PDFWorker);
 
 const getNextId = () => String(Math.random()).slice(2);
@@ -395,7 +397,7 @@ const SECONDARY_PDF_URL = "https://arxiv.org/pdf/1604.02480.pdf";
 
 const searchParams = new URLSearchParams(document.location.search);
 
-const initialUrl = searchParams.get("url") || PRIMARY_PDF_URL;
+const initialUrl = SECONDARY_PDF_URL;
 
 class ProjectReview extends Component {
   state = {
@@ -482,19 +484,13 @@ class ProjectReview extends Component {
     const { url, highlights } = this.state;
 
     return (
-      <div className="App" style={{ display: "flex", height: "100vh" }}>
+      <div>
         <Sidebar
           highlights={highlights}
           resetHighlights={this.resetHighlights}
           toggleDocument={this.toggleDocument}
         />
-        <div
-          style={{
-            height: "100vh",
-            width: "75vw",
-            position: "relative",
-          }}
-        >
+        <div>
           <PdfLoader url={url} beforeLoad={<Spinner />}>
             {(pdfDocument) => (
               <PdfHighlighter
