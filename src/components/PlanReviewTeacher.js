@@ -102,13 +102,12 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     setSending(true);
     const data = {
       ...values,
-      status: "plan_review_teacher",
     };
 
     console.log("DATOS", data);
 
     try {
-      await API.post(`/projects/${plan.id}`, data); // put data to server
+      await API.post(`/projects/${plan.id}/plan-review-teacher`, data); // put data to server
       setSending(false);
       confirm({
         icon: <CheckCircleOutlined />,
@@ -402,7 +401,6 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     const data = form.getFieldsValue();
     let dataToSent = {
       ...data,
-      status: "plan_approved_director",
       title_comment: "",
       problem_comment: "",
       general_objective_comment: "",
@@ -415,7 +413,7 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
       bibliography_comment: "",
     };
     try {
-      await API.post(`/projects/${plan.id}`, dataToSent); // put data to server
+      await API.post(`/projects/${plan.id}/plan-approved-director`, dataToSent); // put data to server
       setSendingPlan(false);
       confirm({
         icon: <CheckCircleOutlined />,
