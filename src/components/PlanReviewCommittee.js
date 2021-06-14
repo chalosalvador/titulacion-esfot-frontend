@@ -108,7 +108,7 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
     console.log("DATOS", data);
 
     try {
-      await API.post(`/projects/${plan.id}/plan-review-commission`, data); // put data to server
+      await API.post(`/projects/${plan.id}/plan-review-commission`); // put data to server
       setSending(false);
       confirm({
         icon: <CheckCircleOutlined />,
@@ -447,10 +447,7 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
       bibliography_comment: "",
     };
     try {
-      await API.post(
-        `/projects/${plan.id}/plan-approved-commission`,
-        dataToSent
-      );
+      await API.post(`/projects/${plan.id}/plan-approved-commission`);
       setSendingPlan(false);
       confirm({
         icon: <CheckCircleOutlined />,
@@ -501,7 +498,7 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
       ...data,
     };
     try {
-      await API.post(`/projects/${plan.id}/plan-rejected`, dataToSent); // put data to server
+      await API.post(`/projects/${plan.id}/plan-rejected`); // put data to server
       setSending(false);
       confirm({
         icon: <CheckCircleOutlined />,

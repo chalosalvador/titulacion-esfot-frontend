@@ -242,17 +242,11 @@ const PlanForm = ({ visible, update }) => {
 
     try {
       if (projects[0].status === "plan_review_teacher") {
-        await API.post(
-          `/projects/${projects[0].id}/plan-corrections-done`,
-          dataToSent
-        );
+        await API.post(`/projects/${projects[0].id}/plan-corrections-done`);
       } else if (projects[0].status === "plan_review_commission") {
-        await API.post(
-          `/projects/${projects[0].id}/plan-corrections-done-2`,
-          dataToSent
-        );
+        await API.post(`/projects/${projects[0].id}/plan-corrections-done-2`);
       } else {
-        await API.post(`/projects/${projects[0].id}/plan-sent`, dataToSent);
+        await API.post(`/projects/${projects[0].id}/plan-sent`);
       }
       setSending(false);
       confirm({

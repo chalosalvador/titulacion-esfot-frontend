@@ -62,19 +62,19 @@ const ProjectDetailSecretary = ({ id }) => {
         case "san_curriculum_1":
           setApproveMethodology(true);
           if (e.target.checked && approve80) {
-            await API.post(`/projects/${id}/san-curriculum-1`, planData);
+            await API.post(`/projects/${id}/san-curriculum-1`);
           }
           break;
         case "san_curriculum_2":
           setApproveSubject(true);
           if (e.target.checked && approveAll && checkSAEW) {
-            await API.post(`/projects/${id}/san-curriculum-2`, planData);
+            await API.post(`/projects/${id}/san-curriculum-2`);
           }
           break;
         case "san_curriculum_2_2":
           setApproveAll(true);
           if (e.target.checked && approveSubject && checkSAEW) {
-            await API.post(`/projects/${id}/san-curriculum-2`, planData);
+            await API.post(`/projects/${id}/san-curriculum-2`);
           }
           break;
         default:

@@ -56,10 +56,7 @@ const ProjectReview = ({ idPlan }) => {
     setSendingProject(true);
     const dataToSent = { ...plan };
     try {
-      await API.post(
-        `/projects/${plan.id}/project-approved-director`,
-        dataToSent
-      ); // put data to server
+      await API.post(`/projects/${plan.id}/project-approved-director`); // put data to server
       setSendingProject(false);
       confirm({
         icon: <CheckCircleOutlined />,
