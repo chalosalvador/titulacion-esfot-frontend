@@ -105,7 +105,11 @@ const SecretaryHome = () => {
                   </div>
                   <div>Listado de profesores de la ESFOT</div>
                   <div>
-                    <Button className={"btn-secretary"}>Ingresar</Button>
+                    <Button className={"btn-secretary"}>
+                      <Link to={Routes.SECRETARY_TEACHERS_LIST}>
+                        Ingresar
+                      </Link>
+                    </Button>
                   </div>
                 </Space>
               </Card>
