@@ -103,13 +103,12 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
     setSending(true);
     const data = {
       ...values,
-      status: "plan_review_commission",
     };
 
     console.log("DATOS", data);
 
     try {
-      await API.post(`/projects/${plan.id}`, data); // put data to server
+      await API.post(`/projects/${plan.id}/plan-review-commission`); // put data to server
       setSending(false);
       confirm({
         icon: <CheckCircleOutlined />,
@@ -436,7 +435,6 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
     const data = form.getFieldsValue();
     let dataToSent = {
       ...data,
-      status: "plan_approved_commission",
       title_comment: "",
       problem_comment: "",
       general_objective_comment: "",
@@ -449,7 +447,7 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
       bibliography_comment: "",
     };
     try {
-      await API.post(`/projects/${plan.id}`, dataToSent); // put data to server
+      await API.post(`/projects/${plan.id}/plan-approved-commission`); // put data to server
       setSendingPlan(false);
       confirm({
         icon: <CheckCircleOutlined />,
@@ -498,10 +496,9 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
     const data = form.getFieldsValue();
     let dataToSent = {
       ...data,
-      status: "plan_rejected",
     };
     try {
-      await API.post(`/projects/${plan.id}`, dataToSent); // put data to server
+      await API.post(`/projects/${plan.id}/plan-rejected`); // put data to server
       setSending(false);
       confirm({
         icon: <CheckCircleOutlined />,

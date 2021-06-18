@@ -240,25 +240,15 @@ const PlanForm = ({ visible, update }) => {
     const data = form.getFieldsValue();
     let dataToSent = {};
 
-    if (projects[0].status === "plan_review_teacher") {
-      dataToSent = {
-        ...data,
-        status: "plan_corrections_done",
-      };
-    } else if (projects[0].status === "plan_review_commission") {
-      dataToSent = {
-        ...data,
-        status: "plan_corrections_done2",
-      };
-    } else {
-      dataToSent = {
-        ...data,
-        status: "plan_sent",
-      };
-    }
-
     try {
-      await API.post(`/projects/${projects[0].id}`, dataToSent); // put data to server
+      if (projects[0].status === "plan_review_teacher") {
+        await API.post(`/projects/${projects[0].id}/plan-corrections-done`);
+      } else if (projects[0].status === "plan_review_commission") {
+        await API.post(`/projects/${projects[0].id}/plan-corrections-done-2`);
+      } else {
+        await API.post(`/projects/${projects[0].id}/plan-sent`);
+      }
+
       setSending(false);
       confirm({
         icon: <CheckCircleOutlined />,

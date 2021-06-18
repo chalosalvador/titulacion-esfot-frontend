@@ -67,13 +67,13 @@ const ProjectReview = ({ idPlan }) => {
 
   const [highlights, setHighlights] = useState(savedHighlights || []);
   const [approveProject, setApproveProject] = useState(false);
+  const [sending, setSending] = useState(false);
   const [sendingProject, setSendingProject] = useState(false);
   const [checked, setChecked] = useState(false);
   const { plan, isLoading } = usePlanContent(idPlan);
-  const { pdf, isLoading1, isError } = useGetProjectPDF(idPlan);
+  const { pdf, isLoading1 } = useGetProjectPDF(idPlan);
 
-  const PRIMARY_PDF_URL = `http://localhost:8000/${plan.report_pdf}`;
-  const SECONDARY_PDF_URL = "https://arxiv.org/pdf/1604.02480.pdf";
+  const PRIMARY_PDF_URL = `http://localhost:8000/api/project/getPDF/${idPlan}`;
   const initialUrl = PRIMARY_PDF_URL;
 
   const [url, setUrl] = useState(initialUrl);
@@ -115,19 +115,11 @@ const ProjectReview = ({ idPlan }) => {
     setHighlights([]);
   };
 
-  const toggleDocument = () => {
-    const newUrl =
-      url === PRIMARY_PDF_URL ? SECONDARY_PDF_URL : PRIMARY_PDF_URL;
-
-    setUrl(newUrl);
-    setHighlights(testHighlights[newUrl] ? [...testHighlights[newUrl]] : []);
-  };
-
   let scrollViewerTo = (highlight) => {};
 
-  const addHighlight = (highlight) => {
+  const addHighlight = async (highlight) => {
     console.log("Saving highlight", highlight);
-    // TODO esto se debe guardar en la bdd, se puede guardar ahi como un string
+
     localStorage.setItem(
       "highlights",
       JSON.stringify([{ ...highlight, id: getNextId() }, ...highlights])
@@ -175,13 +167,69 @@ const ProjectReview = ({ idPlan }) => {
       okButtonProps: { style: { backgroundColor: "#034c70" } },
     });
   };
+
+  const onSentComments = async () => {
+    setSending(true);
+
+    let dataToSent = {
+      highlights: JSON.stringify(highlights),
+    };
+
+    try {
+      await API.post(`/projects/${plan.id}`, dataToSent);
+      await API.post(`/projects/${plan.id}/project-review-teacher`); // put data to server
+      setSending(false);
+      confirm({
+        icon: <CheckCircleOutlined />,
+        title: (
+          <Title level={3} style={{ color: "#034c70" }}>
+            ¡Buen trabajo!
+          </Title>
+        ),
+        content: (
+          <>
+            <Row justify="center">
+              <Col>
+                <Image src="boy.png" width={100} />
+                <Image src="girl.png" width={100} />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <p style={{ color: "#034c70" }}>
+                  Gracias por tu esfuerzo en revisar el proyecto,
+                  <br />
+                  <strong>tus comentarios han sido enviados</strong>.
+                </p>
+              </Col>
+            </Row>
+          </>
+        ),
+        okText: "Entendido",
+        okButtonProps: {
+          href: Routes.HOME,
+          style: {
+            backgroundColor: "#034c70",
+            marginRight: 125,
+          },
+        },
+        cancelButtonProps: { hidden: true },
+      });
+    } catch (e) {
+      console.log("ERROR", e);
+      message.error(`No se guardaron los datos:¨${e}`);
+    }
+  };
+
   const onFinish = async () => {
     setSendingProject(true);
     const dataToSent = { ...plan };
-    dataToSent.status = "project_approved_director";
     try {
-      await API.post(`/projects/${plan.id}`, dataToSent); // put data to server
+      await API.post(`/projects/${plan.id}/project-approved-director`); // put data to server
       setSendingProject(false);
+      setHighlights([]);
+      await API.post(`/projects/${plan.id}`, { highlights: highlights });
       confirm({
         icon: <CheckCircleOutlined />,
         title: (
@@ -332,11 +380,7 @@ const ProjectReview = ({ idPlan }) => {
   return (
     <div>
       <div className="App" style={{ display: "flex", height: "100vh" }}>
-        <Sidebar
-          highlights={highlights}
-          resetHighlights={resetHighlights}
-          toggleDocument={toggleDocument}
-        />
+        <Sidebar highlights={highlights} resetHighlights={resetHighlights} />
         <div
           style={{
             height: "100vh",
@@ -426,6 +470,8 @@ const ProjectReview = ({ idPlan }) => {
           <Col>
             <Button
               className={"submit"}
+              onClick={() => onSentComments()}
+              loading={sending}
               disabled={
                 !(
                   plan.status === "project_uploaded" ||

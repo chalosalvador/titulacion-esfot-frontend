@@ -20,6 +20,7 @@ const { Title } = Typography;
 const TeacherPanel = () => {
   const [state, setState] = useState({
     idPlan: null,
+    status: null,
     showPlanReview: false,
   });
   let location = useLocation();
@@ -174,6 +175,7 @@ const TeacherPanel = () => {
               event.stopPropagation();
               setState({
                 idPlan: record.id,
+                status: record.status,
                 showPlanReview: true,
               });
             },
@@ -182,7 +184,7 @@ const TeacherPanel = () => {
       />
     );
   } else {
-    content = <PlanReview planId={state.idPlan} />;
+    content = <PlanReview planId={state.idPlan} status={state.status} />;
   }
 
   // console.log("Pilas",getDataSource());
