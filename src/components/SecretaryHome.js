@@ -16,6 +16,19 @@ const SecretaryHome = () => {
   return (
     <>
       <Row>
+        <Col>
+          <Title
+              level={3}
+              style={{
+                color: "#034c70",
+                marginLeft: -30,
+              }}
+          >
+            Panel Principal:
+          </Title>
+        </Col>
+      </Row>
+      <Row>
         <Col span={24}>
           <Row justify="right">
             <Col span={6}>
@@ -109,7 +122,11 @@ const SecretaryHome = () => {
                   </div>
                   <div>Comisiones de titulación de la ESFOT</div>
                   <div>
-                    <Button className={"btn-secretary"}>Ingresar</Button>
+                    <Button className={"btn-secretary"}>
+                      <Link to={Routes.SECRETARY_COMMITTEE_LIST}>
+                        Ingresar
+                      </Link>
+                    </Button>
                   </div>
                 </Space>
               </Card>

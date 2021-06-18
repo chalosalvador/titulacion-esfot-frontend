@@ -413,7 +413,8 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
       bibliography_comment: "",
     };
     try {
-      await API.post(`/projects/${plan.id}/plan-approved-director`, dataToSent); // put data to server
+      await API.post(`/projects/${plan.id}/plan-approved-director`); // put data to server
+
       setSendingPlan(false);
       confirm({
         icon: <CheckCircleOutlined />,

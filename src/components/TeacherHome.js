@@ -22,6 +22,19 @@ const TeacherHomePage = () => {
   return (
     <>
       <Row>
+        <Col>
+          <Title
+              level={3}
+              style={{
+                color: "#034c70",
+                marginLeft: -30,
+              }}
+          >
+            Panel Principal:
+          </Title>
+        </Col>
+      </Row>
+      <Row>
         <Col span={24}>
           <Row justify="center">
             <Col span={6}>
