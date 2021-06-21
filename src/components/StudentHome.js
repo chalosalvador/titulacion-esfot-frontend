@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Card, Col, Layout, Row, Space, Typography } from "antd";
+import {Button, Card, Col, Layout, PageHeader, Row, Space, Typography} from "antd";
 import {
   CopyOutlined,
   FileTextOutlined,
@@ -24,6 +24,19 @@ const StudentHomePage = () => {
 
   return (
     <>
+      <Row>
+        <Col>
+          <Title
+          level={3}
+           style={{
+             color: "#034c70",
+             marginLeft: -30,
+          }}
+          >
+          Panel Principal:
+          </Title>
+        </Col>
+      </Row>
       <Row>
         <Col span={24}>
           <Row justify="center">

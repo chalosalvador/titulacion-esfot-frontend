@@ -238,7 +238,7 @@ const PlanForm = ({ visible, update }) => {
   const onFinish = async () => {
     setSending(true);
     const data = form.getFieldsValue();
-    let dataToSent = {};
+    let dataToSent = { ...data };
 
     try {
       if (projects[0].status === "plan_review_teacher") {
@@ -248,7 +248,6 @@ const PlanForm = ({ visible, update }) => {
       } else {
         await API.post(`/projects/${projects[0].id}/plan-sent`);
       }
-
       setSending(false);
       confirm({
         icon: <CheckCircleOutlined />,

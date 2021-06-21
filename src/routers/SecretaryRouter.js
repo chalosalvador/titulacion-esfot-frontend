@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import loadable from "@loadable/component";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
@@ -7,7 +7,7 @@ import Routes from "../constants/routes";
 import NotFoundPage from "../pages/NotFoundPage";
 import Loading from "../components/Loading";
 
-const loadableOptions = { fallback: <Loading /> };
+const loadableOptions = {fallback: <Loading/>};
 
 const AsyncIndex = loadable(() => import("../pages/Index"), loadableOptions);
 const AsyncLogin = loadable(() => import("../pages/Login"), loadableOptions);
@@ -15,16 +15,20 @@ const AsyncLogin = loadable(() => import("../pages/Login"), loadableOptions);
 const AsyncHome = loadable(() => import("../pages/HomePage"), loadableOptions);
 
 const AsyncSecretaryProjectsList = loadable(
-  () => import("../pages/SecretaryProjectsListPage"),
-  loadableOptions
+    () => import("../pages/SecretaryProjectsListPage"),
+    loadableOptions
 );
 const AsyncSecretaryProjectDetail = loadable(() =>
-  import("../pages/SecretaryProjectDetailPage")
+    import("../pages/SecretaryProjectDetailPage")
+);
+const AsyncSecretaryCommitteeList = loadable(
+    () => import("../pages/SecretaryCommitteeListPage"),
+    loadableOptions
 );
 
 const AsyncAbout = loadable(
-  () => import("../pages/AboutPage"),
-  loadableOptions
+    () => import("../pages/AboutPage"),
+    loadableOptions
 );
 const AsyncLogout = loadable(() => import("../pages/Logout"), loadableOptions);
 
@@ -40,25 +44,30 @@ const AsyncLogout = loadable(() => import("../pages/Logout"), loadableOptions);
  * @constructor
  */
 const SecretaryRouter = () => (
-  <Switch>
-    <PublicRoute exact path={Routes.INDEX} component={AsyncIndex} />
-    <PublicRoute path={Routes.LOGIN} component={AsyncLogin} />
+    <Switch>
+        <PublicRoute exact path={Routes.INDEX} component={AsyncIndex}/>
+        <PublicRoute path={Routes.LOGIN} component={AsyncLogin}/>
 
-    <PrivateRoute path={Routes.HOME} component={AsyncHome} />
-    <PrivateRoute
-      path={Routes.PROJECTS_LIST_SECRETARY}
-      component={AsyncSecretaryProjectsList}
-    />
-    <PrivateRoute
-      path={Routes.PROJECT_DETAIL_SECRETARY}
-      component={AsyncSecretaryProjectDetail}
-    />
+        <PrivateRoute path={Routes.HOME} component={AsyncHome}/>
+        <PrivateRoute
+            path={Routes.PROJECTS_LIST_SECRETARY}
+            component={AsyncSecretaryProjectsList}
+        />
+        <PrivateRoute
+            path={Routes.PROJECT_DETAIL_SECRETARY}
+            component={AsyncSecretaryProjectDetail}
+        />
 
-    <PrivateRoute path={Routes.LOGOUT} component={AsyncLogout} />
-    <PublicRoute path={Routes.ABOUT} component={AsyncAbout} />
+        <PrivateRoute
+            path={Routes.SECRETARY_COMMITTEE_LIST}
+            component={AsyncSecretaryCommitteeList}
+        />
 
-    <Route component={NotFoundPage} />
-  </Switch>
+        <PrivateRoute path={Routes.LOGOUT} component={AsyncLogout}/>
+        <PublicRoute path={Routes.ABOUT} component={AsyncAbout}/>
+
+        <Route component={NotFoundPage}/>
+    </Switch>
 );
 
 export default SecretaryRouter;
