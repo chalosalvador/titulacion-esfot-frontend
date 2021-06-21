@@ -71,7 +71,9 @@ const ProjectReview = ({ idPlan }) => {
   const [checked, setChecked] = useState(false);
   const { plan, isLoading } = usePlanContent(idPlan);
   const { pdf, isLoading1 } = useGetProjectPDF(idPlan);
-  const [highlights, setHighlights] = useState(plan.highlights || []);
+  const [highlights, setHighlights] = useState(
+    JSON.parse(plan.highlights) || []
+  );
 
   const PRIMARY_PDF_URL = `http://localhost:8000/api/project/getPDF/${idPlan}`;
   const initialUrl = PRIMARY_PDF_URL;
