@@ -65,13 +65,13 @@ const HighlightPopup = ({ comment }) =>
 const ProjectReview = ({ idPlan }) => {
   const savedHighlights = JSON.parse(localStorage.getItem("highlights"));
 
-  const [highlights, setHighlights] = useState(savedHighlights || []);
   const [approveProject, setApproveProject] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendingProject, setSendingProject] = useState(false);
   const [checked, setChecked] = useState(false);
   const { plan, isLoading } = usePlanContent(idPlan);
   const { pdf, isLoading1 } = useGetProjectPDF(idPlan);
+  const [highlights, setHighlights] = useState(plan.highlights || []);
 
   const PRIMARY_PDF_URL = `http://localhost:8000/api/project/getPDF/${idPlan}`;
   const initialUrl = PRIMARY_PDF_URL;
