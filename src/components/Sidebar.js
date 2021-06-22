@@ -4,24 +4,21 @@ const updateHash = (highlight) => {
   document.location.hash = `highlight-${highlight.id}`;
 };
 
-function Sidebar({ highlights, toggleDocument, resetHighlights }) {
+function Sidebar({ highlights, resetHighlights, teacher }) {
   return (
     <div className="sidebar" style={{ width: "25vw" }}>
       <div className="description" style={{ padding: "1rem" }}>
-        <h2 style={{ marginBottom: "1rem" }}>react-pdf-highlighter</h2>
+        <h2 style={{ marginBottom: "1rem" }}>Comentarios:</h2>
 
-        <p style={{ fontSize: "0.7rem" }}>
-          <a href="https://github.com/agentcooper/react-pdf-highlighter">
-            Open in GitHub
-          </a>
-        </p>
-
-        <p>
-          <small>
-            To create area highlight hold ⌥ Option key (Alt), then click and
-            drag.
-          </small>
-        </p>
+        {teacher ? (
+          <p style={{ fontSize: "0.7rem" }}>
+            Seleccione un área de texto para agregar un comentario.
+          </p>
+        ) : (
+          <p style={{ fontSize: "0.7rem" }}>
+            Estos son los comentarios dejados por tu director.
+          </p>
+        )}
       </div>
 
       <ul className="sidebar__highlights">
@@ -50,17 +47,14 @@ function Sidebar({ highlights, toggleDocument, resetHighlights }) {
               ) : null}
             </div>
             <div className="highlight__location">
-              Page {highlight.position.pageNumber}
+              Página {highlight.position.pageNumber}
             </div>
           </li>
         ))}
       </ul>
-      <div style={{ padding: "1rem" }}>
-        <button onClick={toggleDocument}>Toggle PDF document</button>
-      </div>
       {highlights.length > 0 ? (
         <div style={{ padding: "1rem" }}>
-          <button onClick={resetHighlights}>Reset highlights</button>
+          <button onClick={resetHighlights}>Borrar comentarios</button>
         </div>
       ) : null}
     </div>

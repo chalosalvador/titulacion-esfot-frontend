@@ -45,8 +45,7 @@ const PlanReview = (props) => {
                 props.status === "plan_review_commission" ||
                 props.status === "plan_approved_commission" ||
                 props.status === "plan_rejected" ||
-                props.status === "san_curriculum_1" ||
-                props.status === "san_curriculum_2"
+                props.status === "san_curriculum_1"
                   ? "disabled"
                   : "header"
               }
