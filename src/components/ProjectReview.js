@@ -1,4 +1,17 @@
-import React, { useState } from "react";
+/* eslint import/no-webpack-loader-syntax: 0 */
+
+import React, { useState, useEffect, useCallback } from "react";
+import PDFWorker from "worker-loader!pdfjs-dist/lib/pdf.worker";
+
+import {
+  PdfLoader,
+  PdfHighlighter,
+  Tip,
+  Highlight,
+  Popup,
+  AreaHighlight,
+  setPdfWorker,
+} from "react-pdf-highlighter";
 import {
   Button,
   Col,
@@ -17,23 +30,127 @@ import {
   SendOutlined,
 } from "@ant-design/icons";
 import { usePlanContent } from "../data/usePlan";
+import { useGetProjectPDF } from "../data/useGetProjectPDF";
 import API from "../data";
 import Routes from "../constants/routes";
+
+import testHighlights from "./test-highlights";
+
+import Spinner from "./Spinner";
+import Sidebar from "./Sidebar";
+
+import "../styles/pdf.css";
+
+setPdfWorker(PDFWorker);
 
 const { Title } = Typography;
 const { confirm } = Modal;
 
+const getNextId = () => String(Math.random()).slice(2);
+
+const parseIdFromHash = () =>
+  document.location.hash.slice("#highlight-".length);
+
+const resetHash = () => {
+  document.location.hash = "";
+};
+
+const HighlightPopup = ({ comment }) =>
+  comment.text ? (
+    <div className="Highlight__popup">
+      {comment.emoji} {comment.text}
+    </div>
+  ) : null;
+
 const ProjectReview = ({ idPlan }) => {
+  const savedHighlights = JSON.parse(localStorage.getItem("highlights"));
+
   const [approveProject, setApproveProject] = useState(false);
+  const [sending, setSending] = useState(false);
   const [sendingProject, setSendingProject] = useState(false);
   const [checked, setChecked] = useState(false);
   const { plan, isLoading } = usePlanContent(idPlan);
+  const { pdf, isLoading1 } = useGetProjectPDF(idPlan);
+  const [highlights, setHighlights] = useState(
+    JSON.parse(plan.highlights) || []
+  );
 
-  if (isLoading) {
+  const PRIMARY_PDF_URL = `http://localhost:8000/api/project/getPDF/${idPlan}`;
+  const initialUrl = PRIMARY_PDF_URL;
+
+  const [url, setUrl] = useState(initialUrl);
+  console.log("plan", plan);
+
+  console.log("highlights", highlights);
+
+  if (isLoading && isLoading1) {
     return <h1>Loading...</h1>;
   }
 
-  console.log("plan", plan);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const getHighlightById = useCallback(
+    (id) => {
+      return highlights.find((highlight) => highlight.id === id);
+    },
+    [highlights]
+  );
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const scrollToHighlightFromHash = useCallback(() => {
+    const highlight = getHighlightById(parseIdFromHash());
+
+    if (highlight) {
+      scrollViewerTo(highlight);
+    }
+  }, [getHighlightById]);
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    window.addEventListener("hashchange", scrollToHighlightFromHash, false);
+
+    return () => {
+      window.removeEventListener("hashchange", scrollToHighlightFromHash);
+    };
+  }, [scrollToHighlightFromHash]);
+
+  const resetHighlights = () => {
+    setHighlights([]);
+  };
+
+  let scrollViewerTo = (highlight) => {};
+
+  const addHighlight = async (highlight) => {
+    console.log("Saving highlight", highlight);
+
+    localStorage.setItem(
+      "highlights",
+      JSON.stringify([{ ...highlight, id: getNextId() }, ...highlights])
+    );
+    setHighlights([{ ...highlight, id: getNextId() }, ...highlights]);
+  };
+
+  const updateHighlight = (highlightId, position, content) => {
+    console.log("Updating highlight", highlightId, position, content);
+
+    setHighlights(
+      highlights.map((h) => {
+        const {
+          id,
+          position: originalPosition,
+          content: originalContent,
+          ...rest
+        } = h;
+        return id === highlightId
+          ? {
+              id,
+              position: { ...originalPosition, ...position },
+              content: { ...originalContent, ...content },
+              ...rest,
+            }
+          : h;
+      })
+    );
+  };
 
   const modal = () => {
     confirm({
@@ -52,12 +169,69 @@ const ProjectReview = ({ idPlan }) => {
       okButtonProps: { style: { backgroundColor: "#034c70" } },
     });
   };
+
+  const onSentComments = async () => {
+    setSending(true);
+
+    let dataToSent = {
+      highlights: JSON.stringify(highlights),
+    };
+
+    try {
+      await API.post(`/projects/${plan.id}`, dataToSent);
+      await API.post(`/projects/${plan.id}/project-review-teacher`); // put data to server
+      setSending(false);
+      confirm({
+        icon: <CheckCircleOutlined />,
+        title: (
+          <Title level={3} style={{ color: "#034c70" }}>
+            ¡Buen trabajo!
+          </Title>
+        ),
+        content: (
+          <>
+            <Row justify="center">
+              <Col>
+                <Image src="boy.png" width={100} />
+                <Image src="girl.png" width={100} />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <p style={{ color: "#034c70" }}>
+                  Gracias por tu esfuerzo en revisar el proyecto,
+                  <br />
+                  <strong>tus comentarios han sido enviados</strong>.
+                </p>
+              </Col>
+            </Row>
+          </>
+        ),
+        okText: "Entendido",
+        okButtonProps: {
+          href: Routes.HOME,
+          style: {
+            backgroundColor: "#034c70",
+            marginRight: 125,
+          },
+        },
+        cancelButtonProps: { hidden: true },
+      });
+    } catch (e) {
+      console.log("ERROR", e);
+      message.error(`No se guardaron los datos:¨${e}`);
+    }
+  };
+
   const onFinish = async () => {
     setSendingProject(true);
     const dataToSent = { ...plan };
     try {
       await API.post(`/projects/${plan.id}/project-approved-director`); // put data to server
       setSendingProject(false);
+      setHighlights([]);
+      await API.post(`/projects/${plan.id}`, { highlights: highlights });
       confirm({
         icon: <CheckCircleOutlined />,
         title: (
@@ -206,42 +380,130 @@ const ProjectReview = ({ idPlan }) => {
   );
 
   return (
-    <>
-      <p>Aqui va el proyecto incrustado</p>
-      <Row justify={"center"}>
-        <Col>
-          <Button
-            className={"submit"}
-            disabled={
-              !(
-                plan.status === "project_uploaded" ||
-                plan.status === "project_corrections_done"
-              )
-            }
-          >
-            <SendOutlined /> Enviar comentarios al estudiante
-          </Button>
-        </Col>
-      </Row>
-      <Row justify={"center"}>
-        <Col>
-          <Button
-            className={"submit"}
-            onClick={() => setApproveProject(true)}
-            disabled={
-              !(
-                plan.status === "project_uploaded" ||
-                plan.status === "project_corrections_done"
-              )
-            }
-          >
-            <CheckOutlined /> Aprobar proyecto de titulación
-          </Button>
-        </Col>
-      </Row>
-      <Modal {...modalProps}>{modalContent}</Modal>
-    </>
+    <div>
+      <div className="App" style={{ display: "flex", height: "100vh" }}>
+        <Sidebar highlights={highlights} resetHighlights={resetHighlights} />
+        <div
+          style={{
+            height: "100vh",
+            width: "75vw",
+            position: "relative",
+          }}
+        >
+          <PdfLoader url={url} beforeLoad={<Spinner />}>
+            {(pdfDocument) => (
+              <PdfHighlighter
+                pdfDocument={pdfDocument}
+                enableAreaSelection={(event) => event.altKey}
+                onScrollChange={resetHash}
+                // pdfScaleValue="page-width"
+                scrollRef={(scrollTo) => {
+                  scrollViewerTo = scrollTo;
+
+                  scrollToHighlightFromHash();
+                }}
+                onSelectionFinished={(
+                  position,
+                  content,
+                  hideTipAndSelection,
+                  transformSelection
+                ) => (
+                  <Tip
+                    onOpen={transformSelection}
+                    onConfirm={(comment) => {
+                      addHighlight({ content, position, comment });
+
+                      hideTipAndSelection();
+                    }}
+                  />
+                )}
+                highlightTransform={(
+                  highlight,
+                  index,
+                  setTip,
+                  hideTip,
+                  viewportToScaled,
+                  screenshot,
+                  isScrolledTo
+                ) => {
+                  const isTextHighlight = !Boolean(
+                    highlight.content && highlight.content.image
+                  );
+
+                  const component = isTextHighlight ? (
+                    <Highlight
+                      isScrolledTo={isScrolledTo}
+                      position={highlight.position}
+                      comment={highlight.comment}
+                    />
+                  ) : (
+                    <AreaHighlight
+                      highlight={highlight}
+                      onChange={(boundingRect) => {
+                        updateHighlight(
+                          highlight.id,
+                          { boundingRect: viewportToScaled(boundingRect) },
+                          { image: screenshot(boundingRect) }
+                        );
+                      }}
+                    />
+                  );
+
+                  return (
+                    <Popup
+                      popupContent={<HighlightPopup {...highlight} />}
+                      onMouseOver={(popupContent) =>
+                        setTip(highlight, (highlight) => popupContent)
+                      }
+                      onMouseOut={hideTip}
+                      key={index}
+                      children={component}
+                    />
+                  );
+                }}
+                highlights={highlights}
+              />
+            )}
+          </PdfLoader>
+        </div>
+      </div>
+      <div style={{ marginTop: 30 }}>
+        <Row justify={"center"}>
+          <Col>
+            <Button
+              className={"submit"}
+              onClick={() => onSentComments()}
+              loading={sending}
+              disabled={
+                !(
+                  plan.status === "project_uploaded" ||
+                  plan.status === "project_corrections_done"
+                )
+              }
+            >
+              <SendOutlined /> Enviar comentarios al estudiante
+            </Button>
+          </Col>
+        </Row>
+        <Row justify={"center"}>
+          <Col>
+            <Button
+              className={"submit"}
+              onClick={() => setApproveProject(true)}
+              disabled={
+                !(
+                  plan.status === "project_uploaded" ||
+                  plan.status === "project_corrections_done"
+                )
+              }
+            >
+              <CheckOutlined /> Aprobar proyecto de titulación
+            </Button>
+          </Col>
+        </Row>
+        <Modal {...modalProps}>{modalContent}</Modal>
+      </div>
+    </div>
   );
 };
-
 export default ProjectReview;

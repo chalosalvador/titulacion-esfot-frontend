@@ -12,6 +12,7 @@ import "../styles/plan-collapse.css";
 const { Panel } = Collapse;
 
 const PlanReview = (props) => {
+  console.log("status", props.status);
   return (
     <>
       <Row>
@@ -35,6 +36,20 @@ const PlanReview = (props) => {
               header="Proyecto de titulación"
               key="2"
               className="site-collapse-custom-panel"
+              collapsible={
+                props.status === "plan_saved" ||
+                props.status === "plan_sent" ||
+                props.status === "plan_review_teacher" ||
+                props.status === "plan_corrections_done" ||
+                props.status === "plan_approved_director" ||
+                props.status === "plan_review_commission" ||
+                props.status === "plan_approved_commission" ||
+                props.status === "plan_rejected" ||
+                props.status === "san_curriculum_1" ||
+                props.status === "san_curriculum_2"
+                  ? "disabled"
+                  : "header"
+              }
             >
               <ProjectReview idPlan={props.planId} />
             </Panel>

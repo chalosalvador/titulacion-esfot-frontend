@@ -414,6 +414,7 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     };
     try {
       await API.post(`/projects/${plan.id}/plan-approved-director`); // put data to server
+
       setSendingPlan(false);
       confirm({
         icon: <CheckCircleOutlined />,

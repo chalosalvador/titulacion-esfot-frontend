@@ -11,12 +11,14 @@ import Routes from "../constants/routes";
 import { Link } from "react-router-dom";
 import { useAuth } from "../providers/Auth";
 import withAuth from "../hocs/withAuth";
+import ProjectReview from "./ProjectReview";
 
 const { Title } = Typography;
 
 const TeacherHomePage = () => {
   const { currentUser } = useAuth();
 
+  // return <ProjectReview idPlan={1} />;
   return (
     <>
       <Row>

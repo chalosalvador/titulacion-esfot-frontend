@@ -447,7 +447,8 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
       bibliography_comment: "",
     };
     try {
-      await API.post(`/projects/${plan.id}/plan-approved-commission`);
+      await API.post(`/projects/${plan.id}/plan-approved-commission`); // put data to server
+
       setSendingPlan(false);
       confirm({
         icon: <CheckCircleOutlined />,
