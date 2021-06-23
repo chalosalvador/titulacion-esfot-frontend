@@ -4,7 +4,7 @@ import { Card, Layout, Typography } from "antd";
 const { Sider } = Layout;
 const { Title } = Typography;
 
-const SiderTeacher = () => {
+const SiderSecretary = () => {
   return (
     <Sider
       theme="light"
@@ -72,4 +72,4 @@ const SiderTeacher = () => {
   );
 };
 
-export default SiderTeacher;
+export default SiderSecretary;

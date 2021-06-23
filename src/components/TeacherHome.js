@@ -11,7 +11,6 @@ import Routes from "../constants/routes";
 import { Link } from "react-router-dom";
 import { useAuth } from "../providers/Auth";
 import withAuth from "../hocs/withAuth";
-import ProjectReview from "./ProjectReview";
 
 const { Title } = Typography;
 

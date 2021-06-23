@@ -1,4 +1,4 @@
-import { Button, Card, Col, Layout, Row, Space, Typography } from "antd";
+import { Button, Card, Col, Row, Space, Typography } from "antd";
 import React from "react";
 import "../styles/home-secretary.css";
 import { BulbOutlined } from "@ant-design/icons";
@@ -10,7 +10,6 @@ import teacher from "../images/la_chalkboard-teacher-solid.png";
 import people from "../images/raphael_people.png";
 
 const { Title } = Typography;
-const { Content, Sider } = Layout;
 
 const SecretaryHome = () => {
   return (
