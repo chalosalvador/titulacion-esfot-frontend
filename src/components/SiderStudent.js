@@ -38,9 +38,11 @@ const SiderStudent = () => {
       : projectStatus === "plan_review_commission" ||
         projectStatus === "plan_corrections_done2"
       ? 4
-      : projectStatus === "plan_approved_commission"
+      : projectStatus === "plan_approved_commission" ||
+        projectStatus === "project_review_teacher"
       ? 5
-      : projectStatus === "project_uploaded"
+      : projectStatus === "project_uploaded" ||
+        projectStatus === "project_corrections_done"
       ? 6
       : projectStatus === "project_approved_director"
       ? 7

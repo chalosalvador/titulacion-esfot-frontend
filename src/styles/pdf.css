@@ -67,8 +67,4 @@ blockquote:after {
     content: close-quote;
 }
 
-.description {
-    display: none;
-}
-
 

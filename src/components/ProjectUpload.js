@@ -1,15 +1,7 @@
-import React, { useState } from "react";
-import {
-  Upload,
-  message,
-  Typography,
-  Button,
-  Form,
-  Row,
-  Col,
-  Modal,
-  Image,
-} from "antd";
+/* eslint import/no-webpack-loader-syntax: 0 */
+
+import React, { useCallback, useEffect, useState } from "react";
+import { Upload, Typography, Button, Form, Row, Col, Modal, Image } from "antd";
 import {
   InboxOutlined,
   DownloadOutlined,
@@ -17,20 +9,70 @@ import {
   ExclamationCircleOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
+import {
+  PdfLoader,
+  PdfHighlighter,
+  Highlight,
+  Popup,
+  AreaHighlight,
+  setPdfWorker,
+  Tip,
+} from "react-pdf-highlighter";
+import PDFWorker from "worker-loader!pdfjs-dist/lib/pdf.worker";
 import { useStudentProject } from "../data/useStudentProjects";
 import API from "../data";
 import Routes from "../constants/routes";
+import { useGetProjectPDF } from "../data/useGetProjectPDF";
+
+import Spinner from "./Spinner";
+import Sidebar from "./Sidebar";
+
+import "../styles/pdf.css";
+
+setPdfWorker(PDFWorker);
 
 const { Dragger } = Upload;
 const { Title } = Typography;
 const { confirm } = Modal;
 
+const parseIdFromHash = () =>
+  document.location.hash.slice("#highlight-".length);
+
+const resetHash = () => {
+  document.location.hash = "";
+};
+
+const HighlightPopup = ({ comment }) =>
+  comment.text ? (
+    <div className="Highlight__popup">
+      {comment.emoji} {comment.text}
+    </div>
+  ) : null;
+
 const ProjectUpload = () => {
-  const { projects } = useStudentProject();
+  const { projects, isLoading } = useStudentProject();
   const [isSending, setIsSending] = useState(false);
   const [form] = Form.useForm();
+  const { pdf, isLoading1 } = useGetProjectPDF(projects[0].id);
+  const [highlights, setHighlights] = useState(
+    JSON.parse(projects[0].highlights) || []
+  );
 
+  const PRIMARY_PDF_URL = `http://localhost:8000/api/project/getPDF/${projects[0].id}`;
+  const initialUrl = PRIMARY_PDF_URL;
+
+  const [url, setUrl] = useState(initialUrl);
   console.log("projects", projects[0]);
+
+  console.log("highlights", highlights);
+
+  if (
+    projects[0].status === "project_review_teacher" &&
+    isLoading &&
+    isLoading1
+  ) {
+    return <h1>Loading...</h1>;
+  }
 
   const normFile = (e) => {
     console.log("Upload event:", e);
@@ -50,7 +92,7 @@ const ProjectUpload = () => {
     },
     disabled: !(
       projects[0].status === "plan_approved_commission" ||
-      projects[0].status === "project_corrections_done"
+      projects[0].status === "project_review_teacher"
     ),
     beforeUpload: () => false,
   };
@@ -63,6 +105,12 @@ const ProjectUpload = () => {
 
     try {
       await API.post(`/projects/${projects[0].id}/pdf`, data);
+      if (projects[0].status === "plan_approved_commission") {
+        await API.post(`/projects/${projects[0].id}/project-uploaded`);
+      } else {
+        await API.post(`/projects/${projects[0].id}/project-corrections-done`);
+      }
+
       setIsSending(false);
       confirm({
         icon: <CheckCircleOutlined />,
@@ -130,6 +178,34 @@ const ProjectUpload = () => {
     });
   };
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const getHighlightById = useCallback(
+    (id) => {
+      return highlights.find((highlight) => highlight.id === id);
+    },
+    [highlights]
+  );
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const scrollToHighlightFromHash = useCallback(() => {
+    const highlight = getHighlightById(parseIdFromHash());
+
+    if (highlight) {
+      scrollViewerTo(highlight);
+    }
+  }, [getHighlightById]);
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    window.addEventListener("hashchange", scrollToHighlightFromHash, false);
+
+    return () => {
+      window.removeEventListener("hashchange", scrollToHighlightFromHash);
+    };
+  }, [scrollToHighlightFromHash]);
+
+  let scrollViewerTo = () => {};
+
   return (
     <>
       <Title
@@ -163,59 +239,136 @@ const ProjectUpload = () => {
       <Title level={3} style={{ color: "#407088", marginTop: 30 }}>
         Proyecto
       </Title>
+      {projects[0].status !== "plan_approved_commission" && (
+        <div className="App" style={{ display: "flex", height: "100vh" }}>
+          {projects[0].status === "project_review_teacher" ? (
+            <Sidebar highlights={highlights} />
+          ) : (
+            <></>
+          )}
 
-      <Form
-        name="project-upload"
-        onFinish={modal}
-        initialValues={
-          projects.length > 0 && projects[0].report_pdf
-            ? projects[0].report_pdf
-            : null
-        }
-        form={form}
-      >
-        <Form.Item
-          name={"report_pdf"}
-          valuePropName={"fileList"}
-          getValueFromEvent={normFile}
-          rules={[
-            { required: true, message: "Por favor seleccione un archivo .pdf" },
-          ]}
+          <div
+            style={{
+              height: "100vh",
+              width: "75vw",
+              position: "relative",
+            }}
+          >
+            <PdfLoader url={url} beforeLoad={<Spinner />}>
+              {(pdfDocument) => (
+                <PdfHighlighter
+                  pdfDocument={pdfDocument}
+                  enableAreaSelection={(event) => event.altKey}
+                  onScrollChange={resetHash}
+                  // pdfScaleValue="page-width"
+                  scrollRef={(scrollTo) => {
+                    scrollViewerTo = scrollTo;
+
+                    scrollToHighlightFromHash();
+                  }}
+                  onSelectionFinished={() => console.log("Finished!")}
+                  highlightTransform={(
+                    highlight,
+                    index,
+                    setTip,
+                    hideTip,
+                    viewportToScaled,
+                    screenshot,
+                    isScrolledTo
+                  ) => {
+                    const isTextHighlight = !Boolean(
+                      highlight.content && highlight.content.image
+                    );
+
+                    const component = isTextHighlight ? (
+                      <Highlight
+                        isScrolledTo={isScrolledTo}
+                        position={highlight.position}
+                        comment={highlight.comment}
+                      />
+                    ) : (
+                      <AreaHighlight
+                        highlight={highlight}
+                        onChange={() => {}}
+                      />
+                    );
+
+                    return (
+                      <Popup
+                        popupContent={<HighlightPopup {...highlight} />}
+                        onMouseOver={(popupContent) =>
+                          setTip(highlight, (highlight) => popupContent)
+                        }
+                        onMouseOut={hideTip}
+                        key={index}
+                        children={component}
+                      />
+                    );
+                  }}
+                  highlights={highlights}
+                />
+              )}
+            </PdfLoader>
+          </div>
+        </div>
+      )}
+      <div style={{ marginTop: 30 }}>
+        <Form
+          name="project-upload"
+          onFinish={modal}
+          initialValues={
+            projects.length > 0 && projects[0].report_pdf
+              ? projects[0].report_pdf
+              : null
+          }
+          form={form}
         >
-          <Row type="flex" justify="center" align="middle">
-            <Col>
-              <Dragger {...props} style={{ width: 350, height: 250 }}>
-                <p className="ant-upload-drag-icon">
-                  <InboxOutlined style={{ color: "#034c70" }} />
-                </p>
-                <p className="ant-upload-text">
-                  Click o arrastre un archivo a esta área para subirlo
-                </p>
-                <p className="ant-upload-hint">Suba un archivo .pdf</p>
-              </Dragger>
-            </Col>
-          </Row>
-        </Form.Item>
-        <Form.Item>
-          <Row type="flex" justify="center" align="middle">
-            <Col>
-              <Button
-                htmlType={"submit"}
-                style={{ marginLeft: 10 }}
-                loading={isSending}
-                disabled={
-                  !(
-                    projects[0].status === "plan_approved_commission" ||
-                    projects[0].status === "project_corrections_done"
-                  )
-                }
-              >
-                <SendOutlined /> Enviar proyecto
-              </Button>
-            </Col>
-          </Row>
-        </Form.Item>
-      </Form>
+          <Form.Item
+            name={"report_pdf"}
+            valuePropName={"fileList"}
+            getValueFromEvent={normFile}
+            rules={[
+              {
+                required: true,
+                message: "Por favor seleccione un archivo .pdf",
+              },
+            ]}
+          >
+            <Row type="flex" justify="center" align="middle">
+              <Col>
+                <Dragger {...props} style={{ width: 350, height: 250 }}>
+                  <p className="ant-upload-drag-icon">
+                    <InboxOutlined style={{ color: "#034c70" }} />
+                  </p>
+                  <p className="ant-upload-text">
+                    Click o arrastre un archivo a esta área para subirlo
+                  </p>
+                  <p className="ant-upload-hint">Suba un archivo .pdf</p>
+                </Dragger>
+              </Col>
+            </Row>
+          </Form.Item>
+          <Form.Item>
+            <Row type="flex" justify="center" align="middle">
+              <Col>
+                <Button
+                  htmlType={"submit"}
+                  style={{ marginLeft: 10 }}
+                  loading={isSending}
+                  disabled={
+                    !(
+                      projects[0].status === "plan_approved_commission" ||
+                      projects[0].status === "project_review_teacher"
+                    )
+                  }
+                >
+                  <SendOutlined /> Enviar proyecto
+                </Button>
+              </Col>
+            </Row>
+          </Form.Item>
+        </Form>
+      </div>
     </>
   );
 };

@@ -34,8 +34,6 @@ import { useGetProjectPDF } from "../data/useGetProjectPDF";
 import API from "../data";
 import Routes from "../constants/routes";
 
-import testHighlights from "./test-highlights";
-
 import Spinner from "./Spinner";
 import Sidebar from "./Sidebar";
 
@@ -63,8 +61,6 @@ const HighlightPopup = ({ comment }) =>
   ) : null;
 
 const ProjectReview = ({ idPlan }) => {
-  const savedHighlights = JSON.parse(localStorage.getItem("highlights"));
-
   const [approveProject, setApproveProject] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendingProject, setSendingProject] = useState(false);
@@ -117,7 +113,7 @@ const ProjectReview = ({ idPlan }) => {
     setHighlights([]);
   };
 
-  let scrollViewerTo = (highlight) => {};
+  let scrollViewerTo = () => {};
 
   const addHighlight = async (highlight) => {
     console.log("Saving highlight", highlight);
@@ -226,12 +222,11 @@ const ProjectReview = ({ idPlan }) => {
 
   const onFinish = async () => {
     setSendingProject(true);
-    const dataToSent = { ...plan };
+    const dataToSent = { highlights: null };
     try {
-      await API.post(`/projects/${plan.id}/project-approved-director`); // put data to server
+      await API.post(`/projects/${plan.id}`, dataToSent); //put data to server
+      await API.post(`/projects/${plan.id}/project-approved-director`); // change status
       setSendingProject(false);
-      setHighlights([]);
-      await API.post(`/projects/${plan.id}`, { highlights: highlights });
       confirm({
         icon: <CheckCircleOutlined />,
         title: (
@@ -382,7 +377,11 @@ const ProjectReview = ({ idPlan }) => {
   return (
     <div>
       <div className="App" style={{ display: "flex", height: "100vh" }}>
-        <Sidebar highlights={highlights} resetHighlights={resetHighlights} />
+        <Sidebar
+          highlights={highlights}
+          resetHighlights={resetHighlights}
+          teacher={"teacher"}
+        />
         <div
           style={{
             height: "100vh",
