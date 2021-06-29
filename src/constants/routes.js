@@ -21,6 +21,7 @@ const privateRoutes = {
   PROJECT_UPLOAD: "/subir-proyecto-titulacion",
   PROJECTS_LIST_SECRETARY: "/listado-proyectos",
   SECRETARY_COMMITTEE_LIST: "/listado-comisiones",
+  SECRETARY_TEACHERS_LIST: "/listado-profesores",
   COMMITTEE_PLANS: "/proyectos-comision",
   PROJECT_DETAIL_SECRETARY: "/detalle-proyecto",
 };
