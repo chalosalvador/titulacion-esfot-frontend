@@ -52,7 +52,6 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
   // const { projects, isError, isLoading } = useProject();
   const { plan, isLoading } = usePlanContent(idPlan);
   const { teachers } = useTeachers();
-  const [imageUrl, setImageUrl] = useState(null);
   const [fileList, setFileList] = useState([]);
   const [sending, setSending] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -68,13 +67,19 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
     setComments(values);
   };
 
-  console.log(plan, isFinished);
-
   const [menuState, setMenuState] = useState({
     current: location.pathname, // set the current selected item in menu, by default the current page
     collapsed: false,
     openKeys: [],
   });
+
+  const [imageUrl, setImageUrl] = useState(plan.schedule);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  console.log(plan, isFinished);
 
   const layout = {
     labelCol: { span: 9 },
@@ -580,19 +585,6 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
 
     return e && [e.file];
   };
-
-  const { isAuthenticated } = useAuth();
-
-  React.useEffect(() => {
-    setMenuState({
-      ...menuState,
-      current: location.pathname,
-    });
-  }, [location, isAuthenticated]);
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <>

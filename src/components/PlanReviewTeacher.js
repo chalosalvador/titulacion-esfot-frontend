@@ -52,7 +52,6 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
   // const { projects, isError, isLoading } = useProject();
   const { plan, isLoading } = usePlanContent(idPlan);
   const { teachers } = useTeachers();
-  const [imageUrl, setImageUrl] = useState(null);
   const [fileList, setFileList] = useState([]);
   const [sending, setSending] = useState(false);
   const [sendingPlan, setSendingPlan] = useState(false);
@@ -74,6 +73,8 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     collapsed: false,
     openKeys: [],
   });
+
+  const [imageUrl, setImageUrl] = useState(plan.schedule);
 
   const layout = {
     labelCol: { span: 9 },
@@ -169,7 +170,6 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     ) {
       setIsFinished(true);
     }
-    console.log("FORM", formData);
   };
 
   const modal = () => {
@@ -904,34 +904,34 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                     label="Cronograma"
                     getValueFromEvent={normPhotoFile}
                   >
-                    <Upload
-                      name="files"
-                      accept="image/jpeg,image/png"
-                      listType="picture-card"
-                      multiple={false}
-                      showUploadList={false}
-                      beforeUpload={() => false}
-                      fileList={fileList}
-                      disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
-                      }
-                    >
-                      {imageUrl ? (
-                        <img
-                          src={imageUrl}
-                          alt="Foto"
-                          style={{ width: "180px" }}
-                        />
-                      ) : (
-                        <div>
-                          <PlusOutlined />
-                          <div className="ant-upload-text">Subir imagen</div>
-                        </div>
-                      )}
-                    </Upload>
+                    {/*<Upload*/}
+                    {/*  name="files"*/}
+                    {/*  accept="image/jpeg,image/png"*/}
+                    {/*  listType="picture-card"*/}
+                    {/*  multiple={false}*/}
+                    {/*  showUploadList={false}*/}
+                    {/*  beforeUpload={() => false}*/}
+                    {/*  fileList={fileList}*/}
+                    {/*  disabled={*/}
+                    {/*    !(*/}
+                    {/*      plan.status === "plan_sent" ||*/}
+                    {/*      plan.status === "plan_corrections_done"*/}
+                    {/*    )*/}
+                    {/*  }*/}
+                    {/*>*/}
+                    {/*{imageUrl ? (*/}
+                    <Image
+                      src={imageUrl}
+                      alt="Foto"
+                      style={{ width: "100px" }}
+                    />
+                    {/*  ) : (*/}
+                    {/*    <div>*/}
+                    {/*      <PlusOutlined />*/}
+                    {/*      <div className="ant-upload-text">Subir imagen</div>*/}
+                    {/*    </div>*/}
+                    {/*  )}*/}
+                    {/*</Upload>*/}
                   </Form.Item>
 
                   <CommentOutlined
