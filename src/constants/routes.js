@@ -20,6 +20,7 @@ const privateRoutes = {
   PLAN_FORM: "/plan-titulacion",
   PROJECT_UPLOAD: "/subir-proyecto-titulacion",
   PROJECTS_LIST_SECRETARY: "/listado-proyectos",
+  PROJECTS_LIST_PRINCIPAL: "/listado-proyectos-direccion",
   SECRETARY_COMMITTEE_LIST: "/listado-comisiones",
   SECRETARY_TEACHERS_LIST: "/listado-profesores",
   COMMITTEE_PLANS: "/proyectos-comision",
