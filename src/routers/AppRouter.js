@@ -5,6 +5,7 @@ import SecretaryRouter from "./SecretaryRouter";
 import AuthRouter from "./AuthRouter";
 import { useAuth } from "../providers/Auth";
 import StudentRouter from "./StudentRouter";
+import AdministrativeRouter from "./AdministrativeRouter";
 
 /**
  * Este es el componente que se encarga de renderizar el componente adecuado
@@ -28,6 +29,8 @@ const AppRouter = () => {
     <TeacherRouter />
   ) : currentUser.role === "ROLE_SECRETARY" ? (
     <SecretaryRouter />
+  ) : currentUser.role === "ROLE_ADMIN" ? (
+    <AdministrativeRouter />
   ) : (
     <StudentRouter />
   );
