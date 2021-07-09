@@ -1,15 +1,17 @@
 import React from "react";
-import TeacherPanel from "../components/TeacherPanel";
 import withAuth from "../hocs/withAuth";
 import SubLayout from "../components/SubLayout";
 import AdministrativePanel from "../components/AdministrativePanel";
 
-const TeacherPanelPage = () => {
+const AdministrativePanelPage = ({ location }) => {
   return (
     <SubLayout>
-      <AdministrativePanel />
+      <AdministrativePanel
+        tribunal={location.state.tribunal}
+        allProjects={location.state.allProjects}
+      />
     </SubLayout>
   );
 };
 
-export default withAuth(TeacherPanelPage);
+export default withAuth(AdministrativePanelPage);

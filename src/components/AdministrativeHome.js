@@ -39,7 +39,12 @@ const AdministrativeHome = () => {
                   <div>Proyectos por asignar tribunal</div>
                   <div>
                     <Button>
-                      <Link to={Routes.ADMINISTRATIVE_PANEL}>
+                      <Link
+                        to={{
+                          pathname: Routes.ADMINISTRATIVE_PANEL,
+                          state: { tribunal: true, allProjects: false },
+                        }}
+                      >
                         Ver proyectos
                       </Link>
                     </Button>
@@ -61,7 +66,14 @@ const AdministrativeHome = () => {
                   <div>Asignación fecha de defensa</div>
                   <div>
                     <Button>
-                      <Link to={Routes.ADMINISTRATIVE_PANEL}>Asignar</Link>
+                      <Link
+                        to={{
+                          pathname: Routes.ADMINISTRATIVE_PANEL,
+                          state: { tribunal: false, allProjects: false },
+                        }}
+                      >
+                        Asignar
+                      </Link>
                     </Button>
                   </div>
                 </Space>
@@ -81,7 +93,12 @@ const AdministrativeHome = () => {
                   <div>Historial de proyectos</div>
                   <div>
                     <Button>
-                      <Link to={Routes.ADMINISTRATIVE_PANEL}>
+                      <Link
+                        to={{
+                          pathname: Routes.ADMINISTRATIVE_PANEL,
+                          state: { tribunal: false, allProjects: true },
+                        }}
+                      >
                         Ver proyectos
                       </Link>
                     </Button>

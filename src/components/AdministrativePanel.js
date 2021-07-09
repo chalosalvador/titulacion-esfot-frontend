@@ -14,14 +14,15 @@ import "../styles/home-teacher.css";
 import SearchColumnFilter from "./SearchColumnFilter";
 import PlanReview from "./PlansReviewCollapse";
 import ProjectsListStatus from "./ProjectsListStatus";
+import { useProjects } from "../data/useProjects";
 
 const { Content, Sider } = Layout;
 const { Title } = Typography;
 
-const TeacherPanel = () => {
+const AdministrativePanel = ({ tribunal, allProjects }) => {
   let location = useLocation();
   const { isAuthenticated, isCheckingAuth } = useAuth();
-  const { teachersProjects, isLoading, isError } = useProjectsList();
+  const { projectsList, isLoading, isError } = useProjects();
 
   const [menuState, setMenuState] = useState({
     current: location.pathname, // set the current selected item in menu, by default the current page
@@ -68,7 +69,8 @@ const TeacherPanel = () => {
     return <ShowError error={isError} />;
   }
 
-  console.log(teachersProjects);
+  console.log("type", tribunal);
+  console.log("type", allProjects);
 
   // console.log("Pilas",getDataSource());
 
@@ -96,11 +98,11 @@ const TeacherPanel = () => {
       </Row>
       <Row>
         <Col>
-          <ProjectsListStatus />
+          <ProjectsListStatus tribunal={tribunal} allProjects={allProjects} />
         </Col>
       </Row>
     </>
   );
 };
 
-export default TeacherPanel;
+export default AdministrativePanel;
