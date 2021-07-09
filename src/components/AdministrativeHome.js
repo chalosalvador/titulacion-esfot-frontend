@@ -1,15 +1,13 @@
-import React from 'react';
+import React from "react";
 import withAuth from "../hocs/withAuth";
-import { Button, Card, Col, Row, Space, Typography } from 'antd';
-import { BarsOutlined, BulbOutlined, CheckOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-import Routes from '../constants/routes';
+import { Button, Card, Col, Row, Space, Typography } from "antd";
+import { BarsOutlined, BulbOutlined, CheckOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import Routes from "../constants/routes";
 
-const {Title} = Typography;
+const { Title } = Typography;
 
-const AdministrativeHome = () =>{
-
-
+const AdministrativeHome = () => {
   return (
     <>
       <Row>
@@ -38,12 +36,17 @@ const AdministrativeHome = () =>{
                   <div>
                     <BulbOutlined className={"big-icon"} />
                   </div>
-                  <div>
-                    Proyectos por asignar tribunal
-                  </div>
+                  <div>Proyectos por asignar tribunal</div>
                   <div>
                     <Button>
-                      <Link to={Routes.TEACHER_PANEL}>Ver proyectos</Link>
+                      <Link
+                        to={{
+                          pathname: Routes.ADMINISTRATIVE_PANEL,
+                          state: { tribunal: true, allProjects: false },
+                        }}
+                      >
+                        Ver proyectos
+                      </Link>
                     </Button>
                   </div>
                 </Space>
@@ -63,7 +66,14 @@ const AdministrativeHome = () =>{
                   <div>Asignación fecha de defensa</div>
                   <div>
                     <Button>
-                      <Link to="">Asignar</Link>
+                      <Link
+                        to={{
+                          pathname: Routes.ADMINISTRATIVE_PANEL,
+                          state: { tribunal: false, allProjects: false },
+                        }}
+                      >
+                        Asignar
+                      </Link>
                     </Button>
                   </div>
                 </Space>
@@ -83,7 +93,14 @@ const AdministrativeHome = () =>{
                   <div>Historial de proyectos</div>
                   <div>
                     <Button>
-                      <Link to={Routes.TEACHERS_PLANS}>Ver proyectos</Link>
+                      <Link
+                        to={{
+                          pathname: Routes.ADMINISTRATIVE_PANEL,
+                          state: { tribunal: false, allProjects: true },
+                        }}
+                      >
+                        Ver proyectos
+                      </Link>
                     </Button>
                   </div>
                 </Space>
@@ -148,7 +165,7 @@ const AdministrativeHome = () =>{
         </Col>
       </Row>
     </>
-  )
-}
+  );
+};
 
 export default withAuth(AdministrativeHome);

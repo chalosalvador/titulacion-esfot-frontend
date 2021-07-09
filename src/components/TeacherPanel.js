@@ -6,7 +6,6 @@ import Tag from "antd/es/tag";
 import { useProjectsList } from "../data/useProjectsList";
 import ShowError from "./ShowError";
 import Loading from "./Loading";
-import { LoadingOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../providers/Auth";
 import Routes from "../constants/routes";
@@ -103,23 +102,6 @@ const TeacherPanel = () => {
     },
   ];
 
-  const userMenu = (
-    <Menu onClick={handleClick}>
-      <Menu.Item key="password">Cambiar clave</Menu.Item>
-      <Menu.Item key={Routes.LOGIN}>
-        <Link to={Routes.LOGOUT} className="logout-link">
-          {isCheckingAuth ? (
-            <LoadingOutlined />
-          ) : (
-            <>
-              <LogoutOutlined /> Cerrar sesión{" "}
-            </>
-          )}
-        </Link>
-      </Menu.Item>
-    </Menu>
-  );
-
   let pagination = {
     current: 1,
     pageSize: 10,
@@ -194,11 +176,11 @@ const TeacherPanel = () => {
       <Row>
         <Col>
           <Title
-              level={3}
-              style={{
-                color: "#034c70",
-                marginLeft: -30,
-              }}
+            level={3}
+            style={{
+              color: "#034c70",
+              marginLeft: -30,
+            }}
           >
             Director:
           </Title>
