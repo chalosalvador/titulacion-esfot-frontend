@@ -148,11 +148,12 @@ const SecretaryTeachersList = () => {
     //Consumo de datos de la base
     const getTeachersData = teachers.map((teacher) => {
         return {
-            originalData: teacher,
             key: teacher.id,
+            originalData: teacher,
             name: teacher.name,
             career: teacher.career,
             email: teacher.email,
+            schedule: teacher.schedule
         };
     });
 
@@ -175,7 +176,7 @@ const SecretaryTeachersList = () => {
             dataSource={getTeachersData}
             columns={columns}
             rowKey={(data) => data.id}
-            onRow={(record) => {
+            onRow={(record, index) => {
                 return {
                     onClick: (event) => {
                         event.stopPropagation();
@@ -221,7 +222,9 @@ const SecretaryTeachersList = () => {
             <Modal
                 title={titleModal}
                 visible={visible}
+                className='schedule-modal'
                 confirmLoading={confirmLoading}
+                centered
                 footer={null}
                 closable={true}
                 destroyOnClose={true}
@@ -230,9 +233,11 @@ const SecretaryTeachersList = () => {
                 <SecretaryAddTeacherForm closeModal={() => setVisible(false)}/>
             </Modal>
 
+
             <Modal
                 title={titleModalEdit}
                 visible={visibleEdit}
+                className='schedule-modal'
                 confirmLoading={confirmLoading}
                 footer={null}
                 closable={true}
