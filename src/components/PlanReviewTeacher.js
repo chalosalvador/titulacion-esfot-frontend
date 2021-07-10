@@ -22,6 +22,7 @@ import {
   ExclamationCircleOutlined,
   PlusOutlined,
   SendOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import Routes from "../constants/routes";
 import { useLocation } from "react-router-dom";
@@ -54,6 +55,7 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
   const { teachers } = useTeachers();
   const [fileList, setFileList] = useState([]);
   const [sending, setSending] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   const [sendingPlan, setSendingPlan] = useState(false);
   const [checked, setChecked] = useState(false);
   const [approvePlan, setApprovePlan] = useState(false);
@@ -74,7 +76,22 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     openKeys: [],
   });
 
-  const [imageUrl, setImageUrl] = useState(plan.schedule);
+  const { isAuthenticated } = useAuth();
+
+  React.useEffect(() => {
+    setMenuState({
+      ...menuState,
+      current: location.pathname,
+    });
+  }, [location, isAuthenticated]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  const image = plan.schedule
+    ? `http://localhost:8000/api/project/getSchedule/${plan.id}`
+    : "";
 
   const layout = {
     labelCol: { span: 9 },
@@ -496,19 +513,6 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     return e && [e.file];
   };
 
-  const { isAuthenticated } = useAuth();
-
-  React.useEffect(() => {
-    setMenuState({
-      ...menuState,
-      current: location.pathname,
-    });
-  }, [location, isAuthenticated]);
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <>
       <Row>
@@ -907,11 +911,11 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                     {/*<Upload*/}
                     {/*  name="files"*/}
                     {/*  accept="image/jpeg,image/png"*/}
-                    {/*  listType="picture-card"*/}
+                    {/*  listType="text"*/}
                     {/*  multiple={false}*/}
                     {/*  showUploadList={false}*/}
                     {/*  beforeUpload={() => false}*/}
-                    {/*  fileList={fileList}*/}
+                    {/*  filelist={imageUrl}*/}
                     {/*  disabled={*/}
                     {/*    !(*/}
                     {/*      plan.status === "plan_sent" ||*/}
@@ -919,19 +923,25 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                     {/*    )*/}
                     {/*  }*/}
                     {/*>*/}
-                    {/*{imageUrl ? (*/}
-                    <Image
-                      src={imageUrl}
-                      alt="Foto"
-                      style={{ width: "100px" }}
-                    />
-                    {/*  ) : (*/}
-                    {/*    <div>*/}
-                    {/*      <PlusOutlined />*/}
-                    {/*      <div className="ant-upload-text">Subir imagen</div>*/}
-                    {/*    </div>*/}
-                    {/*  )}*/}
+                    {/*  <Button*/}
+                    {/*    icon={<UploadOutlined />}*/}
+                    {/*    disabled={*/}
+                    {/*      !(*/}
+                    {/*        plan.status === "plan_sent" ||*/}
+                    {/*        plan.status === "plan_corrections_done"*/}
+                    {/*      )*/}
+                    {/*    }*/}
+                    {/*  >*/}
+                    {/*    Subir Imagen*/}
+                    {/*  </Button>*/}
                     {/*</Upload>*/}
+                    {image && (
+                      <Image
+                        src={image}
+                        alt="Foto"
+                        style={{ width: "490px" }}
+                      />
+                    )}
                   </Form.Item>
 
                   <CommentOutlined

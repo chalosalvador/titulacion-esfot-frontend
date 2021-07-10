@@ -67,7 +67,11 @@ const PlanForm = ({ visible, update }) => {
   let location = useLocation();
   const { projects, isLoading } = useStudentProject();
   const { teachers } = useTeachers();
-  const [imageUrl, setImageUrl] = useState(projects[0].schedule);
+  const [imageUrl, setImageUrl] = useState(
+    projects[0] && projects[0].schedule
+      ? `http://localhost:8000/api/project/getSchedule/${projects[0].id}`
+      : ""
+  );
   const [fileList, setFileList] = useState([]);
   const [sending, setSending] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -145,7 +149,7 @@ const PlanForm = ({ visible, update }) => {
     );
     data.append("methodology", values.methodology ? values.methodology : "");
     data.append("work_plan", values.work_plan ? values.work_plan : "");
-    data.append("schedule", values.schedule ? JSON.stringify(imageUrl) : null);
+    data.append("schedule", values.schedule ? values.schedule[0] : null);
     data.append("bibliography", values.bibliography ? values.bibliography : "");
     data.append("teacher_id", values.teacher_id);
 
@@ -182,17 +186,21 @@ const PlanForm = ({ visible, update }) => {
     const formData = form.getFieldsValue();
     const data = {
       ...formData,
-      schedule: imageUrl,
     };
+
+    const forms = new FormData();
+    if (formData.schedule) {
+      forms.append("schedule", formData.schedule[0]);
+    }
 
     console.log("DATOS", data);
 
     if (projects.length > 0) {
       try {
-        await API.post(`/projects/${projects[0].id}`, data); // put data to server
+        await API.post(`/projects/${projects[0].id}`, forms);
+        await API.post(`/projects/${projects[0].id}`, data);
       } catch (e) {
         console.log("ERROR", e);
-        //message.error( `No se guardaron los datos:¨${ e }` );
       }
     } else {
       onCreate(data);
