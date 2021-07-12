@@ -20,6 +20,7 @@ import {
   ExclamationCircleOutlined,
   PlusOutlined,
   SendOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import Routes from "../constants/routes";
 import { useLocation } from "react-router-dom";
@@ -66,9 +67,15 @@ const PlanForm = ({ visible, update }) => {
   let location = useLocation();
   const { projects, isLoading } = useStudentProject();
   const { teachers } = useTeachers();
-  const [imageUrl, setImageUrl] = useState(null);
+  const [imageUrl, setImageUrl] = useState(
+    projects[0] && projects[0].schedule
+      ? `http://localhost:8000/api/project/getSchedule/${projects[0].id}`
+      : ""
+  );
   const [fileList, setFileList] = useState([]);
   const [sending, setSending] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewVisible, setPreviewVisible] = useState(false);
   const [isFinished, setIsFinished] = useState(() => {
     getProjectData();
   });
@@ -81,12 +88,6 @@ const PlanForm = ({ visible, update }) => {
   };
 
   console.log(projects, isFinished);
-
-  const [menuState, setMenuState] = useState({
-    current: location.pathname, // set the current selected item in menu, by default the current page
-    collapsed: false,
-    openKeys: [],
-  });
 
   const layout = {
     labelCol: { span: 9 },
@@ -164,18 +165,42 @@ const PlanForm = ({ visible, update }) => {
     }
   };
 
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+  };
+
+  const handleRemove = () => {
+    setImageUrl(null);
+  };
+
+  const handleCancel = () => {
+    setPreviewVisible(false);
+  };
+
   const onUpdate = async () => {
     const formData = form.getFieldsValue();
-    const data = { ...formData };
+    const data = {
+      ...formData,
+    };
+
+    const forms = new FormData();
+    if (formData.schedule) {
+      forms.append("schedule", formData.schedule[0]);
+    }
 
     console.log("DATOS", data);
 
     if (projects.length > 0) {
       try {
-        await API.post(`/projects/${projects[0].id}`, data); // put data to server
+        await API.post(`/projects/${projects[0].id}`, forms);
+        await API.post(`/projects/${projects[0].id}`, data);
       } catch (e) {
         console.log("ERROR", e);
-        //message.error( `No se guardaron los datos:¨${ e }` );
       }
     } else {
       onCreate(data);
@@ -199,7 +224,6 @@ const PlanForm = ({ visible, update }) => {
     ) {
       setIsFinished(true);
     }
-    console.log("FORM", JSON.stringify(formData));
   };
 
   const modal = () => {
@@ -888,11 +912,11 @@ const PlanForm = ({ visible, update }) => {
                     <Upload
                       name="files"
                       accept="image/jpeg,image/png"
-                      listType="picture-card"
+                      listType="text"
                       multiple={false}
                       showUploadList={false}
                       beforeUpload={() => false}
-                      fileList={fileList}
+                      filelist={imageUrl}
                       disabled={
                         projects[0] &&
                         !(
@@ -902,20 +926,31 @@ const PlanForm = ({ visible, update }) => {
                         )
                       }
                     >
-                      {imageUrl ? (
-                        <img
-                          src={imageUrl}
-                          alt="Foto"
-                          style={{ width: "100px" }}
-                        />
-                      ) : (
-                        <div>
-                          <PlusOutlined />
-                          <div className="ant-upload-text">Subir imagen</div>
-                        </div>
-                      )}
+                      <Button
+                        icon={<UploadOutlined />}
+                        disabled={
+                          projects[0] &&
+                          !(
+                            projects[0].status === "plan_saved" ||
+                            projects[0].status === "plan_review_teacher" ||
+                            projects[0].status === "plan_review_commission"
+                          )
+                        }
+                      >
+                        Subir Imagen
+                      </Button>
                     </Upload>
                   </Form.Item>
+
+                  <div style={{ marginLeft: 300, marginBottom: 20 }}>
+                    {imageUrl && (
+                      <Image
+                        src={imageUrl}
+                        alt="Foto"
+                        style={{ width: "490px" }}
+                      />
+                    )}
+                  </div>
 
                   {projects[0] &&
                   projects[0].bibliography_comment &&
