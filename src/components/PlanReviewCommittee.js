@@ -599,7 +599,7 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
       <Row>
         <Col>
           <Title level={4}>
-            {plan["students"].length > 0 ? plan["students"][0]["name"] : ""}
+            {/*{plan["students"].length > 0 ? plan["students"][0]["name"] : ""}*/}
           </Title>
           <Title level={5}>{plan.title}</Title>
         </Col>

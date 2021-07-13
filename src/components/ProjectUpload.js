@@ -53,26 +53,24 @@ const ProjectUpload = () => {
   const { projects, isLoading } = useStudentProject();
   const [isSending, setIsSending] = useState(false);
   const [form] = Form.useForm();
-  const { pdf, isLoading1 } = useGetProjectPDF(projects[0].id);
-  const [highlights, setHighlights] = useState(
-    JSON.parse(projects[0].highlights) || []
-  );
+  // const { pdf, isLoading1 } = useGetProjectPDF(projects[0].id);
+
+  if (projects[0].status === "project_review_teacher" && isLoading) {
+    return <h1>Loading...</h1>;
+  }
+
+  console.log("projects", projects[0]);
 
   const PRIMARY_PDF_URL = `http://localhost:8000/api/project/getPDF/${projects[0].id}`;
   const initialUrl = PRIMARY_PDF_URL;
 
-  const [url, setUrl] = useState(initialUrl);
-  console.log("projects", projects[0]);
+  const url = initialUrl;
+
+  const highlights = projects[0].highlights
+    ? JSON.parse(projects[0].highlights)
+    : [];
 
   console.log("highlights", highlights);
-
-  if (
-    projects[0].status === "project_review_teacher" &&
-    isLoading &&
-    isLoading1
-  ) {
-    return <h1>Loading...</h1>;
-  }
 
   const normFile = (e) => {
     console.log("Upload event:", e);

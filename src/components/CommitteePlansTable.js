@@ -24,14 +24,14 @@ const CommitteePlansTable = () => {
       ...SearchColumnFilter("students"),
       render: (students) => (
         <span>
-          {students.length > 1 ? (
-            <>
-              <h4>{students[0].name}</h4>
-              <h4>{students[1].name}</h4>
-            </>
-          ) : (
-            <h4>{students[0].name}</h4>
-          )}
+          {/*{students.length > 1 ? (*/}
+          {/*  <>*/}
+          {/*    <h4>{students[0].name}</h4>*/}
+          {/*    <h4>{students[1].name}</h4>*/}
+          {/*  </>*/}
+          {/*) : (*/}
+          {/*  <h4>{students[0].name}</h4>*/}
+          {/*)}*/}
         </span>
       ),
     },
