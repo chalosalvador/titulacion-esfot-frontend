@@ -323,7 +323,6 @@ const ProjectUpload = () => {
         >
           <Form.Item
             name={"report_pdf"}
-            valuePropName={"fileList"}
             getValueFromEvent={normFile}
             rules={[
               {

@@ -22,6 +22,7 @@ import {
   CommentOutlined,
   ExclamationCircleOutlined,
   PlusOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import Routes from "../constants/routes";
 import { useLocation } from "react-router-dom";
@@ -52,7 +53,6 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
   // const { projects, isError, isLoading } = useProject();
   const { plan, isLoading } = usePlanContent(idPlan);
   const { teachers } = useTeachers();
-  const [imageUrl, setImageUrl] = useState(null);
   const [fileList, setFileList] = useState([]);
   const [sending, setSending] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -68,13 +68,23 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
     setComments(values);
   };
 
-  console.log(plan, isFinished);
-
   const [menuState, setMenuState] = useState({
     current: location.pathname, // set the current selected item in menu, by default the current page
     collapsed: false,
     openKeys: [],
   });
+
+  const [imageUrl, setImageUrl] = useState("");
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  const image = plan.schedule
+    ? `http://localhost:8000/api/project/getSchedule/${plan.id}`
+    : "";
+
+  console.log(plan, isFinished);
 
   const layout = {
     labelCol: { span: 9 },
@@ -581,19 +591,6 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
     return e && [e.file];
   };
 
-  const { isAuthenticated } = useAuth();
-
-  React.useEffect(() => {
-    setMenuState({
-      ...menuState,
-      current: location.pathname,
-    });
-  }, [location, isAuthenticated]);
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <>
       <Row>
@@ -853,6 +850,7 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
                   <Form.Item name="hypothesis" label="Hipótesis">
                     <TextArea
                       style={{ width: 600 }}
+                      image
                       placeholder="Si no aplica escribir N/A"
                       autoSize={{
                         minRows: 6,
@@ -991,34 +989,40 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
                     label="Cronograma"
                     getValueFromEvent={normPhotoFile}
                   >
-                    <Upload
-                      name="files"
-                      accept="image/jpeg,image/png"
-                      listType="picture-card"
-                      multiple={false}
-                      showUploadList={false}
-                      beforeUpload={() => false}
-                      fileList={fileList}
-                      disabled={
-                        !(
-                          plan.status === "san_curriculum_1" ||
-                          plan.status === "plan_corrections_done2"
-                        )
-                      }
-                    >
-                      {imageUrl ? (
-                        <img
-                          src={imageUrl}
-                          alt="Foto"
-                          style={{ width: "180px" }}
-                        />
-                      ) : (
-                        <div>
-                          <PlusOutlined />
-                          <div className="ant-upload-text">Subir imagen</div>
-                        </div>
-                      )}
-                    </Upload>
+                    {/*  <Upload*/}
+                    {/*    name="files"*/}
+                    {/*    accept="image/jpeg,image/png"*/}
+                    {/*    listType="text"*/}
+                    {/*    multiple={false}*/}
+                    {/*    showUploadList={false}*/}
+                    {/*    beforeUpload={() => false}*/}
+                    {/*    filelist={imageUrl}*/}
+                    {/*    disabled={*/}
+                    {/*      !(*/}
+                    {/*        plan.status === "plan_sent" ||*/}
+                    {/*        plan.status === "plan_corrections_done"*/}
+                    {/*      )*/}
+                    {/*    }*/}
+                    {/*  >*/}
+                    {/*    <Button*/}
+                    {/*      icon={<UploadOutlined />}*/}
+                    {/*      disabled={*/}
+                    {/*        !(*/}
+                    {/*          plan.status === "plan_sent" ||*/}
+                    {/*          plan.status === "plan_corrections_done"*/}
+                    {/*        )*/}
+                    {/*      }*/}
+                    {/*    >*/}
+                    {/*      Subir Imagen*/}
+                    {/*    </Button>*/}
+                    {/*  </Upload>*/}
+                    {image && (
+                      <Image
+                        src={image}
+                        alt="Foto"
+                        style={{ width: "490px" }}
+                      />
+                    )}
                   </Form.Item>
 
                   <CommentOutlined
