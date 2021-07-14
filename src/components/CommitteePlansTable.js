@@ -15,25 +15,26 @@ const CommitteePlansTable = () => {
   });
 
   const { projectsList, isLoading, isError } = useProjects();
+  console.log("proyectos al inicio", projectsList);
   const columns = [
     {
       key: "students",
       dataIndex: "students",
       title: "Estudiante(s)",
-      width: 150,
-      ...SearchColumnFilter("students"),
-      render: (students) => (
-        <span>
-          {/*{students.length > 1 ? (*/}
-          {/*  <>*/}
-          {/*    <h4>{students[0].name}</h4>*/}
-          {/*    <h4>{students[1].name}</h4>*/}
-          {/*  </>*/}
-          {/*) : (*/}
-          {/*  <h4>{students[0].name}</h4>*/}
-          {/*)}*/}
-        </span>
-      ),
+      width: 250,
+      ...SearchColumnFilter("students")
+      // render: (students) => (
+      //   <span>
+      //     {/*{students.length > 1 ? (*/}
+      //     {/*  <>*/}
+      //     {/*    <h4>{students[0].name}</h4>*/}
+      //     {/*    <h4>{students[1].name}</h4>*/}
+      //     {/*  </>*/}
+      //     {/*) : (*/}
+      //     {/*  <h4>{students[0].name}</h4>*/}
+      //     {/*)}*/}
+      //   </span>
+      // ),
     },
     {
       key: "title",
@@ -88,13 +89,13 @@ const CommitteePlansTable = () => {
         key: projectsList[i].id,
         title: projectsList[i].title,
         status: projectsList[i].status,
-        students: projectsList[i].students,
+        students: projectsList[i].student_name,
         id: projectsList[i].id,
       });
     }
   }
 
-  console.log("projects", JSON.stringify(data));
+  console.log("projects", data);
 
   let content = "";
   let titleTable = "";
