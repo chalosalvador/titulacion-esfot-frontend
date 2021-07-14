@@ -4,7 +4,9 @@ import "../styles/home-teacher.css";
 import { useProjects } from "../data/useProjects";
 import Loading from "./Loading";
 import SearchColumnFilter from "./SearchColumnFilter";
-import PlanReviewCommittee from "./PlansReviewCollapseCommittee";
+import PlanReview from "./PlanReviewTeacher";
+import PlanReviewTeacher from "./PlanReviewTeacher";
+import PlanReviewCommittee from "./PlanReviewCommittee";
 
 const { Title } = Typography;
 
@@ -124,7 +126,7 @@ const CommitteePlansTable = () => {
       />
     );
   } else {
-    content = <PlanReviewCommittee planId={state.idPlan} />;
+    content = <PlanReviewTeacher idPlan={state.idPlan} user={"committee"} />;
   }
 
   return (

@@ -45,12 +45,12 @@ const getBase64 = (file, callback) => {
   reader.readAsDataURL(file);
 };
 
-const PlanFormCommittee = ({ visible, update, idPlan }) => {
+const PlanFormCommittee = ({ visible, update, planId }) => {
   const [form] = Form.useForm();
 
   let location = useLocation();
   // const { projects, isError, isLoading } = useProject();
-  const { plan, isLoading } = usePlanContent(idPlan);
+  const { plan, isLoading } = usePlanContent(planId);
   const { teachers } = useTeachers();
   const [imageUrl, setImageUrl] = useState(null);
   const [fileList, setFileList] = useState([]);
@@ -1101,7 +1101,7 @@ const PlanFormCommittee = ({ visible, update, idPlan }) => {
       >
         <AddComments
           comments={comments}
-          planID={idPlan}
+          planID={planId}
           plan={plan}
           closeModal={() => showAddCommentsModal(false)}
         />

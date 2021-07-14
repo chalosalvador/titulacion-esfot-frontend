@@ -24,7 +24,7 @@ const PlanReviewCommittee = (props) => {
               key="1"
               className="site-collapse-custom-panel"
             >
-              <PlanFormCommittee idPlan={props.planId} />
+              <PlanFormCommittee planId={props.planId} />
             </Panel>
             <Panel
               header="Proyecto de titulación"

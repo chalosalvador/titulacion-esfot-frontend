@@ -4,7 +4,6 @@ import {
   Form,
   Image,
   Input,
-  Layout,
   message,
   Modal,
   Row,
@@ -33,7 +32,6 @@ import ViewComments from "./ViewComments";
 const { Option } = Select;
 const { TextArea } = Input;
 const { Title } = Typography;
-const { Sider } = Layout;
 const { confirm } = Modal;
 
 const getBase64 = (file, callback) => {
@@ -43,7 +41,7 @@ const getBase64 = (file, callback) => {
   reader.readAsDataURL(file);
 };
 
-const PlanForm = ({ visible, update }) => {
+const PlanForm = () => {
   const [form] = Form.useForm();
 
   const getProjectData = () => {
@@ -178,7 +176,7 @@ const PlanForm = ({ visible, update }) => {
         //message.error( `No se guardaron los datos:¨${ e }` );
       }
     } else {
-      onCreate(data);
+      await onCreate(data);
     }
   };
 
@@ -202,7 +200,7 @@ const PlanForm = ({ visible, update }) => {
     console.log("FORM", JSON.stringify(formData));
   };
 
-  const modal = () => {
+  const modal = async () => {
     confirm({
       icon: <ExclamationCircleOutlined />,
       title: "¿Estás seguro de mandar el plan?",
@@ -304,19 +302,19 @@ const PlanForm = ({ visible, update }) => {
     }
   };
 
-  const normPhotoFile = (e) => {
+  const normPhotoFile = async (e) => {
     console.log("Upload event:", e);
     const file = e.file;
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
-      message.error("La imagen debe tener formato JPG o PNG");
+      await message.error("La imagen debe tener formato JPG o PNG");
       setFileList([]);
       setImageUrl(null);
       return null;
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error("La imagen debe ser menor a 2MB");
+      await message.error("La imagen debe ser menor a 2MB");
       setFileList([]);
       setImageUrl(null);
       return null;

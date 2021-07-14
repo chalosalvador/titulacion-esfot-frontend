@@ -1,11 +1,7 @@
 import React from "react";
-import { Button, Col, Collapse, Row } from "antd";
-import {
-  CaretRightOutlined,
-  SendOutlined,
-  CheckOutlined,
-} from "@ant-design/icons";
-import PlanFormTeacher from "./PlanReviewTeacher";
+import { Col, Collapse, Row } from "antd";
+import { CaretRightOutlined } from "@ant-design/icons";
+import PlanReviewTeacher from "./PlanReviewTeacher";
 import ProjectReview from "./ProjectReview";
 import "../styles/plan-collapse.css";
 
@@ -30,7 +26,7 @@ const PlanReview = (props) => {
               key="1"
               className="site-collapse-custom-panel"
             >
-              <PlanFormTeacher idPlan={props.planId} />
+              <PlanReviewTeacher idPlan={props.planId} user={"director"} />
             </Panel>
             <Panel
               header="Proyecto de titulación"
