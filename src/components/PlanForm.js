@@ -80,12 +80,6 @@ const PlanForm = () => {
 
   console.log(projects, isFinished);
 
-  const [menuState, setMenuState] = useState({
-    current: location.pathname, // set the current selected item in menu, by default the current page
-    collapsed: false,
-    openKeys: [],
-  });
-
   const layout = {
     labelCol: { span: 9 },
     wrapperCol: { span: 15 },

@@ -39,6 +39,7 @@ const PlanReview = (props) => {
                 props.status === "plan_corrections_done" ||
                 props.status === "plan_approved_director" ||
                 props.status === "plan_review_commission" ||
+                props.status === "plan_corrections_done2" ||
                 props.status === "plan_approved_commission" ||
                 props.status === "plan_rejected" ||
                 props.status === "san_curriculum_1"

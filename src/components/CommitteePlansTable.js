@@ -4,11 +4,10 @@ import "../styles/home-teacher.css";
 import { useProjects } from "../data/useProjects";
 import Loading from "./Loading";
 import SearchColumnFilter from "./SearchColumnFilter";
-import PlanReview from "./PlanReviewTeacher";
 import PlanReviewTeacher from "./PlanReviewTeacher";
-import PlanReviewCommittee from "./PlanReviewCommittee";
 
 const { Title } = Typography;
+const { Link } = Typography;
 
 const CommitteePlansTable = () => {
   const [state, setState] = useState({
@@ -22,49 +21,53 @@ const CommitteePlansTable = () => {
       key: "students",
       dataIndex: "students",
       title: "Estudiante(s)",
-      width: 150,
+      width: 250,
       ...SearchColumnFilter("students"),
-      render: (students) => (
-        <span>
-          {/*{students.length > 1 ? (*/}
-          {/*  <>*/}
-          {/*    <h4>{students[0].name}</h4>*/}
-          {/*    <h4>{students[1].name}</h4>*/}
-          {/*  </>*/}
-          {/*) : (*/}
-          {/*  <h4>{students[0].name}</h4>*/}
-          {/*)}*/}
-        </span>
-      ),
     },
     {
-      key: "title",
+      title: "Tema",
       dataIndex: "title",
-      title: "Título",
+      key: "title",
+      width: 800,
       ...SearchColumnFilter("title"),
-      render: (text) => <a>{text}</a>,
+      render: (text) => <Link>{text}</Link>,
     },
     {
       key: "status",
       dataIndex: "status",
       title: "Estado",
+      width: 125,
       render: (status) => {
-        let state = "Plan aprobado";
-        let color = "green";
-        if (
-          status === "san_curriculum_1" ||
-          status === "plan_corrections_done2"
-        ) {
-          state = "Por revisar";
-          color = "red";
-        } else if (status === "plan_review_commission") {
-          state = "Correcciones enviadas";
-          color = "blue";
+        let state = "";
+        let color = "";
+        switch (status) {
+          case "san_curriculum_1":
+            state = "Por revisar";
+            color = "red";
+            break;
+
+          case "plan_corrections_done2":
+            state = "Correcciones realizadas";
+            color = "purple";
+            break;
+
+          case "plan_review_commission":
+            state = "Correcciones enviadas";
+            color = "blue";
+            break;
+
+          case "plan_approved_commission":
+            state = "Plan aprobado";
+            color = "green";
+            break;
+
+          default:
+            break;
         }
         return (
-          <span>
-            <Tag color={color}>{state}</Tag>
-          </span>
+          <Tag color={color} key={status}>
+            {state.toUpperCase()}
+          </Tag>
         );
       },
     },
@@ -90,7 +93,7 @@ const CommitteePlansTable = () => {
         key: projectsList[i].id,
         title: projectsList[i].title,
         status: projectsList[i].status,
-        students: projectsList[i].students,
+        students: projectsList[i].student_name,
         id: projectsList[i].id,
       });
     }

@@ -1,8 +1,19 @@
 import React, { useState } from "react";
-import { Button, Card, Col, Modal, Row, Skeleton, Table, Tag } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Modal,
+  Row,
+  Skeleton,
+  Table,
+  Tag,
+  Typography,
+} from "antd";
 import ShowError from "./ShowError";
 import { useProjects } from "../data/useProjects";
-import SecretaryAddTeacherForm from "./SecretaryAddTeacherForm";
+
+const { Link } = Typography;
 
 const ProjectsList = ({ tribunal, allProjects }) => {
   const [state, setState] = useState({
@@ -84,6 +95,12 @@ const ProjectsList = ({ tribunal, allProjects }) => {
       title: "Título",
       dataIndex: "title",
       key: "title",
+      render: (title) =>
+        !(!tribunal && allProjects) ? (
+          <Link>{title}</Link>
+        ) : (
+          <Typography>{title}</Typography>
+        ),
     },
     {
       title: "Fecha de creación",
@@ -110,19 +127,24 @@ const ProjectsList = ({ tribunal, allProjects }) => {
               name = "Plan en desarrollo";
               break;
 
-            case "plan_sent" || "plan_corrections_done" || "plan_saved":
+            case "plan_sent":
               color = "blue";
-              name = "Por revisar de director";
+              name = "Por revisar";
+              break;
+
+            case "plan_corrections_done":
+              color = "blue";
+              name = "Correcciones de plan realizadas";
               break;
 
             case "plan_review_teacher":
               color = "orange";
-              name = "Correcciones de director enviadas";
+              name = "Correcciones enviadas";
               break;
 
             case "plan_approved_director":
               color = "green";
-              name = "Plan aprobado por director";
+              name = "Plan aprobado";
               break;
 
             case "plan_review_commission":
@@ -155,14 +177,24 @@ const ProjectsList = ({ tribunal, allProjects }) => {
               name = "Plan rechazado";
               break;
 
-            case "project_uploaded" || "project_corrections_done":
+            case "project_uploaded":
               color = "cyan";
               name = "PDF por revisar";
+              break;
+
+            case "project_corrections_done":
+              color = "cyan";
+              name = "correcciones de PDF realizadas";
               break;
 
             case "project_review_teacher":
               color = "magenta";
               name = "Correcciones de PDF enviadas";
+              break;
+
+            case "project_approved_director":
+              color = "green";
+              name = "PDF aprobado";
               break;
 
             case "tribunal_assigned":
@@ -249,14 +281,6 @@ const ProjectsList = ({ tribunal, allProjects }) => {
             columns={columns}
             dataSource={data}
             rowKey={(data) => data.id}
-            onRow={() => {
-              return {
-                onClick: (event) => {
-                  event.stopPropagation();
-                  setVisible(true);
-                },
-              };
-            }}
           />
         )
       )}

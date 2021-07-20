@@ -443,6 +443,8 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
         await API.post(`/projects/${plan.id}/plan-approved-commission`); // put data to server
       }
 
+      await API.post(`projects/${plan.id}`, dataToSent);
+
       setSendingPlan(false);
       confirm({
         icon: <CheckCircleOutlined />,
@@ -579,6 +581,20 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     return e && [e.file];
   };
 
+  const onUpdate = async () => {
+    const formData = form.getFieldsValue();
+    const data = { ...formData };
+
+    console.log("DATOS", data);
+
+    try {
+      await API.post(`/projects/${plan.id}`, data); // put data to server
+    } catch (e) {
+      console.log("ERROR", e);
+      //message.error( `No se guardaron los datos:¨${ e }` );
+    }
+  };
+
   const { isAuthenticated } = useAuth();
 
   React.useEffect(() => {
@@ -613,7 +629,16 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
           >
             Datos Generales
           </Title>
-          <Form.Provider onFormChange={onCompleteForm}>
+          <Form.Provider
+            onFormChange={() => {
+              onCompleteForm();
+              setTimeout(() => {
+                onUpdate().then(() => {
+                  console.log("Cambios guardados correctamente!");
+                });
+              }, 2000);
+            }}
+          >
             <Form
               {...layout}
               name="nest-messages"
@@ -1192,4 +1217,5 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     </>
   );
 };
+
 export default withAuth(PlanReviewTeacher);

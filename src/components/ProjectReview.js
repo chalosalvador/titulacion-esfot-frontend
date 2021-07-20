@@ -148,7 +148,7 @@ const ProjectReview = ({ idPlan }) => {
     );
   };
 
-  const modal = () => {
+  const modal = async () => {
     confirm({
       icon: <ExclamationCircleOutlined />,
       title: "¿Estás seguro de mandar el proyecto?",

@@ -17,11 +17,11 @@ const SecretaryHome = () => {
       <Row>
         <Col>
           <Title
-              level={3}
-              style={{
-                color: "#034c70",
-                marginLeft: -30,
-              }}
+            level={3}
+            style={{
+              color: "#034c70",
+              marginLeft: -30,
+            }}
           >
             Panel Principal:
           </Title>
@@ -29,7 +29,7 @@ const SecretaryHome = () => {
       </Row>
       <Row>
         <Col span={24}>
-          <Row justify="right">
+          <Row justify="center">
             <Col span={6}>
               <Card
                 className={"options main-options"}
@@ -53,6 +53,8 @@ const SecretaryHome = () => {
                 </Space>
               </Card>
             </Col>
+            <Col span={6} />
+            <Col span={6} />
           </Row>
         </Col>
       </Row>
@@ -72,8 +74,8 @@ const SecretaryHome = () => {
         </Col>
       </Row>
 
-      <Row>
-        <Col span={24} style={{ marginTop: 30 }}>
+      <Row style={{ marginTop: 75 }}>
+        <Col span={24}>
           <Row justify="center">
             <Col span={6}>
               <Card
@@ -105,9 +107,7 @@ const SecretaryHome = () => {
                   <div>Listado de profesores de la ESFOT</div>
                   <div>
                     <Button className={"btn-secretary"}>
-                      <Link to={Routes.SECRETARY_TEACHERS_LIST}>
-                        Ingresar
-                      </Link>
+                      <Link to={Routes.SECRETARY_TEACHERS_LIST}>Ingresar</Link>
                     </Button>
                   </div>
                 </Space>
@@ -126,16 +126,12 @@ const SecretaryHome = () => {
                   <div>Comisiones de titulación de la ESFOT</div>
                   <div>
                     <Button className={"btn-secretary"}>
-                      <Link to={Routes.SECRETARY_COMMITTEE_LIST}>
-                        Ingresar
-                      </Link>
+                      <Link to={Routes.SECRETARY_COMMITTEE_LIST}>Ingresar</Link>
                     </Button>
                   </div>
                 </Space>
               </Card>
             </Col>
-            <Col span={6} />
-            <Col span={6} />
           </Row>
         </Col>
       </Row>
