@@ -94,7 +94,7 @@ const SecretaryAddTeacherForm = ({closeModal}) => {
         let daysByHour = {};
         days.forEach((day) => {
             daysByHour[day] = (<Item name={[day, i]}><Switch initialValue={false} valuePropName='checked'
-                                                             className={'schedule-form__switch'}
+                                                             className='schedule-form__switch'
                                                              onChange={handleScheduleChange}/></Item>)
         });
 

@@ -16,6 +16,7 @@ const CommitteePlansTable = () => {
   });
 
   const { projectsList, isLoading, isError } = useProjects();
+  console.log("proyectos al inicio", projectsList);
   const columns = [
     {
       key: "students",
@@ -99,7 +100,7 @@ const CommitteePlansTable = () => {
     }
   }
 
-  console.log("projects", JSON.stringify(data));
+  console.log("projects", data);
 
   let content = "";
   let titleTable = "";

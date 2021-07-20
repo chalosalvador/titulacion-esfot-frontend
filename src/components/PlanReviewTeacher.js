@@ -23,6 +23,7 @@ import {
   ExclamationCircleOutlined,
   PlusOutlined,
   SendOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import Routes from "../constants/routes";
 import { useLocation } from "react-router-dom";
@@ -53,9 +54,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
   // const { projects, isError, isLoading } = useProject();
   const { plan, isLoading } = usePlanContent(idPlan);
   const { teachers } = useTeachers();
-  const [imageUrl, setImageUrl] = useState(null);
   const [fileList, setFileList] = useState([]);
   const [sending, setSending] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   const [sendingPlan, setSendingPlan] = useState(false);
   const [checked, setChecked] = useState(false);
   const [approvePlan, setApprovePlan] = useState(false);
@@ -75,6 +76,23 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     collapsed: false,
     openKeys: [],
   });
+
+  const { isAuthenticated } = useAuth();
+
+  React.useEffect(() => {
+    setMenuState({
+      ...menuState,
+      current: location.pathname,
+    });
+  }, [location, isAuthenticated]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  const image = plan.schedule
+    ? `http://localhost:8000/api/project/getSchedule/${plan.id}`
+    : "";
 
   const layout = {
     labelCol: { span: 9 },
@@ -174,7 +192,6 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     ) {
       setIsFinished(true);
     }
-    console.log("FORM", formData);
   };
 
   const modal = async () => {
@@ -1077,39 +1094,40 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                     label="Cronograma"
                     getValueFromEvent={normPhotoFile}
                   >
-                    <Upload
-                      name="files"
-                      accept="image/jpeg,image/png"
-                      listType="picture-card"
-                      multiple={false}
-                      showUploadList={false}
-                      beforeUpload={() => false}
-                      fileList={fileList}
-                      disabled={
-                        user === "director"
-                          ? !(
-                              plan.status === "plan_sent" ||
-                              plan.status === "plan_corrections_done"
-                            )
-                          : !(
-                              plan.status === "san_curriculum_1" ||
-                              plan.status === "plan_corrections_done2"
-                            )
-                      }
-                    >
-                      {imageUrl ? (
-                        <img
-                          src={imageUrl}
-                          alt="Foto"
-                          style={{ width: "180px" }}
-                        />
-                      ) : (
-                        <div>
-                          <PlusOutlined />
-                          <div className="ant-upload-text">Subir imagen</div>
-                        </div>
-                      )}
-                    </Upload>
+                    {/*<Upload*/}
+                    {/*  name="files"*/}
+                    {/*  accept="image/jpeg,image/png"*/}
+                    {/*  listType="text"*/}
+                    {/*  multiple={false}*/}
+                    {/*  showUploadList={false}*/}
+                    {/*  beforeUpload={() => false}*/}
+                    {/*  filelist={imageUrl}*/}
+                    {/*  disabled={*/}
+                    {/*    !(*/}
+                    {/*      plan.status === "plan_sent" ||*/}
+                    {/*      plan.status === "plan_corrections_done"*/}
+                    {/*    )*/}
+                    {/*  }*/}
+                    {/*>*/}
+                    {/*  <Button*/}
+                    {/*    icon={<UploadOutlined />}*/}
+                    {/*    disabled={*/}
+                    {/*      !(*/}
+                    {/*        plan.status === "plan_sent" ||*/}
+                    {/*        plan.status === "plan_corrections_done"*/}
+                    {/*      )*/}
+                    {/*    }*/}
+                    {/*  >*/}
+                    {/*    Subir Imagen*/}
+                    {/*  </Button>*/}
+                    {/*</Upload>*/}
+                    {image && (
+                      <Image
+                        src={image}
+                        alt="Foto"
+                        style={{ width: "490px" }}
+                      />
+                    )}
                   </Form.Item>
 
                   <CommentOutlined
