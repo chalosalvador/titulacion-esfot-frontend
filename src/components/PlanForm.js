@@ -42,7 +42,7 @@ const getBase64 = (file, callback) => {
   reader.readAsDataURL(file);
 };
 
-const PlanForm = () => {
+const PlanForm = ({ visible, update }) => {
   const [form] = Form.useForm();
 
   const getProjectData = () => {
@@ -201,7 +201,7 @@ const PlanForm = () => {
         console.log("ERROR", e);
       }
     } else {
-      await onCreate(data);
+      onCreate(data);
     }
   };
 
@@ -224,7 +224,7 @@ const PlanForm = () => {
     }
   };
 
-  const modal = async () => {
+  const modal = () => {
     confirm({
       icon: <ExclamationCircleOutlined />,
       title: "¿Estás seguro de mandar el plan?",
@@ -326,19 +326,19 @@ const PlanForm = () => {
     }
   };
 
-  const normPhotoFile = async (e) => {
+  const normPhotoFile = (e) => {
     console.log("Upload event:", e);
     const file = e.file;
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
-      await message.error("La imagen debe tener formato JPG o PNG");
+      message.error("La imagen debe tener formato JPG o PNG");
       setFileList([]);
       setImageUrl(null);
       return null;
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      await message.error("La imagen debe ser menor a 2MB");
+      message.error("La imagen debe ser menor a 2MB");
       setFileList([]);
       setImageUrl(null);
       return null;

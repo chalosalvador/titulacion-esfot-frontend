@@ -612,19 +612,6 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     }
   };
 
-  const { isAuthenticated } = useAuth();
-
-  React.useEffect(() => {
-    setMenuState({
-      ...menuState,
-      current: location.pathname,
-    });
-  }, [location, isAuthenticated]);
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <>
       <Row>
