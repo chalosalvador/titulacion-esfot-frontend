@@ -1,4 +1,4 @@
-import {Button, Col, Layout, Menu, Row, Typography, Modal} from "antd";
+import {Button, Col, Layout, Menu, Row, Typography, Modal, Form} from "antd";
 import React, {useState} from "react";
 import "../styles/teacher-panel.css";
 import Table from "antd/es/table";
@@ -8,14 +8,22 @@ import {useAuth} from "../providers/Auth";
 import Routes from "../constants/routes";
 import "../styles/home-teacher.css";
 import SearchColumnFilter from "./SearchColumnFilter";
-import CommitteeCareerForm from "./CommitteeCareerForm";
+import AddCommissionForm from "./AddCommissionForm";
+import EditCommissionForm from './EditCommissionForm';
+import Loading from './Loading';
+import {useCommissionsList} from '../data/useCommissionsList';
+import { useCareersList } from '../data/useCareersList';
 
 const {Content, Sider} = Layout;
 const {Title} = Typography;
 
 const SecretaryCommitteeList = () => {
     let location = useLocation();
-    const {isAuthenticated, isCheckingAuth, currentUser} = useAuth();
+    const {isAuthenticated, isCheckingAuth} = useAuth();
+    const [form] = Form.useForm();
+    const {commissions, isLoading, isError} = useCommissionsList();
+    const {careers} = useCareersList();
+
 
     const [menuState, setMenuState] = useState({
         current: location.pathname, // set the current selected item in menu, by default the current page
@@ -24,6 +32,7 @@ const SecretaryCommitteeList = () => {
     });
     const [visible, setVisible] = useState(false);
     const [visibleEdit, setVisibleEdit] = useState(false);
+    const [commissionToEdit, setCommissionToEdit] = useState(null);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false);
 
@@ -42,23 +51,23 @@ const SecretaryCommitteeList = () => {
     };
 
     const handleOk = () => {
+        // console.log('form', form.getFieldsValue());
         setConfirmLoading(true);
         setTimeout(() => {
-            setVisible(false);
+            form.submit();
+            // setVisible(false);
             setConfirmLoading(false);
+            // form.resetFields();
         }, 2000);
     };
 
     const handleCancel = () => {
-        console.log('Clicked cancel button');
+        form.resetFields();
         setVisible(false);
     };
 
     // Handles modal editar profesor
 
-    const showEditModal = () => {
-        setVisibleEdit(true);
-    };
 
     const handleEditOk = () => {
         setConfirmLoadingEdit(true);
@@ -69,7 +78,6 @@ const SecretaryCommitteeList = () => {
     };
 
     const handleEditCancel = () => {
-        console.log('Clicked cancel button');
         setVisibleEdit(false);
     };
 
@@ -80,15 +88,25 @@ const SecretaryCommitteeList = () => {
         });
     }, [location, isAuthenticated]);
 
+    if(isLoading){
+        return <Loading />;
+    }
+
+    if(isError){
+        return "Error";
+    }
+
+    console.log("commissions", commissions);
+
     // Columnas y datos para la tabla
 
     const columns = [
         {
             title: "Carrera",
-            dataIndex: "career",
-            key: "career",
+            dataIndex: "career_id",
+            key: "career_id",
             width: 150,
-            ...SearchColumnFilter("career"),
+            ...SearchColumnFilter("career_id"),
         },
         {
             title: "Miembro 1",
@@ -120,10 +138,10 @@ const SecretaryCommitteeList = () => {
         },
         {
             title: "Horario comisión",
-            dataIndex: "committee_schedule",
-            key: "committee_schedule",
+            dataIndex: "commission_schedule",
+            key: "commission_schedule",
             width: 150,
-            ...SearchColumnFilter("committee_schedule"),
+            ...SearchColumnFilter("commission_schedule"),
         },
         {
             title: "Pendientes",
@@ -134,28 +152,18 @@ const SecretaryCommitteeList = () => {
         },
     ];
 
-    const data = [
-        {
-            key: '1',
-            career: 'ASI',
-            first_member: 'Edwin Salvador',
-            second_member: 'Juan Pablo Zaldumbide',
-            third_member: 'Ivonne Maldonado',
-            fourth_member: 'Monica Vinueza',
-            committee_schedule: 'Lunes de 9 a 10',
+    const data = commissions.map((commission)=>{
+        return {
+            key: commission.career_id,
+            career_id: commission.career_name,
+            first_member: commission.members[0] ? commission.members[0].name :  "Por asignar",
+            second_member: commission.members[1] ? commission.members[1].name : "Por asignar",
+            third_member: commission.members[2] ? commission.members[2].name : "Por asignar",
+            fourth_member: commission.members[3] ? commission.members[3].name : "Por asignar",
+            commission_schedule: commission.commission_schedule,
             pending: '3 pendientes'
-        },
-        {
-            key: '2',
-            career: 'ET',
-            first_member: 'Alex Oña',
-            second_member: 'Gabreilea Cevallos',
-            third_member: 'Fanny Flores',
-            fourth_member: 'Monica Vinueza',
-            committee_schedule: 'Martes de 9 a 10',
-            pending: '2 pendientes'
         }
-    ]
+    })
 
     const userMenu = (
         <Menu onClick={handleClick}>
@@ -174,38 +182,6 @@ const SecretaryCommitteeList = () => {
         </Menu>
     );
 
-    let pagination = {
-        current: 1,
-        pageSize: 10,
-        total: 10,
-        showSizeChanger: false,
-    };
-    // if (isLoading) {
-    //     return <Loading/>;
-    // }
-    //
-    // if (isError) {
-    //     return <ShowError error={isError}/>;
-    // }
-
-    // const data = teachersProjects.map((project, index) => {
-    //     return {
-    //         key: index,
-    //         title: project.title,
-    //         student_name: project.student_name,
-    //         status: project.status,
-    //         id: project.id,
-    //     };
-    // });
-
-    // if (meta) {
-    //     pagination = {
-    //         current: meta.current_page,
-    //         pageSize: meta.per_page,
-    //         total: meta.total,
-    //         showSizeChanger: false,
-    //     };
-    // }
 
     let content = "";
     let titleTable = "";
@@ -228,10 +204,11 @@ const SecretaryCommitteeList = () => {
                     onClick: (event) => {
                         event.stopPropagation();
                         setVisibleEdit(true);
-                        // setState({
-                        //     id: record.id,
-                        //     showPlanReview: true,
-                        // });
+                        console.log('record', record);
+                        const commissionFormData = {
+                            career_id: record.key
+                        }
+                        setCommissionToEdit(commissionFormData);
                     },
                 };
             }}
@@ -240,15 +217,42 @@ const SecretaryCommitteeList = () => {
 
     titleModal = (
         <Title level={3} style={{color: "#034c70"}}>
-            Agregar carrera
+            Agregar comisión
         </Title>
     )
 
     titleModalEdit = (
         <Title level={3} style={{color: "#034c70"}}>
-            Editar carrera
+            Editar comisión
         </Title>
     )
+
+    const modalAddCommissionProps = {
+        title: titleModal,
+        visible: visible,
+        onOk(){ handleOk() },
+        closable: true,
+        confirmLoading: confirmLoading,
+        onCancel() { handleCancel() },
+        cancelButtonProps: { hidden: true },
+        okButtonProps: {
+            style: {
+                marginRight: '40%',
+                backgroundColor: '#034c70'
+            },
+            icon: <PlusOutlined />,
+        },
+        okText: 'Agregar'
+    }
+
+    const modalEditCommissionProps = {
+        title: titleModalEdit,
+        visible: visibleEdit,
+        onOk(){handleEditOk()},
+        confirmLoading: confirmLoadingEdit,
+        onCancel(){handleEditCancel()},
+        onClose(){form.resetFields()}
+    }
 
     return (
         <>
@@ -257,7 +261,7 @@ const SecretaryCommitteeList = () => {
             </Row>
             <Row>
                 <Button style={{backgroundColor: "#034c70", color: "white"}} onClick={showModal}><PlusOutlined/>Agregar
-                    Carrera</Button>
+                    Comisión</Button>
             </Row>
             <br>
             </br>
@@ -266,23 +270,15 @@ const SecretaryCommitteeList = () => {
             </Row>
 
             <Modal
-                title={titleModal}
-                visible={visible}
-                onOk={handleOk}
-                confirmLoading={confirmLoading}
-                onCancel={handleCancel}
+              {...modalAddCommissionProps}
             >
-                <CommitteeCareerForm/>
+                <AddCommissionForm form={form} careers={careers} closeModal={()=>{setVisible(false)}}/>
             </Modal>
 
             <Modal
-                title={titleModalEdit}
-                visible={visibleEdit}
-                onOk={handleEditOk}
-                confirmLoading={confirmLoading}
-                onCancel={handleEditCancel}
+              {...modalEditCommissionProps}
             >
-                <CommitteeCareerForm/>
+                <EditCommissionForm form={form} commission={commissionToEdit} careers={careers} closeModal={()=>{setVisibleEdit(false)}} />
             </Modal>
         </>
     );
