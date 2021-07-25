@@ -22,7 +22,7 @@ const { Title } = Typography;
 const AdministrativePanel = ({ tribunal, allProjects }) => {
   let location = useLocation();
   const { isAuthenticated, isCheckingAuth } = useAuth();
-  const { projectsList, isLoading, isError } = useProjects();
+  const { projectsList, isLoading, isError, mutate } = useProjects();
 
   const [menuState, setMenuState] = useState({
     current: location.pathname, // set the current selected item in menu, by default the current page
@@ -98,7 +98,11 @@ const AdministrativePanel = ({ tribunal, allProjects }) => {
       </Row>
       <Row>
         <Col>
-          <ProjectsListStatus tribunal={tribunal} allProjects={allProjects} />
+          <ProjectsListStatus
+            projectsList={projectsList}
+            mutate={mutate}
+            tribunal={tribunal}
+            allProjects={allProjects} />
         </Col>
       </Row>
     </>

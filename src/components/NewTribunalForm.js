@@ -1,46 +1,37 @@
-import React, {useEffect, useState} from "react";
-import {Form, Input, message, Button, Select, Col, Row, Alert, Icon, Switch, Table} from "antd";
-import {useCareersList} from "../data/useCareersList";
-import Loading from "./Loading";
-import ShowError from "./ShowError";
+import React from "react";
+import {Form, Input, message, Select} from "antd";
 import {Option} from "antd/es/mentions";
 import API from "../data";
 
 const {Item} = Form;
 
-const NewTribunalForm = ({project, projectid, closeModal}) => {
-    const [loading, setLoading] = useState(false);
-    const {careers, isLoading, isError} = useCareersList();
+const NewTribunalForm = ({project, careers, closeModal, form, mutate}) => {
 
-    console.log("props project", project);
+    const career = careers.filter((career)=>career.id===project.teacher_career);
+    const teachersCareer = career[0].teachers.data.map((teacher)=>{
+        return {
+            id: teacher.id,
+            value: teacher.id,
+            label: teacher.name
+        }
+    })
 
-    if (isLoading) {
-        return <Loading/>;
-    }
+    console.log('career', career[0].teachers);
 
-    if (isError) {
-        return <ShowError error={isError}/>;
-    }
-
-    const formSuccess = async (datos) => {
-        console.log("Datos recibidos del form", datos);
-        const {career_id} = datos;
-        setLoading(true);
+    const handleSubmit = async (values) => {
+        console.log("Datos recibidos del form", values);
         const jury = {
-            // member1: member1,
-            // member2: member2,
-            // member3: member3,
-            career_id: career_id,
             project_id: project.id,
+            members: values.members,
             tribunalSchedule: "Prueba"
         };
         console.log("Arreglo", jury);
         try {
             await API.post("/juries/", jury);
+            await API.post(`/projects/${project.id}/tribunal-assigned`);
             console.log("Tribunal creado exitosamente", jury);
             message.success("Cambios guardados correctamente!");
-            setLoading(false);
-            // mutate();
+            mutate();
             closeModal();
         } catch (e) {
             message.error(e);
@@ -55,8 +46,11 @@ const NewTribunalForm = ({project, projectid, closeModal}) => {
         <div>
             <div>
                 <Form
-                    onFinish={formSuccess}
-                    onFinishFailed={formFailed}>
+                    onFinish={handleSubmit}
+                    onFinishFailed={formFailed}
+                    layout={'vertical'}
+                    form={form}
+                >
                     <Item label="Titulo"
                           name="title"
                           disabled={true}
@@ -65,38 +59,48 @@ const NewTribunalForm = ({project, projectid, closeModal}) => {
                               message: "Por favor ingrese el título del proyecto",
                           }]}
                           initialValue={project.title}>
-                        <Input/>
+                        <Input disabled/>
                     </Item>
                     <Item label="Carrera"
                           name="career_id"
-                          disabled={true}
                           rules={[{
                               required: true,
                               message: "Por favor ingresa el id de la carrera",
-                              disabled: true
                           }
                           ]}
                           initialValue={project.teacher_career}>
                         <Select
                             placeholder="Seleccione"
-                            style={{width: 300}}
-                            loading={isLoading}
+                            style={{width: "100%"}}
+                            showArrow={false}
+                            disabled
                         >
-                            {careers &&
-                            careers.map((career, index) => (
-                                <Option value={career.id} key={index}>
-                                    {career.name}
-                                </Option>
-                            ))}
+                            {
+                                careers.map((career, index) => (
+                                    <Option value={career.id} key={index}>
+                                        {career.name}
+                                    </Option>
+                                ))
+                            }
                         </Select>
                     </Item>
-                    <Row type='flex' justify='center'>
-                        <Col>
-                            <Item>
-                                <Button type="primary" htmlType="submit" size='large'>Guardar</Button>
-                            </Item>
-                        </Col>
-                    </Row>
+                    <Item
+                      name='members'
+                      label='Miembros'
+                      rules={ [
+                          {
+                              required: true,
+                              message: 'Selecciona los miembros del jurado'
+                          }
+                      ] }>
+                        <Select
+                          mode='multiple'
+                          placeholder='Selcciona los profesores'
+                          showArrow
+                          style={ { width: '100%' } }
+                          options={teachersCareer}
+                        />
+                    </Item>
                 </Form>
             </div>
         </div>
