@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Form, Input, message, Select} from "antd";
 import {Option} from "antd/es/mentions";
 import API from "../data";
@@ -16,7 +16,12 @@ const NewTribunalForm = ({project, careers, closeModal, form, mutate}) => {
         }
     })
 
-    console.log('career', career[0].teachers);
+    useEffect(()=>{
+
+      return ()=>{
+        form.resetFields();
+      }
+    },[])
 
     const handleSubmit = async (values) => {
         console.log("Datos recibidos del form", values);

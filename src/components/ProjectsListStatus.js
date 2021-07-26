@@ -36,7 +36,7 @@ const ProjectsList = ({projectsList, tribunal, allProjects, mutate}) => {
     const dataTribunal = projectsList
         .map(
             (project, index) =>
-                project.status ===  "test_defense_apt" && {
+                project.status ===  "san_curriculum_2" && {
                     key: index,
                     originalData: project,
                     title: project.title,
@@ -218,13 +218,19 @@ const ProjectsList = ({projectsList, tribunal, allProjects, mutate}) => {
         setConfirmLoading(false);
     }
 
+    const handleCancel = () => {
+        setVisible(false);
+        form.resetFields();
+    }
+
     const modalProps = {
         title: titleModal,
         visible,
         confirmLoading,
         closable: true,
         destroyOnClose: true,
-        onCancel(){setVisible(false)},
+        onCancel(){handleCancel()},
+        onClose(){handleCancel()},
         cancelButtonProps: { hidden: true },
         okButtonProps: {
             style: {
