@@ -1,11 +1,13 @@
 import React from "react";
 import SubLayout from "../components/SubLayout";
 import ProjectsListStatus from "../components/ProjectsListStatus";
-import { useProjects } from "../data/useProjects";
 import Loading from "../components/Loading";
 import ShowError from "../components/ShowError";
 import { useJuries } from "../data/useJuries";
 import { useAuth } from "../providers/Auth";
+import { Col, Row, Typography } from "antd";
+
+const { Title } = Typography;
 
 const JuryProjectsListPage = () => {
   const { juries, isLoading, isError } = useJuries();
@@ -18,8 +20,8 @@ const JuryProjectsListPage = () => {
   }
 
   let project = {};
-
-  const juriesList = juries.map((jury) => {
+  let juriesList = [];
+  juriesList = juries.map((jury) => {
     for (let i = 0; i < jury.teachers.data.length; i++) {
       if (jury.teachers.data[i].id === currentUser.userable.id) {
         project = {
@@ -36,6 +38,13 @@ const JuryProjectsListPage = () => {
 
   return (
     <SubLayout>
+      <Row>
+        <Col>
+          <Title level={4} style={{ color: "#034c70", fontSize: 50 }}>
+            Proyectos Jurado
+          </Title>
+        </Col>
+      </Row>
       <ProjectsListStatus projectsList={juriesList} isTribunal={true} />
     </SubLayout>
   );
