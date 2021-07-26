@@ -38,8 +38,6 @@ const ProjectsList = ({
     return <ShowError error={isError} />;
   }
 
-  console.log("props", assignTribunal, assignDate, allProjects, isTribunal);
-
   const dataToAssignTribunal = projectsList
     .map(
       (project, index) =>
@@ -229,10 +227,8 @@ const ProjectsList = ({
     </Title>
   );
 
-  const handleOk = async () => {
-    setConfirmLoading(true);
-    await form.submit();
-    setConfirmLoading(false);
+  const handleOk = () => {
+    form.submit();
   };
 
   const handleCancel = () => {
@@ -256,6 +252,7 @@ const ProjectsList = ({
     okButtonProps: {
       style: {
         right: "43%",
+        backgroundColor: "#034c70",
       },
     },
     okText: "Guardar",
@@ -312,6 +309,7 @@ const ProjectsList = ({
           form={form}
           mutate={mutate}
           closeModal={() => setVisible(false)}
+          loadingModal={setConfirmLoading}
         />
       </Modal>
     </>
