@@ -1,21 +1,19 @@
-import {Button, Col, Layout, Menu, Row, Typography, Modal} from "antd";
+import {Button, Col, Row, Typography, Modal} from "antd";
 import React, {useState} from "react";
 import "../styles/teacher-panel.css";
 import Table from "antd/es/table";
-import {LoadingOutlined, LogoutOutlined, PlusOutlined} from "@ant-design/icons";
-import {Link, useLocation} from "react-router-dom";
+import {PlusOutlined} from "@ant-design/icons";
+import {useLocation} from "react-router-dom";
 import {useAuth} from "../providers/Auth";
-import Routes from "../constants/routes";
 import "../styles/home-teacher.css";
 import SearchColumnFilter from "./SearchColumnFilter";
 import CommitteeCareerForm from "./CommitteeCareerForm";
 
-const {Content, Sider} = Layout;
 const {Title} = Typography;
 
 const SecretaryCommitteeList = () => {
     let location = useLocation();
-    const {isAuthenticated, isCheckingAuth, currentUser} = useAuth();
+    const {isAuthenticated} = useAuth();
 
     const [menuState, setMenuState] = useState({
         current: location.pathname, // set the current selected item in menu, by default the current page
@@ -27,19 +25,6 @@ const SecretaryCommitteeList = () => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false);
 
-    // Handles modal agregar comision
-
-    const handleClick = (e) => {
-        console.log("click ", e);
-        setMenuState({
-            ...menuState,
-            current: e.key,
-        });
-    };
-
-    const showModal = () => {
-        setVisible(true);
-    };
 
     const handleOk = () => {
         setConfirmLoading(true);
@@ -56,9 +41,6 @@ const SecretaryCommitteeList = () => {
 
     // Handles modal editar profesor
 
-    const showEditModal = () => {
-        setVisibleEdit(true);
-    };
 
     const handleEditOk = () => {
         setConfirmLoadingEdit(true);
@@ -157,55 +139,8 @@ const SecretaryCommitteeList = () => {
         }
     ]
 
-    const userMenu = (
-        <Menu onClick={handleClick}>
-            <Menu.Item key="password">Cambiar clave</Menu.Item>
-            <Menu.Item key={Routes.LOGIN}>
-                <Link to={Routes.LOGOUT} className="logout-link">
-                    {isCheckingAuth ? (
-                        <LoadingOutlined/>
-                    ) : (
-                        <>
-                            <LogoutOutlined/> Cerrar sesión{" "}
-                        </>
-                    )}
-                </Link>
-            </Menu.Item>
-        </Menu>
-    );
 
-    let pagination = {
-        current: 1,
-        pageSize: 10,
-        total: 10,
-        showSizeChanger: false,
-    };
-    // if (isLoading) {
-    //     return <Loading/>;
-    // }
-    //
-    // if (isError) {
-    //     return <ShowError error={isError}/>;
-    // }
 
-    // const data = teachersProjects.map((project, index) => {
-    //     return {
-    //         key: index,
-    //         title: project.title,
-    //         student_name: project.student_name,
-    //         status: project.status,
-    //         id: project.id,
-    //     };
-    // });
-
-    // if (meta) {
-    //     pagination = {
-    //         current: meta.current_page,
-    //         pageSize: meta.per_page,
-    //         total: meta.total,
-    //         showSizeChanger: false,
-    //     };
-    // }
 
     let content = "";
     let titleTable = "";
@@ -228,10 +163,6 @@ const SecretaryCommitteeList = () => {
                     onClick: (event) => {
                         event.stopPropagation();
                         setVisibleEdit(true);
-                        // setState({
-                        //     id: record.id,
-                        //     showPlanReview: true,
-                        // });
                     },
                 };
             }}
@@ -256,7 +187,7 @@ const SecretaryCommitteeList = () => {
                 <Col>{titleTable}</Col>
             </Row>
             <Row>
-                <Button style={{backgroundColor: "#034c70", color: "white"}} onClick={showModal}><PlusOutlined/>Agregar
+                <Button style={{backgroundColor: "#034c70", color: "white"}} onClick={()=>setVisible(true)}><PlusOutlined/>Agregar
                     Carrera</Button>
             </Row>
             <br>
@@ -279,7 +210,7 @@ const SecretaryCommitteeList = () => {
                 title={titleModalEdit}
                 visible={visibleEdit}
                 onOk={handleEditOk}
-                confirmLoading={confirmLoading}
+                confirmLoading={confirmLoadingEdit}
                 onCancel={handleEditCancel}
             >
                 <CommitteeCareerForm/>

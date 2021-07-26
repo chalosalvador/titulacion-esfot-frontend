@@ -50,7 +50,7 @@ const ProjectsList = ({projectsList, tribunal, allProjects, mutate}) => {
     const dataDate = projectsList
         .map(
             (project, index) =>
-                project.status === "tribunal_assigned" && {
+                project.status === "test_defense_apt" && {
                     key: index,
                     originalData: project,
                     title: project.title,
@@ -73,7 +73,6 @@ const ProjectsList = ({projectsList, tribunal, allProjects, mutate}) => {
         }))
         .filter(Boolean);
 
-    console.log("projects", projectsList);
 
 
     const columns = [
@@ -268,8 +267,6 @@ const ProjectsList = ({projectsList, tribunal, allProjects, mutate}) => {
                         return {
                             onClick: (event) => {
                                 event.stopPropagation();
-                                setVisible(true);
-                                setTribunalData(record.originalData);
                             },
                         };
                     }}
@@ -281,15 +278,6 @@ const ProjectsList = ({projectsList, tribunal, allProjects, mutate}) => {
                         columns={columns}
                         dataSource={data}
                         rowKey={(data) => data.id}
-                        onRow={(record) => {
-                            return {
-                                onClick: (event) => {
-                                    event.stopPropagation();
-                                    setVisible(true);
-                                    setTribunalData(record.originalData);
-                                },
-                            };
-                        }}
                     />
                 )
             )}

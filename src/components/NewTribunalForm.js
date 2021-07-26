@@ -24,7 +24,7 @@ const NewTribunalForm = ({project, careers, closeModal, form, mutate}) => {
     },[])
 
     const handleSubmit = async (values) => {
-        console.log("Datos recibidos del form", values);
+
         const jury = {
             project_id: project.id,
             members: values.members,
