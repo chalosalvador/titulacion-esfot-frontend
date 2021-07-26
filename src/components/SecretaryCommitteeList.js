@@ -2,7 +2,7 @@ import {Button, Col, Layout, Menu, Row, Typography, Modal, Form} from "antd";
 import React, {useState} from "react";
 import "../styles/teacher-panel.css";
 import Table from "antd/es/table";
-import {LoadingOutlined, LogoutOutlined, PlusOutlined} from "@ant-design/icons";
+import {LoadingOutlined, LogoutOutlined, PlusOutlined, ReloadOutlined, StopOutlined} from "@ant-design/icons";
 import {Link, useLocation} from "react-router-dom";
 import {useAuth} from "../providers/Auth";
 import Routes from "../constants/routes";
@@ -251,7 +251,23 @@ const SecretaryCommitteeList = () => {
         onOk(){handleEditOk()},
         confirmLoading: confirmLoadingEdit,
         onCancel(){handleEditCancel()},
-        onClose(){form.resetFields()}
+        onClose(){form.resetFields()},
+        okText: "Actualizar",
+        okButtonProps: {
+            style: {
+                backgroundColor: '#034c70'
+            },
+            icon: <ReloadOutlined />
+        },
+        cancelText: "Suspender carrera",
+        cancelButtonProps: {
+            style: {
+                backgroundColor: '#407088',
+                color: 'white',
+                // marginRight:'5%'
+            },
+            icon: <StopOutlined />,
+        }
     }
 
     return (
