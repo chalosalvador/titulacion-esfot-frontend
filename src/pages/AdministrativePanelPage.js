@@ -7,8 +7,9 @@ const AdministrativePanelPage = ({ location }) => {
   return (
     <SubLayout>
       <AdministrativePanel
-        tribunal={location.state.tribunal}
+        assignTribunal={location.state.assignTribunal}
         allProjects={location.state.allProjects}
+        assignDate={location.state.assignDate}
       />
     </SubLayout>
   );

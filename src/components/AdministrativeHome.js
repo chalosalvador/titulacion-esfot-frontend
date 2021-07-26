@@ -42,7 +42,7 @@ const AdministrativeHome = () => {
                       <Link
                         to={{
                           pathname: Routes.ADMINISTRATIVE_PANEL,
-                          state: { tribunal: true, allProjects: false },
+                          state: { assignTribunal: true },
                         }}
                       >
                         Ver proyectos
@@ -69,7 +69,7 @@ const AdministrativeHome = () => {
                       <Link
                         to={{
                           pathname: Routes.ADMINISTRATIVE_PANEL,
-                          state: { tribunal: false, allProjects: false },
+                          state: { assignDate: true },
                         }}
                       >
                         Asignar
@@ -96,7 +96,7 @@ const AdministrativeHome = () => {
                       <Link
                         to={{
                           pathname: Routes.ADMINISTRATIVE_PANEL,
-                          state: { tribunal: false, allProjects: true },
+                          state: { allProjects: true },
                         }}
                       >
                         Ver proyectos

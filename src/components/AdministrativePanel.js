@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "../styles/teacher-panel.css";
 import ShowError from "./ShowError";
 import Loading from "./Loading";
-import {  useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../providers/Auth";
 import "../styles/home-teacher.css";
 import ProjectsListStatus from "./ProjectsListStatus";
@@ -11,7 +11,7 @@ import { useProjects } from "../data/useProjects";
 
 const { Title } = Typography;
 
-const AdministrativePanel = ({ tribunal, allProjects }) => {
+const AdministrativePanel = ({ assignTribunal, assignDate, allProjects }) => {
   let location = useLocation();
   const { isAuthenticated } = useAuth();
   const { projectsList, isLoading, isError, mutate } = useProjects();
@@ -29,7 +29,6 @@ const AdministrativePanel = ({ tribunal, allProjects }) => {
     });
   }, [location, isAuthenticated]);
 
-
   if (isLoading) {
     return <Loading />;
   }
@@ -37,7 +36,6 @@ const AdministrativePanel = ({ tribunal, allProjects }) => {
   if (isError) {
     return <ShowError error={isError} />;
   }
-
 
   return (
     <>
@@ -66,8 +64,10 @@ const AdministrativePanel = ({ tribunal, allProjects }) => {
           <ProjectsListStatus
             projectsList={projectsList}
             mutate={mutate}
-            tribunal={tribunal}
-            allProjects={allProjects} />
+            assignTribunal={assignTribunal}
+            assignDate={assignDate}
+            allProjects={allProjects}
+          />
         </Col>
       </Row>
     </>
