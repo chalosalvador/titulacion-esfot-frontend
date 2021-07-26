@@ -54,6 +54,12 @@ const EditCommissionForm = ({form, commission,careers, closeModal}) => {
     }
   }, [career]);
 
+  useEffect(()=>{
+    return () => {
+      form.resetFields();
+    }
+  },[]);
+
   if(isLoading){
     return <Loading />;
   }
