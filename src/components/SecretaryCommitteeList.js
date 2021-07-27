@@ -257,7 +257,7 @@ const SecretaryCommitteeList = () => {
           Agregar Carrera
         </Button>
       </Row>
-      <br></br>
+      <br />
       <Row>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Col>{content}</Col>
