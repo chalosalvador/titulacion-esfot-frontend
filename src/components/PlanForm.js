@@ -187,7 +187,10 @@ const PlanForm = ({ visible, update }) => {
     };
 
     const forms = new FormData();
-    if (formData.schedule) {
+    if (
+      formData.schedule &&
+      formData.schedule !== `storage/schedule/${projects[0].id}/schedule.jpg`
+    ) {
       forms.append("schedule", formData.schedule[0]);
     }
 
@@ -196,7 +199,23 @@ const PlanForm = ({ visible, update }) => {
     if (projects.length > 0) {
       try {
         await API.post(`/projects/${projects[0].id}`, forms);
-        await API.post(`/projects/${projects[0].id}`, data);
+        await API.post(`/projects/${projects[0].id}`, {
+          codirector: data.codirector,
+          partner: data.partner,
+          project_type: data.project_type,
+          research_line: data.research_line,
+          knowledge_area: data.knowledge_area,
+          title: data.title,
+          problem: data.problem,
+          justification: data.justification,
+          hypothesis: data.hypothesis,
+          general_objective: data.general_objective,
+          specifics_objectives: data.specifics_objectives,
+          methodology: data.methodology,
+          work_plan: data.work_plan,
+          bibliography: data.bibliography,
+          teacher_id: data.teacher_id,
+        });
       } catch (e) {
         console.log("ERROR", e);
       }

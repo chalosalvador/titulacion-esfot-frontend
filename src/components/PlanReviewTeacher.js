@@ -605,7 +605,23 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     console.log("DATOS", data);
 
     try {
-      await API.post(`/projects/${plan.id}`, data); // put data to server
+      await API.post(`/projects/${plan.id}`, {
+        codirector: data.codirector,
+        partner: data.partner,
+        project_type: data.project_type,
+        research_line: data.research_line,
+        knowledge_area: data.knowledge_area,
+        title: data.title,
+        problem: data.problem,
+        justification: data.justification,
+        hypothesis: data.hypothesis,
+        general_objective: data.general_objective,
+        specifics_objectives: data.specifics_objectives,
+        methodology: data.methodology,
+        work_plan: data.work_plan,
+        bibliography: data.bibliography,
+        teacher_id: data.teacher_id,
+      });
     } catch (e) {
       console.log("ERROR", e);
       //message.error( `No se guardaron los datos:¨${ e }` );
@@ -1077,7 +1093,7 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                     onClick={() => showAddComments("schedule_comment")}
                   />
                   <Form.Item
-                    name="schedule"
+                    name={plan.schedule === null && "schedule"}
                     label="Cronograma"
                     getValueFromEvent={normPhotoFile}
                   >
