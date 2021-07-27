@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Card, Col, Layout, PageHeader, Row, Space, Typography} from "antd";
+import { Button, Card, Col, Row, Space, Typography } from "antd";
 import {
   CopyOutlined,
   FileTextOutlined,
@@ -13,7 +13,6 @@ import { useStudentProject } from "../data/useStudentProjects";
 import Loading from "../components/Loading";
 
 const { Title } = Typography;
-const { Content, Sider } = Layout;
 
 const StudentHomePage = () => {
   const { projects, isLoading } = useStudentProject();
@@ -27,13 +26,13 @@ const StudentHomePage = () => {
       <Row>
         <Col>
           <Title
-          level={3}
-           style={{
-             color: "#034c70",
-             marginLeft: -30,
-          }}
+            level={3}
+            style={{
+              color: "#034c70",
+              marginLeft: -30,
+            }}
           >
-          Panel Principal:
+            Panel Principal:
           </Title>
         </Col>
       </Row>

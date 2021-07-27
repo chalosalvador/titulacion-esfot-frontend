@@ -142,7 +142,7 @@ const AddComments = (props) => {
           {
             content: (
               <div>
-                {props.plan.work_pkan_comment ? (
+                {props.plan.work_plan_comment ? (
                   <p>
                     <b>Comentarios: </b>
                     {props.plan.work_plan_comment}

@@ -1,4 +1,4 @@
-import { Col, Layout, Menu, Row, Typography } from "antd";
+import { Col, Row, Typography } from "antd";
 import React, { useState } from "react";
 import "../styles/teacher-panel.css";
 import Table from "antd/es/table";
@@ -6,15 +6,14 @@ import Tag from "antd/es/tag";
 import { useProjectsList } from "../data/useProjectsList";
 import ShowError from "./ShowError";
 import Loading from "./Loading";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../providers/Auth";
-import Routes from "../constants/routes";
 import "../styles/home-teacher.css";
 import SearchColumnFilter from "./SearchColumnFilter";
 import PlanReview from "./PlansReviewCollapse";
 
-const { Content, Sider } = Layout;
 const { Title } = Typography;
+const { Link } = Typography;
 
 const TeacherPanel = () => {
   const [state, setState] = useState({
@@ -23,7 +22,7 @@ const TeacherPanel = () => {
     showPlanReview: false,
   });
   let location = useLocation();
-  const { isAuthenticated, isCheckingAuth, currentUser } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { teachersProjects, meta, isLoading, isError } = useProjectsList();
 
   const [menuState, setMenuState] = useState({
@@ -31,13 +30,6 @@ const TeacherPanel = () => {
     collapsed: false,
     openKeys: [],
   });
-  const handleClick = (e) => {
-    console.log("click ", e);
-    setMenuState({
-      ...menuState,
-      current: e.key,
-    });
-  };
   //
   React.useEffect(() => {
     setMenuState({
@@ -60,6 +52,7 @@ const TeacherPanel = () => {
       key: "title",
       width: 800,
       ...SearchColumnFilter("title"),
+      render: (text) => <Link>{text}</Link>,
     },
     {
       title: "Estado",
@@ -70,27 +63,114 @@ const TeacherPanel = () => {
         let color = "";
         let name = "";
         {
-          if (
-            status === "plan_sent" ||
-            status === "plan_corrections_done" ||
-            status === "plan_saved"
-          ) {
-            color = "blue";
-            name = "Por revisar";
-          } else if (status === "plan_review_teacher") {
-            color = "red";
-            name = "Correcciones enviadas";
-          } else if (
-            status === "plan_approved_director" ||
-            status === "san_curriculum_1" ||
-            status === "plan_review_commission" ||
-            status === "plan_corrections_done2"
-          ) {
-            color = "green";
-            name = "Plan aprobado";
-          } else if (status === "plan_approved_commission") {
-            color = "purple";
-            name = "Plan Aprobado por comisión";
+          switch (status) {
+            case "plan_saved":
+              color = "orange";
+              name = "Plan en desarrollo";
+              break;
+
+            case "plan_sent":
+              color = "blue";
+              name = "Por revisar";
+              break;
+
+            case "plan_corrections_done":
+              color = "blue";
+              name = "Correcciones de plan realizadas";
+              break;
+
+            case "plan_review_teacher":
+              color = "orange";
+              name = "Correcciones enviadas";
+              break;
+
+            case "plan_approved_director":
+              color = "green";
+              name = "Plan aprobado";
+              break;
+
+            case "plan_review_commission":
+              color = "orange";
+              name = "Correcciones de comisión enviadas";
+              break;
+
+            case "plan_corrections_done2":
+              color = "blue";
+              name = "Por revisar por comisión";
+              break;
+
+            case "plan_approved_commission":
+              color = "green";
+              name = "Plan aprobado por comisión";
+              break;
+
+            case "san_curriculum_1":
+              color = "purple";
+              name = "Curriculum saneado 1";
+              break;
+
+            case "san_curriculum_2":
+              color = "purple";
+              name = "Curriculum saneado 2";
+              break;
+
+            case "plan_rejected":
+              color = "red";
+              name = "Plan rechazado";
+              break;
+
+            case "project_uploaded":
+              color = "cyan";
+              name = "PDF por revisar";
+              break;
+
+            case "project_corrections_done":
+              color = "cyan";
+              name = "correcciones de PDF realizadas";
+              break;
+
+            case "project_review_teacher":
+              color = "magenta";
+              name = "Correcciones de PDF enviadas";
+              break;
+
+            case "project_approved_director":
+              color = "green";
+              name = "PDF aprobado";
+              break;
+
+            case "tribunal_assigned":
+              color = "lime";
+              name = "Tribunal asignado";
+              break;
+
+            case "project_graded":
+              color = "yellow";
+              name = "Proyecto calificado";
+              break;
+
+            case "test_defense_apt":
+              color = "green";
+              name = "Apto para defensa oral";
+              break;
+
+            case "date_defense_assigned":
+              color = "geekblue";
+              name = "Fecha de defensa asignada";
+              break;
+
+            case "project_completed":
+              color = "gold";
+              name = "Proyecto completado";
+              break;
+
+            case "project_rejected":
+              color = "red";
+              name = "Proyecto rechazado";
+              break;
+
+            default:
+              break;
           }
           return (
             <Tag color={color} key={status}>

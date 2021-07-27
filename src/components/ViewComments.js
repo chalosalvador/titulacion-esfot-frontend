@@ -138,7 +138,7 @@ const ViewComments = (props) => {
           {
             content: (
               <div>
-                {props.plan[0].work_pkan_comment ? (
+                {props.plan[0].work_plan_comment ? (
                   <p>
                     <b>Comentarios: </b>
                     {props.plan[0].work_plan_comment}

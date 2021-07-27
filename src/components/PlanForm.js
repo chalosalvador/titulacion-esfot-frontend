@@ -4,7 +4,6 @@ import {
   Form,
   Image,
   Input,
-  Layout,
   message,
   Modal,
   Row,
@@ -18,7 +17,6 @@ import {
   CheckCircleOutlined,
   CommentOutlined,
   ExclamationCircleOutlined,
-  PlusOutlined,
   SendOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
@@ -34,11 +32,9 @@ import ViewComments from "./ViewComments";
 const { Option } = Select;
 const { TextArea } = Input;
 const { Title } = Typography;
-const { Sider } = Layout;
 const { confirm } = Modal;
 
 const getBase64 = (file, callback) => {
-  console.log("file", file);
   const reader = new FileReader();
   reader.addEventListener("load", () => callback(reader.result));
   reader.readAsDataURL(file);
@@ -64,7 +60,6 @@ const PlanForm = ({ visible, update }) => {
     );
   };
 
-  let location = useLocation();
   const { projects, isLoading } = useStudentProject();
   const { teachers } = useTeachers();
   const [imageUrl, setImageUrl] = useState(
@@ -86,8 +81,6 @@ const PlanForm = ({ visible, update }) => {
     showViewCommentsModal(true);
     setComments(values);
   };
-
-  console.log(projects, isFinished);
 
   const layout = {
     labelCol: { span: 9 },
@@ -113,13 +106,6 @@ const PlanForm = ({ visible, update }) => {
   };
 
   const onCreate = async (values) => {
-    console.log("Received values of form: ", values);
-
-    // form.validateFields()
-    //   .then( async( values ) => {
-    //
-    //     console.log( 'values', values );
-
     const data = new FormData();
     data.append("codirector", values.codirector ? values.codirector : "");
     data.append("partner", values.partner ? values.partner : "");
@@ -165,23 +151,6 @@ const PlanForm = ({ visible, update }) => {
     }
   };
 
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    setPreviewImage(file.url || file.preview);
-    setPreviewVisible(true);
-  };
-
-  const handleRemove = () => {
-    setImageUrl(null);
-  };
-
-  const handleCancel = () => {
-    setPreviewVisible(false);
-  };
-
   const onUpdate = async () => {
     const formData = form.getFieldsValue();
     const data = {
@@ -189,16 +158,32 @@ const PlanForm = ({ visible, update }) => {
     };
 
     const forms = new FormData();
-    if (formData.schedule) {
+    if (
+      formData.schedule &&
+      formData.schedule !== `storage/schedule/${projects[0].id}/schedule.jpg`
+    ) {
       forms.append("schedule", formData.schedule[0]);
     }
-
-    console.log("DATOS", data);
-
     if (projects.length > 0) {
       try {
         await API.post(`/projects/${projects[0].id}`, forms);
-        await API.post(`/projects/${projects[0].id}`, data);
+        await API.post(`/projects/${projects[0].id}`, {
+          codirector: data.codirector,
+          partner: data.partner,
+          project_type: data.project_type,
+          research_line: data.research_line,
+          knowledge_area: data.knowledge_area,
+          title: data.title,
+          problem: data.problem,
+          justification: data.justification,
+          hypothesis: data.hypothesis,
+          general_objective: data.general_objective,
+          specifics_objectives: data.specifics_objectives,
+          methodology: data.methodology,
+          work_plan: data.work_plan,
+          bibliography: data.bibliography,
+          teacher_id: data.teacher_id,
+        });
       } catch (e) {
         console.log("ERROR", e);
       }
@@ -329,7 +314,6 @@ const PlanForm = ({ visible, update }) => {
   };
 
   const normPhotoFile = (e) => {
-    console.log("Upload event:", e);
     const file = e.file;
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
@@ -357,9 +341,6 @@ const PlanForm = ({ visible, update }) => {
     if (Array.isArray(e)) {
       return e;
     }
-
-    console.log("e.file", e.file);
-    console.log("e.fileList", e.fileList);
     setFileList([file]);
 
     return e && [e.file];
