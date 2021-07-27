@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import {
-  Button,
   Card,
   Col,
+  Form,
   Modal,
   Row,
   Skeleton,
@@ -11,20 +11,26 @@ import {
   Typography,
 } from "antd";
 import ShowError from "./ShowError";
-import { useProjects } from "../data/useProjects";
+import Title from "antd/es/typography/Title";
+import { useCareersList } from "../data/useCareersList";
+import NewTribunalForm from "./NewTribunalForm";
 
 const { Link } = Typography;
 
-const ProjectsList = ({ tribunal, allProjects }) => {
-  const [state, setState] = useState({
-    idPlan: null,
-    status: null,
-    showPlanReview: false,
-  });
-  const { projectsList, isLoading, isError } = useProjects();
+const ProjectsList = ({
+  projectsList,
+  assignTribunal,
+  assignDate,
+  allProjects,
+  mutate,
+  isTribunal,
+}) => {
+  const [form] = Form.useForm();
+  const { careers, isLoading, isError } = useCareersList();
   const [visible, setVisible] = useState(false);
   let titleModal = "";
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [tribunalData, setTribunalData] = useState(null);
 
   if (isLoading) {
     return (
@@ -40,12 +46,16 @@ const ProjectsList = ({ tribunal, allProjects }) => {
       </Row>
     );
   }
+  if (isError) {
+    return <ShowError error={isError} />;
+  }
 
-  const dataTribunal = projectsList
+  const dataToAssignTribunal = projectsList
     .map(
       (project, index) =>
         project.status === "san_curriculum_2" && {
           key: index,
+          originalData: project,
           title: project.title,
           teacher_name: project.teacher_name,
           created_at: project.created_at,
@@ -59,6 +69,7 @@ const ProjectsList = ({ tribunal, allProjects }) => {
       (project, index) =>
         project.status === "test_defense_apt" && {
           key: index,
+          originalData: project,
           title: project.title,
           teacher_name: project.teacher_name,
           created_at: project.created_at,
@@ -70,25 +81,28 @@ const ProjectsList = ({ tribunal, allProjects }) => {
   const data = projectsList
     .map((project, index) => ({
       key: index,
+      originalData: project,
       title: project.title,
       teacher_name: project.teacher_name,
       created_at: project.created_at,
       status: project.status,
+      career: project.teacher_career,
     }))
     .filter(Boolean);
 
-  console.log("projects", projectsList);
-
-  if (isError) {
-    return <ShowError error={isError} />;
-  }
-  // if (props) {
-  //   if (props === "date") {
-  //     setDateAssigned(true);
-  //   } else if (props === "tribunal") {
-  //     setTribunalAssigned(true);
-  //   }
-  // }
+  const dataTribunalAssigned = projectsList
+    .map(
+      (project, index) =>
+        project.status === "tribunal_assigned" && {
+          key: index,
+          originalData: project,
+          title: project.title,
+          teacher_name: project.teacher_name,
+          created_at: project.created_at,
+          status: project.status,
+        }
+    )
+    .filter(Boolean);
 
   const columns = [
     {
@@ -96,7 +110,7 @@ const ProjectsList = ({ tribunal, allProjects }) => {
       dataIndex: "title",
       key: "title",
       render: (title) =>
-        !(!tribunal && allProjects) ? (
+        !(!assignTribunal && allProjects) ? (
           <Link>{title}</Link>
         ) : (
           <Typography>{title}</Typography>
@@ -240,60 +254,96 @@ const ProjectsList = ({ tribunal, allProjects }) => {
     },
   ];
 
-  const showModal = () => {
-    setVisible(true);
+  titleModal = (
+    <Title level={3} style={{ color: "#034c70" }}>
+      Asignar tribunal
+    </Title>
+  );
+
+  const handleOk = () => {
+    form.submit();
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+    form.resetFields();
+  };
+
+  const modalProps = {
+    title: titleModal,
+    visible,
+    confirmLoading,
+    closable: true,
+    destroyOnClose: true,
+    onCancel() {
+      handleCancel();
+    },
+    onClose() {
+      handleCancel();
+    },
+    cancelButtonProps: { hidden: true },
+    okButtonProps: {
+      style: {
+        right: "43%",
+        backgroundColor: "#034c70",
+      },
+    },
+    okText: "Guardar",
+    onOk() {
+      handleOk();
+    },
   };
 
   return (
     <>
-      {tribunal && !allProjects ? (
+      {assignTribunal && !allProjects && !assignDate ? (
         <Table
           columns={columns}
-          dataSource={dataTribunal}
+          dataSource={dataToAssignTribunal}
           rowKey={(dataTribunal) => dataTribunal.id}
-          onRow={() => {
+          onRow={(record) => {
             return {
               onClick: (event) => {
                 event.stopPropagation();
                 setVisible(true);
+                setTribunalData(record.originalData);
               },
             };
           }}
         />
-      ) : !tribunal && !allProjects ? (
+      ) : assignDate ? (
         <Table
           columns={columns}
           dataSource={dataDate}
           rowKey={(dataDate) => dataDate.id}
-          onRow={() => {
+          onRow={(record) => {
             return {
               onClick: (event) => {
                 event.stopPropagation();
-                setVisible(true);
               },
             };
           }}
         />
+      ) : !assignTribunal && allProjects ? (
+        <Table columns={columns} dataSource={data} rowKey={(data) => data.id} />
       ) : (
-        !tribunal &&
-        allProjects && (
+        isTribunal && (
           <Table
             columns={columns}
-            dataSource={data}
+            dataSource={dataTribunalAssigned}
             rowKey={(data) => data.id}
           />
         )
       )}
-      <Modal
-        title={titleModal}
-        visible={visible}
-        confirmLoading={confirmLoading}
-        footer={null}
-        closable={true}
-        destroyOnClose={true}
-        onCancel={() => setVisible(false)}
-      >
-        <Button>hola</Button>
+      <Modal {...modalProps}>
+        <NewTribunalForm
+          project={tribunalData}
+          careers={careers}
+          form={form}
+          mutate={mutate}
+          closeModal={() => setVisible(false)}
+          loadingModal={setConfirmLoading}
+        />
       </Modal>
     </>
   );

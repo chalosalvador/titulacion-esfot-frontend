@@ -23,11 +23,11 @@ const TeacherHomePage = () => {
       <Row>
         <Col>
           <Title
-              level={3}
-              style={{
-                color: "#034c70",
-                marginLeft: -30,
-              }}
+            level={3}
+            style={{
+              color: "#034c70",
+              marginLeft: -30,
+            }}
           >
             Panel Principal:
           </Title>
@@ -71,7 +71,7 @@ const TeacherHomePage = () => {
                   <div>Revisa los proyectos como jurado</div>
                   <div>
                     <Button>
-                      <Link to="">Ver proyectos</Link>
+                      <Link to={Routes.JURY_PROJECTS_LIST}>Ver proyectos</Link>
                     </Button>
                   </div>
                 </Space>
@@ -155,7 +155,7 @@ const TeacherHomePage = () => {
           </Row>
         </Col>
       </Row>
-      {currentUser.committee !== 0 ? (
+      {currentUser.commission_id !== null && (
         <>
           <Row style={{ marginTop: 120 }}>
             <Col>
@@ -201,8 +201,6 @@ const TeacherHomePage = () => {
             </Col>
           </Row>
         </>
-      ) : (
-        ""
       )}
     </>
   );

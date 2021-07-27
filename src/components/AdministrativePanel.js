@@ -8,19 +8,20 @@ import { useAuth } from "../providers/Auth";
 import "../styles/home-teacher.css";
 import ProjectsListStatus from "./ProjectsListStatus";
 import { useProjects } from "../data/useProjects";
+
 const { Title } = Typography;
 
-const AdministrativePanel = ({ tribunal, allProjects }) => {
+const AdministrativePanel = ({ assignTribunal, assignDate, allProjects }) => {
   let location = useLocation();
-  const { isAuthenticated, isCheckingAuth } = useAuth();
-  const { projectsList, isLoading, isError } = useProjects();
+  const { isAuthenticated } = useAuth();
+  const { projectsList, isLoading, isError, mutate } = useProjects();
 
   const [menuState, setMenuState] = useState({
     current: location.pathname, // set the current selected item in menu, by default the current page
     collapsed: false,
     openKeys: [],
   });
-  //
+
   React.useEffect(() => {
     setMenuState({
       ...menuState,
@@ -35,11 +36,6 @@ const AdministrativePanel = ({ tribunal, allProjects }) => {
   if (isError) {
     return <ShowError error={isError} />;
   }
-
-  console.log("type", tribunal);
-  console.log("type", allProjects);
-
-  // console.log("Pilas",getDataSource());
 
   return (
     <>
@@ -65,7 +61,13 @@ const AdministrativePanel = ({ tribunal, allProjects }) => {
       </Row>
       <Row>
         <Col>
-          <ProjectsListStatus tribunal={tribunal} allProjects={allProjects} />
+          <ProjectsListStatus
+            projectsList={projectsList}
+            mutate={mutate}
+            assignTribunal={assignTribunal}
+            assignDate={assignDate}
+            allProjects={allProjects}
+          />
         </Col>
       </Row>
     </>

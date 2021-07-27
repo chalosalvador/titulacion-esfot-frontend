@@ -4,7 +4,22 @@ import { Card, Layout, Typography } from "antd";
 const { Sider } = Layout;
 const { Title } = Typography;
 
-const SiderAdministrative = () => {
+const SiderAdministrative = ({ projectsList }) => {
+  const projectsToAssignTribunal = projectsList.filter(
+    (project) => project.status === "san_curriculum_2"
+  );
+  const projectsToAssignDefenseDate = projectsList.filter(
+    (project) => project.status === "test_defense_apt"
+  );
+  const projects = projectsList.filter(
+    (project) =>
+      !(
+        project.status === "plan_rejected" ||
+        project.status === "project_rejected" ||
+        project.status === "project_completed"
+      )
+  );
+
   return (
     <Sider
       theme="light"
@@ -22,15 +37,15 @@ const SiderAdministrative = () => {
         title="Proyectos sin tribunal"
         bordered={false}
       >
-        <Title level={2}>10</Title>
+        <Title level={2}>{projectsToAssignTribunal.length}</Title>
       </Card>
 
       <Card
         className={"statistics-content"}
-        title="Proyectos con defensa asignada"
+        title="Proyectos sin defensa asignada"
         bordered={false}
       >
-        <Title level={2}>4</Title>
+        <Title level={2}>{projectsToAssignDefenseDate.length}</Title>
       </Card>
 
       <Card
@@ -38,7 +53,7 @@ const SiderAdministrative = () => {
         title="Proyectos en curso"
         bordered={false}
       >
-        <Title level={2}>4</Title>
+        <Title level={2}>{projects.length}</Title>
       </Card>
     </Sider>
   );

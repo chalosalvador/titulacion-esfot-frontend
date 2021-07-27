@@ -1,10 +1,38 @@
 import React from "react";
 import { Card, Layout, Typography } from "antd";
+import { useProjectsList } from "../data/useProjectsList";
+import Loading from "./Loading";
+import ShowError from "./ShowError";
 
 const { Sider } = Layout;
 const { Title } = Typography;
 
-const SiderTeacher = () => {
+const SiderTeacher = ({ user }) => {
+  const { teachersProjects, isLoading, isError } = useProjectsList();
+
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (isError) {
+    return <ShowError />;
+  }
+
+  const plansReview = teachersProjects.filter(
+    (project) =>
+      project.status === "plan_sent" ||
+      project.status === "plan_corrections_done"
+  );
+
+  const projectsReview = teachersProjects.filter(
+    (project) =>
+      project.status === "project_uploaded" ||
+      project.status === "project_corrections_done"
+  );
+
+  const projectsTribunal = teachersProjects.filter(
+    (project) => project.status === "tribunal_assigned"
+  );
+
   return (
     <Sider
       theme="light"
@@ -22,7 +50,7 @@ const SiderTeacher = () => {
         title="Tesis dirigidas"
         bordered={false}
       >
-        <Title level={2}>10</Title>
+        <Title level={2}>{teachersProjects.length}</Title>
       </Card>
 
       <Card
@@ -30,7 +58,7 @@ const SiderTeacher = () => {
         title="Planes por revisar"
         bordered={false}
       >
-        <Title level={2}>2</Title>
+        <Title level={2}>{plansReview.length}</Title>
       </Card>
 
       <Card
@@ -38,20 +66,24 @@ const SiderTeacher = () => {
         title="Proyectos por revisar"
         bordered={false}
       >
-        <Title level={2}>2</Title>
+        <Title level={2}>{projectsReview.length}</Title>
       </Card>
 
-      <Title level={3} style={{ color: "#034c70" }}>
-        Jurado
-      </Title>
+      {user.jury_id !== null && (
+        <>
+          <Title level={3} style={{ color: "#034c70" }}>
+            Jurado
+          </Title>
 
-      <Card
-        className={"statistics-content"}
-        title="Proyectos por revisar"
-        bordered={false}
-      >
-        <Title level={2}>10</Title>
-      </Card>
+          <Card
+            className={"statistics-content"}
+            title="Proyectos por revisar"
+            bordered={false}
+          >
+            <Title level={2}>{projectsTribunal.length}</Title>
+          </Card>
+        </>
+      )}
     </Sider>
   );
 };

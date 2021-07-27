@@ -33,10 +33,6 @@ const SecretaryCommitteeList = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false);
 
-  const showModal = () => {
-    setVisible(true);
-  };
-
   const handleOk = () => {
     form.submit();
   };
@@ -45,8 +41,6 @@ const SecretaryCommitteeList = () => {
     form.resetFields();
     setVisible(false);
   };
-
-  // Handles modal editar profesor
 
   const handleEditOk = () => {
     setConfirmLoadingEdit(true);
@@ -257,13 +251,13 @@ const SecretaryCommitteeList = () => {
       <Row>
         <Button
           style={{ backgroundColor: "#034c70", color: "white" }}
-          onClick={showModal}
+          onClick={() => setVisible(true)}
         >
           <PlusOutlined />
-          Agregar Comisión
+          Agregar Carrera
         </Button>
       </Row>
-      <br></br>
+      <br />
       <Row>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Col>{content}</Col>
