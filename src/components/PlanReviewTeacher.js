@@ -18,6 +18,7 @@ import {
   CheckCircleOutlined,
   CheckOutlined,
   CloseCircleOutlined,
+  CloseOutlined,
   CommentOutlined,
   ExclamationCircleOutlined,
   PlusOutlined,
@@ -39,18 +40,10 @@ const { TextArea } = Input;
 const { Title } = Typography;
 const { confirm } = Modal;
 
-const getBase64 = (file, callback) => {
-  console.log("file", file);
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(file);
-};
-
-const PlanFormTeacher = ({ visible, update, idPlan }) => {
+const PlanReviewTeacher = ({ idPlan, user }) => {
   const [form] = Form.useForm();
 
   let location = useLocation();
-  // const { projects, isError, isLoading } = useProject();
   const { plan, isLoading } = usePlanContent(idPlan);
   const { teachers } = useTeachers();
   const [fileList, setFileList] = useState([]);
@@ -67,8 +60,6 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     showAddCommentsModal(true);
     setComments(values);
   };
-
-  console.log(plan, isFinished);
 
   const [menuState, setMenuState] = useState({
     current: location.pathname, // set the current selected item in menu, by default the current page
@@ -125,7 +116,11 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     console.log("DATOS", data);
 
     try {
-      await API.post(`/projects/${plan.id}/plan-review-teacher`); // put data to server
+      if (user === "director") {
+        await API.post(`/projects/${plan.id}/plan-review-teacher`); // put data to server
+      } else if (user === "committee") {
+        await API.post(`/projects/${plan.id}/plan-review-commission`); // put data to server
+      }
       setSending(false);
       confirm({
         icon: <CheckCircleOutlined />,
@@ -189,16 +184,35 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     }
   };
 
-  const modal = () => {
+  const modal = async () => {
     confirm({
       icon: <ExclamationCircleOutlined />,
       title: "¿Estás seguro de mandar el plan?",
       content:
-        "Una vez aprobado se enviará a la comisión de titulación para su revisión.",
+        user === "director"
+          ? "Una vez aprobado se enviará a la comisión de titulación para su revisión."
+          : "Una vez aprobado se enviará una notificación al estudiante y al director.",
       okText: "Si",
       cancelText: "No",
       onOk() {
         onFinish();
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+      okButtonProps: { style: { backgroundColor: "#034c70" } },
+    });
+  };
+
+  const modalReject = () => {
+    confirm({
+      icon: <ExclamationCircleOutlined />,
+      title: "¿Estás seguro de rechazar el plan?",
+      content: "Una vez rechazado no podrá deshacer la acción.",
+      okText: "Si",
+      cancelText: "No",
+      onOk() {
+        onReject();
       },
       onCancel() {
         console.log("Cancel");
@@ -240,7 +254,6 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     },
   };
   const onChange = (checkedValue) => {
-    console.log(checkedValue);
     if (checkedValue.length === 18) {
       setChecked(true);
     } else {
@@ -430,7 +443,13 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
       bibliography_comment: "",
     };
     try {
-      await API.post(`/projects/${plan.id}/plan-approved-director`); // put data to server
+      if (user === "director") {
+        await API.post(`/projects/${plan.id}/plan-approved-director`); // put data to server
+      } else if (user === "committee") {
+        await API.post(`/projects/${plan.id}/plan-approved-commission`); // put data to server
+      }
+
+      await API.post(`projects/${plan.id}`, dataToSent);
 
       setSendingPlan(false);
       confirm({
@@ -454,7 +473,11 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                 <p style={{ color: "#034c70" }}>
                   Gracias por tu esfuerzo en revisar el plan,
                   <br />
-                  <strong>ha sido enviado a la comisión</strong>.
+                  {user === "director" ? (
+                    <strong>ha sido enviado a la comisión</strong>
+                  ) : (
+                    <strong>el plan ha sido aprobado.</strong>
+                  )}
                 </p>
               </Col>
             </Row>
@@ -476,41 +499,82 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     }
   };
 
-  const normPhotoFile = (e) => {
-    console.log("Upload event:", e);
-    const file = e.file;
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      message.error("La imagen debe tener formato JPG o PNG");
-      setFileList([]);
-      setImageUrl(null);
-      return null;
+  const onReject = async () => {
+    const data = form.getFieldsValue();
+    let dataToSent = {
+      ...data,
+    };
+    try {
+      await API.post(`/projects/${plan.id}/plan-rejected`); // put data to server
+      setSending(false);
+      confirm({
+        icon: <CheckCircleOutlined />,
+        title: (
+          <Title level={3} style={{ color: "#034c70" }}>
+            ¡Listo!
+          </Title>
+        ),
+        content: (
+          <>
+            <Row justify="center">
+              <Col>
+                <Image src="boy.png" width={100} />
+                <Image src="girl.png" width={100} />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <p style={{ color: "#034c70" }}>
+                  Se ha rechazo este plan,
+                  <br />
+                  <strong>han sido enviadas las notificaciones</strong>.
+                </p>
+              </Col>
+            </Row>
+          </>
+        ),
+        okText: "Entendido",
+        okButtonProps: {
+          href: Routes.HOME,
+          style: {
+            backgroundColor: "#034c70",
+            marginRight: 125,
+          },
+        },
+        cancelButtonProps: { hidden: true },
+      });
+    } catch (e) {
+      console.log("ERROR", e);
+      message.error(`No se guardaron los datos:¨${e}`);
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error("La imagen debe ser menor a 2MB");
-      setFileList([]);
-      setImageUrl(null);
-      return null;
+  };
+
+  const onUpdate = async () => {
+    const formData = form.getFieldsValue();
+    const data = { ...formData };
+    try {
+      await API.post(`/projects/${plan.id}`, {
+        codirector: data.codirector,
+        partner: data.partner,
+        project_type: data.project_type,
+        research_line: data.research_line,
+        knowledge_area: data.knowledge_area,
+        title: data.title,
+        problem: data.problem,
+        justification: data.justification,
+        hypothesis: data.hypothesis,
+        general_objective: data.general_objective,
+        specifics_objectives: data.specifics_objectives,
+        methodology: data.methodology,
+        work_plan: data.work_plan,
+        bibliography: data.bibliography,
+        teacher_id: data.teacher_id,
+      });
+    } catch (e) {
+      console.log("ERROR", e);
+      //message.error( `No se guardaron los datos:¨${ e }` );
     }
-
-    if (file.status === "removed") {
-      setFileList([]);
-      setImageUrl(null);
-      return null;
-    }
-
-    getBase64(e.file, (imageUrl) => setImageUrl(imageUrl));
-
-    if (Array.isArray(e)) {
-      return e;
-    }
-
-    console.log("e.file", e.file);
-    console.log("e.fileList", e.fileList);
-    setFileList([file]);
-
-    return e && [e.file];
   };
 
   return (
@@ -534,7 +598,16 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
           >
             Datos Generales
           </Title>
-          <Form.Provider onFormChange={onCompleteForm}>
+          <Form.Provider
+            onFormChange={() => {
+              onCompleteForm();
+              setTimeout(() => {
+                onUpdate().then(() => {
+                  console.log("Cambios guardados correctamente!");
+                });
+              }, 2000);
+            }}
+          >
             <Form
               {...layout}
               name="nest-messages"
@@ -571,10 +644,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                     <Input
                       style={{ width: 300 }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                       placeholder="Nombre del co-director"
                     />
@@ -584,10 +662,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                       placeholder="Seleccione"
                       style={{ width: 300 }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     >
                       <Option value="jack">Jack</Option>
@@ -600,10 +683,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                       placeholder="Seleccione"
                       style={{ width: 300 }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     >
                       <Option value="areaInvestigation">
@@ -623,10 +711,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                       placeholder="Seleccione"
                       style={{ width: 300 }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     >
                       <Option value="jack">Jack</Option>
@@ -642,10 +735,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                       placeholder="Seleccione"
                       style={{ width: 300 }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     >
                       <Option value="jack">Jack</Option>
@@ -696,10 +794,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                         maxRows: 5,
                       }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     />
                   </Form.Item>
@@ -723,10 +826,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                         maxRows: 15,
                       }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     />
                   </Form.Item>
@@ -749,10 +857,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                         maxRows: 15,
                       }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     />
                   </Form.Item>
@@ -776,10 +889,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                         maxRows: 6,
                       }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     />
                   </Form.Item>
@@ -802,10 +920,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                         maxRows: 6,
                       }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     />
                   </Form.Item>
@@ -833,10 +956,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                         maxRows: 6,
                       }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     />
                   </Form.Item>
@@ -859,10 +987,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                         maxRows: 15,
                       }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     />
                   </Form.Item>
@@ -885,10 +1018,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                         maxRows: 15,
                       }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     />
                   </Form.Item>
@@ -904,37 +1042,9 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                     onClick={() => showAddComments("schedule_comment")}
                   />
                   <Form.Item
-                    name="schedule"
+                    name={plan.schedule === null && "schedule"}
                     label="Cronograma"
-                    getValueFromEvent={normPhotoFile}
                   >
-                    {/*<Upload*/}
-                    {/*  name="files"*/}
-                    {/*  accept="image/jpeg,image/png"*/}
-                    {/*  listType="text"*/}
-                    {/*  multiple={false}*/}
-                    {/*  showUploadList={false}*/}
-                    {/*  beforeUpload={() => false}*/}
-                    {/*  filelist={imageUrl}*/}
-                    {/*  disabled={*/}
-                    {/*    !(*/}
-                    {/*      plan.status === "plan_sent" ||*/}
-                    {/*      plan.status === "plan_corrections_done"*/}
-                    {/*    )*/}
-                    {/*  }*/}
-                    {/*>*/}
-                    {/*  <Button*/}
-                    {/*    icon={<UploadOutlined />}*/}
-                    {/*    disabled={*/}
-                    {/*      !(*/}
-                    {/*        plan.status === "plan_sent" ||*/}
-                    {/*        plan.status === "plan_corrections_done"*/}
-                    {/*      )*/}
-                    {/*    }*/}
-                    {/*  >*/}
-                    {/*    Subir Imagen*/}
-                    {/*  </Button>*/}
-                    {/*</Upload>*/}
                     {image && (
                       <Image
                         src={image}
@@ -962,10 +1072,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                         maxRows: 6,
                       }}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     />
                   </Form.Item>
@@ -975,10 +1090,15 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                       htmlType="submit"
                       loading={sending}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                     >
                       Enviar Comentarios
@@ -986,15 +1106,34 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
                     <Button
                       className={"submit"}
                       disabled={
-                        !(
-                          plan.status === "plan_sent" ||
-                          plan.status === "plan_corrections_done"
-                        )
+                        user === "director"
+                          ? !(
+                              plan.status === "plan_sent" ||
+                              plan.status === "plan_corrections_done"
+                            )
+                          : !(
+                              plan.status === "san_curriculum_1" ||
+                              plan.status === "plan_corrections_done2"
+                            )
                       }
                       onClick={() => setApprovePlan(true)}
                     >
                       <SendOutlined /> Aprobar Plan
                     </Button>
+                    {user === "committee" && (
+                      <Button
+                        className={"submit"}
+                        disabled={
+                          !(
+                            plan.status === "san_curriculum_1" ||
+                            plan.status === "plan_corrections_done2"
+                          )
+                        }
+                        onClick={modalReject}
+                      >
+                        <CloseOutlined /> Rechazar Plan
+                      </Button>
+                    )}
                   </Form.Item>
                 </Col>
               </Row>
@@ -1020,4 +1159,5 @@ const PlanFormTeacher = ({ visible, update, idPlan }) => {
     </>
   );
 };
-export default withAuth(PlanFormTeacher);
+
+export default withAuth(PlanReviewTeacher);

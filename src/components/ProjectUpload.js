@@ -16,7 +16,6 @@ import {
   Popup,
   AreaHighlight,
   setPdfWorker,
-  Tip,
 } from "react-pdf-highlighter";
 import PDFWorker from "worker-loader!pdfjs-dist/lib/pdf.worker";
 import { useStudentProject } from "../data/useStudentProjects";
@@ -53,9 +52,13 @@ const ProjectUpload = () => {
   const { projects, isLoading } = useStudentProject();
   const [isSending, setIsSending] = useState(false);
   const [form] = Form.useForm();
-  // const { pdf, isLoading1 } = useGetProjectPDF(projects[0].id);
+  const { pdf, isLoading1 } = useGetProjectPDF(projects[0].id);
 
-  if (projects[0].status === "project_review_teacher" && isLoading) {
+  if (
+    projects[0].status === "project_review_teacher" &&
+    isLoading &&
+    isLoading1
+  ) {
     return <h1>Loading...</h1>;
   }
 
@@ -151,7 +154,7 @@ const ProjectUpload = () => {
     }
   };
 
-  const modal = (file) => {
+  const modal = async (file) => {
     confirm({
       icon: <ExclamationCircleOutlined />,
       title: "¿Estás seguro de mandar el proyecto?",
@@ -295,7 +298,7 @@ const ProjectUpload = () => {
                       <Popup
                         popupContent={<HighlightPopup {...highlight} />}
                         onMouseOver={(popupContent) =>
-                          setTip(highlight, (highlight) => popupContent)
+                          setTip(highlight, () => popupContent)
                         }
                         onMouseOut={hideTip}
                         key={index}

@@ -46,7 +46,7 @@ const TeacherPlans = () => {
         const color = status === "assigned" ? "green" : "orange";
         const text = status === "assigned" ? "Asignado" : "No Asignado";
 
-        return <Tag color={color}>{text}</Tag>;
+        return <Tag color={color}>{text.toUpperCase()}</Tag>;
       },
     },
   ];
@@ -123,11 +123,11 @@ const TeacherPlans = () => {
       <Row>
         <Col>
           <Title
-              level={3}
-              style={{
-                color: "#034c70",
-                marginLeft: -30,
-              }}
+            level={3}
+            style={{
+              color: "#034c70",
+              marginLeft: -30,
+            }}
           >
             Listado de temas:
           </Title>
