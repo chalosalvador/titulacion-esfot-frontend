@@ -35,7 +35,6 @@ const { Title } = Typography;
 const { confirm } = Modal;
 
 const getBase64 = (file, callback) => {
-  console.log("file", file);
   const reader = new FileReader();
   reader.addEventListener("load", () => callback(reader.result));
   reader.readAsDataURL(file);
@@ -83,8 +82,6 @@ const PlanForm = ({ visible, update }) => {
     setComments(values);
   };
 
-  console.log(projects, isFinished);
-
   const layout = {
     labelCol: { span: 9 },
     wrapperCol: { span: 15 },
@@ -109,13 +106,6 @@ const PlanForm = ({ visible, update }) => {
   };
 
   const onCreate = async (values) => {
-    console.log("Received values of form: ", values);
-
-    // form.validateFields()
-    //   .then( async( values ) => {
-    //
-    //     console.log( 'values', values );
-
     const data = new FormData();
     data.append("codirector", values.codirector ? values.codirector : "");
     data.append("partner", values.partner ? values.partner : "");
@@ -174,9 +164,6 @@ const PlanForm = ({ visible, update }) => {
     ) {
       forms.append("schedule", formData.schedule[0]);
     }
-
-    console.log("DATOS", data);
-
     if (projects.length > 0) {
       try {
         await API.post(`/projects/${projects[0].id}`, forms);
@@ -327,7 +314,6 @@ const PlanForm = ({ visible, update }) => {
   };
 
   const normPhotoFile = (e) => {
-    console.log("Upload event:", e);
     const file = e.file;
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
@@ -355,9 +341,6 @@ const PlanForm = ({ visible, update }) => {
     if (Array.isArray(e)) {
       return e;
     }
-
-    console.log("e.file", e.file);
-    console.log("e.fileList", e.fileList);
     setFileList([file]);
 
     return e && [e.file];

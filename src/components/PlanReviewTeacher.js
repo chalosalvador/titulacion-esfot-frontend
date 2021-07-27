@@ -41,7 +41,6 @@ const { Title } = Typography;
 const { confirm } = Modal;
 
 const getBase64 = (file, callback) => {
-  console.log("file", file);
   const reader = new FileReader();
   reader.addEventListener("load", () => callback(reader.result));
   reader.readAsDataURL(file);
@@ -68,8 +67,6 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     showAddCommentsModal(true);
     setComments(values);
   };
-
-  console.log(plan, isFinished);
 
   const [menuState, setMenuState] = useState({
     current: location.pathname, // set the current selected item in menu, by default the current page
@@ -264,7 +261,6 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     },
   };
   const onChange = (checkedValue) => {
-    console.log(checkedValue);
     if (checkedValue.length === 18) {
       setChecked(true);
     } else {
@@ -562,7 +558,6 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
   };
 
   const normPhotoFile = async (e) => {
-    console.log("Upload event:", e);
     const file = e.file;
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
@@ -591,8 +586,6 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
       return e;
     }
 
-    console.log("e.file", e.file);
-    console.log("e.fileList", e.fileList);
     setFileList([file]);
 
     return e && [e.file];
@@ -601,9 +594,6 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
   const onUpdate = async () => {
     const formData = form.getFieldsValue();
     const data = { ...formData };
-
-    console.log("DATOS", data);
-
     try {
       await API.post(`/projects/${plan.id}`, {
         codirector: data.codirector,
