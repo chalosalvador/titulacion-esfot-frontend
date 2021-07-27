@@ -17,7 +17,6 @@ import {
   CheckCircleOutlined,
   CommentOutlined,
   ExclamationCircleOutlined,
-  PlusOutlined,
   SendOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
@@ -62,7 +61,6 @@ const PlanForm = ({ visible, update }) => {
     );
   };
 
-  let location = useLocation();
   const { projects, isLoading } = useStudentProject();
   const { teachers } = useTeachers();
   const [imageUrl, setImageUrl] = useState(
@@ -161,23 +159,6 @@ const PlanForm = ({ visible, update }) => {
       console.log("ERROR", e);
       //.error( `No se guardaron los datos:¨${ e }` );
     }
-  };
-
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    setPreviewImage(file.url || file.preview);
-    setPreviewVisible(true);
-  };
-
-  const handleRemove = () => {
-    setImageUrl(null);
-  };
-
-  const handleCancel = () => {
-    setPreviewVisible(false);
   };
 
   const onUpdate = async () => {
