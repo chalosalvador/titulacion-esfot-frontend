@@ -40,17 +40,10 @@ const { TextArea } = Input;
 const { Title } = Typography;
 const { confirm } = Modal;
 
-const getBase64 = (file, callback) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(file);
-};
-
 const PlanReviewTeacher = ({ idPlan, user }) => {
   const [form] = Form.useForm();
 
   let location = useLocation();
-  // const { projects, isError, isLoading } = useProject();
   const { plan, isLoading } = usePlanContent(idPlan);
   const { teachers } = useTeachers();
   const [fileList, setFileList] = useState([]);
@@ -557,40 +550,6 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     }
   };
 
-  const normPhotoFile = async (e) => {
-    const file = e.file;
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      await message.error("La imagen debe tener formato JPG o PNG");
-      setFileList([]);
-      setImageUrl(null);
-      return null;
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      await message.error("La imagen debe ser menor a 2MB");
-      setFileList([]);
-      setImageUrl(null);
-      return null;
-    }
-
-    if (file.status === "removed") {
-      setFileList([]);
-      setImageUrl(null);
-      return null;
-    }
-
-    getBase64(e.file, (imageUrl) => setImageUrl(imageUrl));
-
-    if (Array.isArray(e)) {
-      return e;
-    }
-
-    setFileList([file]);
-
-    return e && [e.file];
-  };
-
   const onUpdate = async () => {
     const formData = form.getFieldsValue();
     const data = { ...formData };
@@ -1085,35 +1044,7 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                   <Form.Item
                     name={plan.schedule === null && "schedule"}
                     label="Cronograma"
-                    getValueFromEvent={normPhotoFile}
                   >
-                    {/*<Upload*/}
-                    {/*  name="files"*/}
-                    {/*  accept="image/jpeg,image/png"*/}
-                    {/*  listType="text"*/}
-                    {/*  multiple={false}*/}
-                    {/*  showUploadList={false}*/}
-                    {/*  beforeUpload={() => false}*/}
-                    {/*  filelist={imageUrl}*/}
-                    {/*  disabled={*/}
-                    {/*    !(*/}
-                    {/*      plan.status === "plan_sent" ||*/}
-                    {/*      plan.status === "plan_corrections_done"*/}
-                    {/*    )*/}
-                    {/*  }*/}
-                    {/*>*/}
-                    {/*  <Button*/}
-                    {/*    icon={<UploadOutlined />}*/}
-                    {/*    disabled={*/}
-                    {/*      !(*/}
-                    {/*        plan.status === "plan_sent" ||*/}
-                    {/*        plan.status === "plan_corrections_done"*/}
-                    {/*      )*/}
-                    {/*    }*/}
-                    {/*  >*/}
-                    {/*    Subir Imagen*/}
-                    {/*  </Button>*/}
-                    {/*</Upload>*/}
                     {image && (
                       <Image
                         src={image}
