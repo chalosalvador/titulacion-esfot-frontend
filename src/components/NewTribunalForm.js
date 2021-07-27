@@ -47,6 +47,7 @@ const NewTribunalForm = ({
       loadingModal(false);
       closeModal();
     } catch (e) {
+      loadingModal(false);
       message.error(e);
     }
   };

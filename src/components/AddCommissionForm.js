@@ -58,6 +58,7 @@ const AddCommissionForm = ({ form, careers, closeModal, loadingModal }) => {
       closeModal();
     } catch (e) {
       message.error("Ocurrió un error");
+      loadingModal(false);
       console.log("error", e);
     }
   };
@@ -134,7 +135,6 @@ const AddCommissionForm = ({ form, careers, closeModal, loadingModal }) => {
           mode="multiple"
           placeholder="Selcciona los profesores"
           showArrow
-          // defaultValue={ [ 'a10', 'c12' ] }
           onChange={handleChange}
           style={{ width: "100%" }}
           options={teachersList}
