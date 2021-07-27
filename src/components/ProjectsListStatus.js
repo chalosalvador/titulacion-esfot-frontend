@@ -1,10 +1,21 @@
 import React, { useState } from "react";
-import { Card, Col, Form, Modal, Row, Skeleton, Table, Tag } from "antd";
+import {
+  Card,
+  Col,
+  Form,
+  Modal,
+  Row,
+  Skeleton,
+  Table,
+  Tag,
+  Typography,
+} from "antd";
 import ShowError from "./ShowError";
 import Title from "antd/es/typography/Title";
 import { useCareersList } from "../data/useCareersList";
 import NewTribunalForm from "./NewTribunalForm";
 
+const { Link } = Typography;
 
 const ProjectsList = ({
   projectsList,
@@ -99,7 +110,7 @@ const ProjectsList = ({
       dataIndex: "title",
       key: "title",
       render: (title) =>
-        !(!tribunal && allProjects) ? (
+        !(!assignTribunal && allProjects) ? (
           <Link>{title}</Link>
         ) : (
           <Typography>{title}</Typography>

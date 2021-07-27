@@ -13,6 +13,7 @@ import Loading from "./Loading";
 import { useCommissionsList } from "../data/useCommissionsList";
 import { useCareersList } from "../data/useCareersList";
 
+const { Title } = Typography;
 
 const SecretaryCommitteeList = () => {
   let location = useLocation();
@@ -32,7 +33,6 @@ const SecretaryCommitteeList = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false);
 
-
   const handleOk = () => {
     form.submit();
   };
@@ -41,13 +41,6 @@ const SecretaryCommitteeList = () => {
     form.resetFields();
     setVisible(false);
   };
-
-  // Handles modal editar profesor
-
-    const handleCancel = () => {
-        console.log('Clicked cancel button');
-        setVisible(false);
-    };
 
   const handleEditOk = () => {
     setConfirmLoadingEdit(true);
@@ -250,20 +243,26 @@ const SecretaryCommitteeList = () => {
     },
   };
 
-    return (
-        <>
-            <Row>
-                <Col>{titleTable}</Col>
-            </Row>
-            <Row>
-                <Button style={{backgroundColor: "#034c70", color: "white"}} onClick={()=>setVisible(true)}><PlusOutlined/>Agregar
-                    Carrera</Button>
-            </Row>
-            <br>
-            </br>
-            <Row>
-                <div style={{display: "flex", justifyContent: "center"}}><Col>{content}</Col></div>
-            </Row>
+  return (
+    <>
+      <Row>
+        <Col>{titleTable}</Col>
+      </Row>
+      <Row>
+        <Button
+          style={{ backgroundColor: "#034c70", color: "white" }}
+          onClick={() => setVisible(true)}
+        >
+          <PlusOutlined />
+          Agregar Carrera
+        </Button>
+      </Row>
+      <br></br>
+      <Row>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Col>{content}</Col>
+        </div>
+      </Row>
 
       <Modal {...modalAddCommissionProps}>
         <AddCommissionForm
