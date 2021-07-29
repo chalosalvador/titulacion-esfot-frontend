@@ -41,7 +41,7 @@ const JuryProjectsListPage = () => {
       <Row>
         <Col>
           <Title level={4} style={{ color: "#034c70", fontSize: 50 }}>
-            Proyectos Jurado
+            Proyectos Tribunal
           </Title>
         </Col>
       </Row>

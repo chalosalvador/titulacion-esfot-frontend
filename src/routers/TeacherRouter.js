@@ -37,6 +37,11 @@ const AsyncJuryProjectsList = loadable(
   loadableOptions
 );
 
+const AsyncJuryProjectReview = loadable(
+  () => import("../pages/JuryProjectReviewPage"),
+  loadableOptions
+);
+
 const AsyncAbout = loadable(
   () => import("../pages/AboutPage"),
   loadableOptions
@@ -71,6 +76,10 @@ const TeacherRouter = () => (
     <PrivateRoute
       path={Routes.JURY_PROJECTS_LIST}
       component={AsyncJuryProjectsList}
+    />
+    <PrivateRoute
+      path={Routes.JURY_PROJECT_REVIEW}
+      component={AsyncJuryProjectReview}
     />
 
     <PrivateRoute path={Routes.LOGOUT} component={AsyncLogout} />

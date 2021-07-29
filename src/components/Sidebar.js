@@ -26,9 +26,9 @@ function Sidebar({ highlights, resetHighlights, teacher }) {
           <li
             key={index}
             className="sidebar__highlight"
-            onClick={() => {
-              updateHash(highlight);
-            }}
+            // onClick={() => {
+            //   updateHash(highlight);
+            // }}
           >
             <div>
               <strong>{highlight.comment.text}</strong>

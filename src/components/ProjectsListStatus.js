@@ -14,6 +14,8 @@ import ShowError from "./ShowError";
 import Title from "antd/es/typography/Title";
 import { useCareersList } from "../data/useCareersList";
 import NewTribunalForm from "./NewTribunalForm";
+import { useHistory } from "react-router-dom";
+import Routes from "../constants/routes";
 
 const { Link } = Typography;
 
@@ -28,9 +30,11 @@ const ProjectsList = ({
   const [form] = Form.useForm();
   const { careers, isLoading, isError } = useCareersList();
   const [visible, setVisible] = useState(false);
-  let titleModal = "";
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [tribunalData, setTribunalData] = useState(null);
+  const [projectData, setProjectData] = useState(null);
+  let titleModal = "";
+  const history = useHistory();
 
   if (isLoading) {
     return (
@@ -95,7 +99,7 @@ const ProjectsList = ({
       (project, index) =>
         project.status === "tribunal_assigned" && {
           key: index,
-          originalData: project,
+          originalData: project.originalData,
           title: project.title,
           teacher_name: project.teacher_name,
           created_at: project.created_at,
@@ -331,10 +335,23 @@ const ProjectsList = ({
           <Table
             columns={columns}
             dataSource={dataTribunalAssigned}
-            rowKey={(data) => data.id}
+            rowKey={(dataTribunalAssigned) => dataTribunalAssigned.id}
+            onRow={(record) => {
+              return {
+                onClick: (event) => {
+                  event.stopPropagation();
+                  setProjectData(record.originalData);
+                  history.push({
+                    pathname: Routes.JURY_PROJECT_REVIEW,
+                    state: { idPlan: record.originalData.id, user: "tribunal" },
+                  });
+                },
+              };
+            }}
           />
         )
       )}
+
       <Modal {...modalProps}>
         <NewTribunalForm
           project={tribunalData}
