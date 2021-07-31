@@ -21,9 +21,7 @@ import {
   CloseOutlined,
   CommentOutlined,
   ExclamationCircleOutlined,
-  PlusOutlined,
   SendOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
 import Routes from "../constants/routes";
 import { useLocation } from "react-router-dom";
@@ -48,7 +46,6 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
   const { teachers } = useTeachers();
   const [fileList, setFileList] = useState([]);
   const [sending, setSending] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
   const [sendingPlan, setSendingPlan] = useState(false);
   const [checked, setChecked] = useState(false);
   const [approvePlan, setApprovePlan] = useState(false);

@@ -69,9 +69,10 @@ const ProjectUpload = () => {
 
   const url = initialUrl;
 
-  const highlights = projects[0].highlights
-    ? JSON.parse(projects[0].highlights)
-    : [];
+  const highlights =
+    projects[0].highlights && projects[0].status === "project_review_teacher"
+      ? JSON.parse(projects[0].highlights)
+      : [];
 
   console.log("highlights", highlights);
 

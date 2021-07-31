@@ -26,6 +26,7 @@ const privateRoutes = {
   COMMITTEE_PLANS: "/proyectos-comision",
   PROJECT_DETAIL_SECRETARY: "/detalle-proyecto",
   JURY_PROJECTS_LIST: "/proyectos-jurado",
+  JURY_PROJECT_REVIEW: "/revision-proyecto",
 };
 
 const Routes = {

@@ -47,7 +47,7 @@ const PlanReview = (props) => {
                   : "header"
               }
             >
-              <ProjectReview idPlan={props.planId} />
+              <ProjectReview idPlan={props.planId} user={"director"} />
             </Panel>
           </Collapse>
         </Col>

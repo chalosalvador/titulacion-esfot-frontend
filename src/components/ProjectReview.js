@@ -60,24 +60,22 @@ const HighlightPopup = ({ comment }) =>
     </div>
   ) : null;
 
-const ProjectReview = ({ idPlan }) => {
+const ProjectReview = ({ idPlan, user }) => {
   const [approveProject, setApproveProject] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendingProject, setSendingProject] = useState(false);
   const [checked, setChecked] = useState(false);
   const { plan, isLoading } = usePlanContent(idPlan);
   const { pdf, isLoading1 } = useGetProjectPDF(idPlan);
+  console.log("plan", idPlan);
   const [highlights, setHighlights] = useState(
-    JSON.parse(plan.highlights) || []
+    plan.highlights ? JSON.parse(plan.highlights) : []
   );
 
   const PRIMARY_PDF_URL = `http://localhost:8000/api/project/getPDF/${idPlan}`;
   const initialUrl = PRIMARY_PDF_URL;
 
   const [url, setUrl] = useState(initialUrl);
-  console.log("plan", plan);
-
-  console.log("highlights", highlights);
 
   if (isLoading && isLoading1) {
     return <h1>Loading...</h1>;
@@ -103,7 +101,6 @@ const ProjectReview = ({ idPlan }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false);
-
     return () => {
       window.removeEventListener("hashchange", scrollToHighlightFromHash);
     };
@@ -116,18 +113,27 @@ const ProjectReview = ({ idPlan }) => {
   let scrollViewerTo = () => {};
 
   const addHighlight = async (highlight) => {
-    console.log("Saving highlight", highlight);
-
     localStorage.setItem(
       "highlights",
       JSON.stringify([{ ...highlight, id: getNextId() }, ...highlights])
     );
     setHighlights([{ ...highlight, id: getNextId() }, ...highlights]);
+
+    let dataToSent = {
+      highlights: JSON.stringify([
+        { ...highlight, id: getNextId() },
+        ...highlights,
+      ]),
+    };
+    try {
+      await API.post(`/projects/${plan.id}`, dataToSent);
+      message.success("Comentario agregado con éxito");
+    } catch (e) {
+      message.error("No se pudo agregar el comentario.");
+    }
   };
 
   const updateHighlight = (highlightId, position, content) => {
-    console.log("Updating highlight", highlightId, position, content);
-
     setHighlights(
       highlights.map((h) => {
         const {
@@ -169,12 +175,7 @@ const ProjectReview = ({ idPlan }) => {
   const onSentComments = async () => {
     setSending(true);
 
-    let dataToSent = {
-      highlights: JSON.stringify(highlights),
-    };
-
     try {
-      await API.post(`/projects/${plan.id}`, dataToSent);
       await API.post(`/projects/${plan.id}/project-review-teacher`); // put data to server
       setSending(false);
       confirm({
@@ -215,7 +216,6 @@ const ProjectReview = ({ idPlan }) => {
         cancelButtonProps: { hidden: true },
       });
     } catch (e) {
-      console.log("ERROR", e);
       message.error(`No se guardaron los datos:¨${e}`);
     }
   };
@@ -272,7 +272,6 @@ const ProjectReview = ({ idPlan }) => {
     }
   };
   const onChange = (checkedValue) => {
-    console.log(checkedValue);
     if (checkedValue.length === 5) {
       setChecked(true);
     } else {
@@ -406,16 +405,24 @@ const ProjectReview = ({ idPlan }) => {
                   content,
                   hideTipAndSelection,
                   transformSelection
-                ) => (
-                  <Tip
-                    onOpen={transformSelection}
-                    onConfirm={(comment) => {
-                      addHighlight({ content, position, comment });
+                ) =>
+                  (user === "director" &&
+                    (plan.status === "project_uploaded" ||
+                      plan.status === "project_corrections_done")) ||
+                  (user === "tribunal" &&
+                    plan.status === "tribunal_assigned") ? (
+                    <Tip
+                      onOpen={transformSelection}
+                      onConfirm={(comment) => {
+                        addHighlight({ content, position, comment });
 
-                      hideTipAndSelection();
-                    }}
-                  />
-                )}
+                        hideTipAndSelection();
+                      }}
+                    />
+                  ) : (
+                    console.log("Finished!")
+                  )
+                }
                 highlightTransform={(
                   highlight,
                   index,
@@ -466,42 +473,46 @@ const ProjectReview = ({ idPlan }) => {
           </PdfLoader>
         </div>
       </div>
-      <div style={{ marginTop: 30 }}>
-        <Row justify={"center"}>
-          <Col>
-            <Button
-              className={"submit"}
-              onClick={() => onSentComments()}
-              loading={sending}
-              disabled={
-                !(
-                  plan.status === "project_uploaded" ||
-                  plan.status === "project_corrections_done"
-                )
-              }
-            >
-              <SendOutlined /> Enviar comentarios al estudiante
-            </Button>
-          </Col>
-        </Row>
-        <Row justify={"center"}>
-          <Col>
-            <Button
-              className={"submit"}
-              onClick={() => setApproveProject(true)}
-              disabled={
-                !(
-                  plan.status === "project_uploaded" ||
-                  plan.status === "project_corrections_done"
-                )
-              }
-            >
-              <CheckOutlined /> Aprobar proyecto de titulación
-            </Button>
-          </Col>
-        </Row>
-        <Modal {...modalProps}>{modalContent}</Modal>
-      </div>
+      {user === "director" && (
+        <div style={{ marginTop: 30 }}>
+          <Row justify={"center"}>
+            <Col>
+              <Button
+                className={"submit"}
+                onClick={() => onSentComments()}
+                loading={sending}
+                disabled={
+                  !(
+                    plan.status === "project_uploaded" ||
+                    plan.status === "project_corrections_done"
+                  )
+                }
+              >
+                <SendOutlined /> Enviar comentarios al estudiante
+              </Button>
+            </Col>
+          </Row>
+
+          <Row justify={"center"}>
+            <Col>
+              <Button
+                className={"submit"}
+                onClick={() => setApproveProject(true)}
+                disabled={
+                  !(
+                    plan.status === "project_uploaded" ||
+                    plan.status === "project_corrections_done"
+                  )
+                }
+              >
+                <CheckOutlined /> Aprobar proyecto de titulación
+              </Button>
+            </Col>
+          </Row>
+
+          <Modal {...modalProps}>{modalContent}</Modal>
+        </div>
+      )}
     </div>
   );
 };
