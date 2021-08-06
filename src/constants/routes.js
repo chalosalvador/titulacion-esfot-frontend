@@ -23,6 +23,7 @@ const privateRoutes = {
   PROJECTS_LIST_SECRETARY: "/listado-proyectos",
   SECRETARY_COMMITTEE_LIST: "/listado-comisiones",
   SECRETARY_TEACHERS_LIST: "/listado-profesores",
+  SECRETARY_STUDENTS_LIST: "/listado-estudiantes",
   COMMITTEE_PLANS: "/proyectos-comision",
   PROJECT_DETAIL_SECRETARY: "/detalle-proyecto",
   JURY_PROJECTS_LIST: "/proyectos-jurado",

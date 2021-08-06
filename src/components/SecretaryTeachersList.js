@@ -118,20 +118,20 @@ const SecretaryTeachersList = () => {
   ];
 
   const userMenu = (
-    <Menu onClick={handleClick}>
-      <Menu.Item key="password">Cambiar clave</Menu.Item>
-      <Menu.Item key={Routes.LOGIN}>
-        <Link to={Routes.LOGOUT} className="logout-link">
-          {isCheckingAuth ? (
-            <LoadingOutlined />
-          ) : (
-            <>
-              <LogoutOutlined /> Cerrar sesión{" "}
-            </>
-          )}
-        </Link>
-      </Menu.Item>
-    </Menu>
+      <Menu onClick={handleClick}>
+        <Menu.Item key="password">Cambiar clave</Menu.Item>
+        <Menu.Item key={Routes.LOGIN}>
+          <Link to={Routes.LOGOUT} className="logout-link">
+            {isCheckingAuth ? (
+                <LoadingOutlined />
+            ) : (
+                <>
+                  <LogoutOutlined /> Cerrar sesión{" "}
+                </>
+            )}
+          </Link>
+        </Menu.Item>
+      </Menu>
   );
 
   let pagination = {

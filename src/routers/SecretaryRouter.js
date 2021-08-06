@@ -30,6 +30,11 @@ const AsyncSecretaryTeachersList = loadable(
     loadableOptions
 );
 
+const AsyncSecretaryStudentsList = loadable(
+    () => import("../pages/SecretaryStudentsListPage"),
+    loadableOptions
+);
+
 const AsyncAbout = loadable(
     () => import("../pages/AboutPage"),
     loadableOptions
@@ -70,6 +75,11 @@ const SecretaryRouter = () => (
         <PrivateRoute
             path={Routes.SECRETARY_TEACHERS_LIST}
             component={AsyncSecretaryTeachersList}
+        />
+
+        <PrivateRoute
+            path={Routes.SECRETARY_STUDENTS_LIST}
+            component={AsyncSecretaryStudentsList}
         />
 
         <PrivateRoute path={Routes.LOGOUT} component={AsyncLogout}/>
