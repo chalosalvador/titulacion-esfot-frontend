@@ -89,131 +89,6 @@ const SecretaryStudentsList = () => {
             width: 550,
             ...SearchColumnFilter("email"),
         },
-        {
-            title: "Estado",
-            dataIndex: "status",
-            key: "status",
-            render: (value) => {
-                let color = "";
-                let name = "";
-                {
-                    switch (value) {
-                        case "plan_saved":
-                            color = "orange";
-                            name = "Plan en desarrollo";
-                            break;
-
-                        case "plan_sent":
-                            color = "blue";
-                            name = "Por revisar";
-                            break;
-
-                        case "plan_corrections_done":
-                            color = "blue";
-                            name = "Correcciones de plan realizadas";
-                            break;
-
-                        case "plan_review_teacher":
-                            color = "orange";
-                            name = "Correcciones enviadas";
-                            break;
-
-                        case "plan_approved_director":
-                            color = "green";
-                            name = "Plan aprobado";
-                            break;
-
-                        case "plan_review_commission":
-                            color = "orange";
-                            name = "Correcciones de comisión enviadas";
-                            break;
-
-                        case "plan_corrections_done2":
-                            color = "blue";
-                            name = "Por revisar por comisión";
-                            break;
-
-                        case "plan_approved_commission":
-                            color = "green";
-                            name = "Plan aprobado por comisión";
-                            break;
-
-                        case "san_curriculum_1":
-                            color = "purple";
-                            name = "Curriculum saneado 1";
-                            break;
-
-                        case "san_curriculum_2":
-                            color = "purple";
-                            name = "Curriculum saneado 2";
-                            break;
-
-                        case "plan_rejected":
-                            color = "red";
-                            name = "Plan rechazado";
-                            break;
-
-                        case "project_uploaded":
-                            color = "cyan";
-                            name = "PDF por revisar";
-                            break;
-
-                        case "project_corrections_done":
-                            color = "cyan";
-                            name = "correcciones de PDF realizadas";
-                            break;
-
-                        case "project_review_teacher":
-                            color = "magenta";
-                            name = "Correcciones de PDF enviadas";
-                            break;
-
-                        case "project_approved_director":
-                            color = "green";
-                            name = "PDF aprobado";
-                            break;
-
-                        case "tribunal_assigned":
-                            color = "lime";
-                            name = "Tribunal asignado";
-                            break;
-
-                        case "project_graded":
-                            color = "yellow";
-                            name = "Proyecto calificado";
-                            break;
-
-                        case "test_defense_apt":
-                            color = "green";
-                            name = "Apto para defensa oral";
-                            break;
-
-                        case "date_defense_assigned":
-                            color = "geekblue";
-                            name = "Fecha de defensa asignada";
-                            break;
-
-                        case "project_completed":
-                            color = "gold";
-                            name = "Proyecto completado";
-                            break;
-
-                        case "project_rejected":
-                            color = "red";
-                            name = "Proyecto rechazado";
-                            break;
-
-                        default:
-                            break;
-                    }
-                    return (
-                        <Tag color={color} key={value}>
-                            {name.toUpperCase()}
-                        </Tag>
-                    );
-                }
-            },
-        },
     ];
 
     const userMenu = (
@@ -254,8 +129,7 @@ const SecretaryStudentsList = () => {
             originalData: student,
             name: student.user.name,
             career: student.career,
-            email: student.user.email,
-            status: student.project[0].status || ''
+            email: student.user.email
         }
     });
 
