@@ -52,11 +52,15 @@ const SiderStudent = () => {
       ? 9
       : projectStatus === "project_graded"
       ? 10
-      : projectStatus === "test_defense_apt"
+      : projectStatus === "project_corrections_done_2"
       ? 11
-      : projectStatus === "date_defense_assigned"
+      : projectStatus === "project_approved_send"
       ? 12
-      : 13;
+      : projectStatus === "test_defense_apt"
+      ? 13
+      : projectStatus === "date_defense_assigned"
+      ? 14
+      : 15;
 
   return (
     <Sider
@@ -81,6 +85,8 @@ const SiderStudent = () => {
         <Step description="Curriculum saneado 2" />
         <Step description="Tribunal asignado" />
         <Step description="Proyecto de titulación calificado (documento)" />
+        <Step description="Proyecto corregido (correcciones del tribunal)" />
+        <Step description="Proyecto aprobado (envío)" />
         <Step description="Declarado apto para defensa oral" />
         <Step description="Fecha de defensa asignada" />
         <Step description="¡Proyecto completado!" />

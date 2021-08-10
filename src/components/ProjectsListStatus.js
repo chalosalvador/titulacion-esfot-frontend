@@ -202,7 +202,7 @@ const ProjectsList = ({
 
             case "project_corrections_done":
               color = "cyan";
-              name = "correcciones de PDF realizadas";
+              name = "Correcciones de PDF realizadas";
               break;
 
             case "project_review_teacher":
@@ -223,6 +223,16 @@ const ProjectsList = ({
             case "project_graded":
               color = "yellow";
               name = "Proyecto calificado";
+              break;
+
+            case "project_corrections_done_2":
+              color = "cyan";
+              name = "Correcciones de PDF realizadas (tribunal)";
+              break;
+
+            case "project_approved_send":
+              color = "cyan";
+              name = "Aprobado para envío";
               break;
 
             case "test_defense_apt":

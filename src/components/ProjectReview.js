@@ -159,7 +159,9 @@ const ProjectReview = ({ idPlan, user }) => {
       icon: <ExclamationCircleOutlined />,
       title: "¿Estás seguro de mandar el proyecto?",
       content:
-        "Una vez aprobado se enviará a secretaria para asignar a un tribunal.",
+        plan.status === "project_corrections_done"
+          ? "Una vez aprobado se enviará a secretaria para asignar a un tribunal."
+          : "Una vez aprobado se enviará a secretaria.",
       okText: "Si",
       cancelText: "No",
       onOk() {
@@ -225,7 +227,11 @@ const ProjectReview = ({ idPlan, user }) => {
     const dataToSent = { highlights: null };
     try {
       await API.post(`/projects/${plan.id}`, dataToSent); //put data to server
-      await API.post(`/projects/${plan.id}/project-approved-director`); // change status
+      if (plan.status === "project_corrections_done") {
+        await API.post(`/projects/${plan.id}/project-approved-director`);
+      } else {
+        await API.post(`/projects/${plan.id}/project-approved-send`);
+      }
       setSendingProject(false);
       confirm({
         icon: <CheckCircleOutlined />,
@@ -248,9 +254,13 @@ const ProjectReview = ({ idPlan, user }) => {
                 <p style={{ color: "#034c70" }}>
                   Gracias por tu esfuerzo en revisar el proyecto de titulación,
                   <br />
-                  <strong>
-                    ha sido enviado a secretaria para asignación de tribunal
-                  </strong>
+                  {plan.status === "project_corrections_done_2" ? (
+                    <strong>el proyecto ha sido enviado a secretaría</strong>
+                  ) : (
+                    <strong>
+                      ha sido enviado a secretaria para asignación de tribunal
+                    </strong>
+                  )}
                   .
                 </p>
               </Col>
@@ -501,7 +511,8 @@ const ProjectReview = ({ idPlan, user }) => {
                 disabled={
                   !(
                     plan.status === "project_uploaded" ||
-                    plan.status === "project_corrections_done"
+                    plan.status === "project_corrections_done" ||
+                    plan.status === "project_corrections_done_2"
                   )
                 }
               >
