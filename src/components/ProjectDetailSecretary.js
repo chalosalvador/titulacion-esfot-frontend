@@ -105,11 +105,51 @@ const ProjectDetailSecretary = ({ id }) => {
     }
   };
 
-  const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
+  const optionsAptDefense = [
+    { label: "Datos del SAEW actualizado", value: 1 },
+    { label: "Título de bachiller", value: 2 },
+    { label: "Certificado de idioma Inglés", value: 3 },
+    {
+      label: "Formulario de no adeudar a las unidades académicas de la EPN",
+      value: 4,
+    },
+    {
+      label: "Factura electrónica del pago de derecho de investidura",
+      value: 5,
+    },
+    { label: "Carta de compromiso para registro de título", value: 6 },
+    { label: "Certificado de periodos matriculados", value: 7 },
+    { label: "Registro blibliográfico ingresado", value: 8 },
+    {
+      label: "Escaneados de cédula de identidad y papeleta",
+      value: 9,
+    },
+    {
+      label: "Informe de finalización de prácticas pre-profesionales",
+      value: 10,
+    },
+    {
+      label: "Informe de finalización de servicio a la comunidad",
+      value: 11,
+    },
+    { label: "Currículum académico certificado", value: 12 },
+    { label: "Proveído de prácticas", value: 13 },
+    { label: "Proveído de calificaciones", value: 14 },
+    { label: "Certificado de créditos por categoría", value: 15 },
+  ];
+
+  const onChangeCheckBoxGroup = async (checkedValues) => {
+    console.log("checkedValues", checkedValues);
+    if (checkedValues.length === 15) {
+      console.log("apt");
+      try {
+        await API.post(`/projects/${id}/test-defense-apt`);
+        message.success("Estudiante declarado apto");
+      } catch (e) {
+        message.error("Sucedió un error intente de nuevo");
+      }
+    }
+  };
 
   return (
     <>
@@ -235,7 +275,18 @@ const ProjectDetailSecretary = ({ id }) => {
           </Checkbox>
         </Panel>
         <Panel header="Requisitos para declarar apta defensa oral" key="4">
-          <p>{text}</p>
+          <Checkbox.Group
+            onChange={onChangeCheckBoxGroup}
+            disabled={plan.status !== "project_graded"}
+          >
+            <Row>
+              {optionsAptDefense.map((option, index) => (
+                <Col span={8} key={index}>
+                  <Checkbox value={option.value}>{option.label}</Checkbox>
+                </Col>
+              ))}
+            </Row>
+          </Checkbox.Group>
         </Panel>
       </Collapse>
     </>
