@@ -149,6 +149,16 @@ const TeacherPanel = () => {
               name = "Proyecto calificado";
               break;
 
+            case "project_corrections_done_2":
+              color = "cyan";
+              name = "Correcciones de PDF realizadas (tribunal)";
+              break;
+
+            case "project_approved_send":
+              color = "cyan";
+              name = "Aprobado para envío";
+              break;
+
             case "test_defense_apt":
               color = "green";
               name = "Apto para defensa oral";

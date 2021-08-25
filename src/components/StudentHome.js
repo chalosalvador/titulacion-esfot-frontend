@@ -83,6 +83,8 @@ const StudentHomePage = () => {
                           projects[0].status === "san_curriculum_2" ||
                           projects[0].status === "tribunal_assigned" ||
                           projects[0].status === "project_graded" ||
+                          projects[0].status === "project_corrections_done_2" ||
+                          projects[0].status === "project_approved_send" ||
                           projects[0].status === "test_defense_apt" ||
                           projects[0].status === "date_defense_assigned" ||
                           projects[0].status === "project_completed"

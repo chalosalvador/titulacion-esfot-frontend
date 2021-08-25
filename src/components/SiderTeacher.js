@@ -26,7 +26,8 @@ const SiderTeacher = ({ user }) => {
   const projectsReview = teachersProjects.filter(
     (project) =>
       project.status === "project_uploaded" ||
-      project.status === "project_corrections_done"
+      project.status === "project_corrections_done" ||
+      project.status === "project_corrections_done_2"
   );
 
   const projectsTribunal = teachersProjects.filter(

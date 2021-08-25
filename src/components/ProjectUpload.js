@@ -55,7 +55,8 @@ const ProjectUpload = () => {
   const { pdf, isLoading1 } = useGetProjectPDF(projects[0].id);
 
   if (
-    projects[0].status === "project_review_teacher" &&
+    (projects[0].status === "project_review_teacher" ||
+      projects[0].status === "project_graded") &&
     isLoading &&
     isLoading1
   ) {
@@ -70,7 +71,9 @@ const ProjectUpload = () => {
   const url = initialUrl;
 
   const highlights =
-    projects[0].highlights && projects[0].status === "project_review_teacher"
+    projects[0].highlights &&
+    (projects[0].status === "project_review_teacher" ||
+      projects[0].status === "project_graded")
       ? JSON.parse(projects[0].highlights)
       : [];
 
@@ -94,7 +97,8 @@ const ProjectUpload = () => {
     },
     disabled: !(
       projects[0].status === "plan_approved_commission" ||
-      projects[0].status === "project_review_teacher"
+      projects[0].status === "project_review_teacher" ||
+      projects[0].status === "project_graded"
     ),
     beforeUpload: () => false,
   };
@@ -107,10 +111,25 @@ const ProjectUpload = () => {
 
     try {
       await API.post(`/projects/${projects[0].id}/pdf`, data);
-      if (projects[0].status === "plan_approved_commission") {
-        await API.post(`/projects/${projects[0].id}/project-uploaded`);
-      } else {
-        await API.post(`/projects/${projects[0].id}/project-corrections-done`);
+      switch (projects[0].status) {
+        case "plan_approved_commission":
+          await API.post(`/projects/${projects[0].id}/project-uploaded`);
+          break;
+
+        case "project_review_teacher":
+          await API.post(
+            `/projects/${projects[0].id}/project-corrections-done`
+          );
+          break;
+
+        case "project_graded":
+          await API.post(
+            `/projects/${projects[0].id}/project-corrections-done-2`
+          );
+          break;
+
+        default:
+          break;
       }
 
       setIsSending(false);
@@ -243,7 +262,8 @@ const ProjectUpload = () => {
       </Title>
       {projects[0].status !== "plan_approved_commission" && (
         <div className="App" style={{ display: "flex", height: "100vh" }}>
-          {projects[0].status === "project_review_teacher" ? (
+          {projects[0].status === "project_review_teacher" ||
+          projects[0].status === "project_graded" ? (
             <Sidebar highlights={highlights} />
           ) : (
             <></>
@@ -359,7 +379,8 @@ const ProjectUpload = () => {
                   disabled={
                     !(
                       projects[0].status === "plan_approved_commission" ||
-                      projects[0].status === "project_review_teacher"
+                      projects[0].status === "project_review_teacher" ||
+                      projects[0].status === "project_graded"
                     )
                   }
                 >
