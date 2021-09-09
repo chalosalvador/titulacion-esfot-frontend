@@ -10,9 +10,8 @@ import {
   Row,
   Select,
   Typography,
-  Upload,
 } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/plan-form.css";
 import {
   CheckCircleOutlined,
@@ -24,8 +23,6 @@ import {
   SendOutlined,
 } from "@ant-design/icons";
 import Routes from "../constants/routes";
-import { useLocation } from "react-router-dom";
-import { useAuth } from "../providers/Auth";
 import withAuth from "../hocs/withAuth";
 import { useTeachers } from "../data/useTeachers";
 import Loading from "./Loading";
@@ -41,10 +38,10 @@ const { confirm } = Modal;
 const PlanReviewTeacher = ({ idPlan, user }) => {
   const [form] = Form.useForm();
 
-  let location = useLocation();
+  // let location = useLocation();
   const { plan, isLoading } = usePlanContent(idPlan);
   const { teachers } = useTeachers();
-  const [fileList, setFileList] = useState([]);
+  const [imageUrl, setImageUrl] = useState(null);
   const [sending, setSending] = useState(false);
   const [sendingPlan, setSendingPlan] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -58,28 +55,30 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     setComments(values);
   };
 
-  const [menuState, setMenuState] = useState({
-    current: location.pathname, // set the current selected item in menu, by default the current page
-    collapsed: false,
-    openKeys: [],
-  });
+  // const [menuState, setMenuState] = useState({
+  //   current: location.pathname, // set the current selected item in menu, by default the current page
+  //   collapsed: false,
+  //   openKeys: [],
+  // });
 
-  const { isAuthenticated } = useAuth();
+  // const { isAuthenticated } = useAuth();
 
-  React.useEffect(() => {
-    setMenuState({
-      ...menuState,
-      current: location.pathname,
-    });
-  }, [location, isAuthenticated]);
+  // React.useEffect(() => {
+  //   setMenuState({
+  //     ...menuState,
+  //     current: location.pathname,
+  //   });
+  // }, [location, isAuthenticated, menuState]);
+
+  useEffect(() => {
+    if (plan && plan.schedule) {
+      setImageUrl(`${process.env.REACT_APP_API_BASE_URL}/${plan.schedule}`);
+    }
+  }, [plan]);
 
   if (isLoading) {
     return <Loading />;
   }
-
-  const image = plan.schedule
-    ? `http://localhost:8000/api/project/getSchedule/${plan.id}`
-    : "";
 
   const layout = {
     labelCol: { span: 9 },
@@ -239,7 +238,7 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
       loading: sendingPlan,
       style: {
         marginRight: 250,
-        backgroundColor: "#034c70",
+        // backgroundColor: "#034c70",
       },
       disabled: !checked,
     },
@@ -260,7 +259,7 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
 
   const contentApproveModal = (
     <>
-      <Checkbox.Group onChange={onChange}>
+      <Checkbox.Group onChange={onChange} className="plan-approval-rubric">
         <Row>
           <Col>
             <Title level={4} style={{ color: "#034c70" }}>
@@ -292,9 +291,8 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
         <Row>
           <Col>
             <Checkbox style={{ marginLeft: 8 }} value={"5"}>
-              Identifica síntomas causas que permiten pronosticar <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;las consecuencias si
-              persiste el problema.
+              Identifica síntomas causas que permiten pronosticar las
+              consecuencias si persiste el problema.
             </Checkbox>
             <Checkbox value={"6"}>Describe el problema y la solución.</Checkbox>
             <Checkbox value={"7"}>
@@ -363,9 +361,8 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
         <Row>
           <Col>
             <Checkbox style={{ marginLeft: 8 }} value={"14"}>
-              Describe las actividades que se realizarán durante <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;la ejecución del trabajo
-              de titulación.
+              Describe las actividades que se realizarán durante la ejecución
+              del trabajo de titulación.
             </Checkbox>
           </Col>
         </Row>
@@ -393,9 +390,8 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
         <Row>
           <Col>
             <Checkbox style={{ marginLeft: 8 }} value={"16"}>
-              Describe las etapas del trabajo de titulación con <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sus respectivos tiempos
-              de ejecución.
+              Describe las etapas del trabajo de titulación con sus respectivos
+              tiempos de ejecución.
             </Checkbox>
           </Col>
         </Row>
@@ -409,9 +405,8 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
         <Row>
           <Col>
             <Checkbox style={{ marginLeft: 8 }} value={"17"}>
-              Las referencias bibliográficas tienen valor académico <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y son contemporáneas a
-              pertinentes.
+              Las referencias bibliográficas tienen valor académico y son
+              contemporáneas a pertinentes.
             </Checkbox>
             <Checkbox value={"18"}>
               Las fuentes citadas son de apoyo para sustentar el trabajo de
@@ -1042,11 +1037,11 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                     name={plan.schedule === null && "schedule"}
                     label="Cronograma"
                   >
-                    {image && (
+                    {imageUrl && (
                       <Image
-                        src={image}
-                        alt="Foto"
-                        style={{ width: "490px" }}
+                        src={imageUrl}
+                        alt="Cronograma"
+                        style={{ width: "200px" }}
                       />
                     )}
                   </Form.Item>
@@ -1150,7 +1145,7 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
           comments={comments}
           planID={idPlan}
           plan={plan}
-          closeModal={() => showAddCommentsModal(false)}
+          onClose={() => showAddCommentsModal(false)}
         />
       </Modal>
     </>

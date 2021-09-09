@@ -8,10 +8,11 @@ import {
   Modal,
   Row,
   Select,
+  Spin,
   Typography,
   Upload,
 } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../styles/plan-form.css";
 import {
   CheckCircleOutlined,
@@ -21,7 +22,6 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import Routes from "../constants/routes";
-import { useLocation } from "react-router-dom";
 import withAuth from "../hocs/withAuth";
 import { useStudentProject } from "../data/useStudentProjects";
 import { useTeachers } from "../data/useTeachers";
@@ -31,8 +31,31 @@ import ViewComments from "./ViewComments";
 
 const { Option } = Select;
 const { TextArea } = Input;
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { confirm } = Modal;
+
+const layout = {
+  labelCol: { span: 9 },
+  wrapperCol: { span: 15 },
+};
+
+const tailLayout = {
+  wrapperCol: {
+    offset: 8,
+    span: 16,
+  },
+};
+
+const validateMessages = {
+  required: "${label} es requerido!",
+  types: {
+    email: "${label} is not validate email!",
+    number: "${label} is not a validate number!",
+  },
+  number: {
+    range: "${label} must be between ${min} and ${max}",
+  },
+};
 
 const getBase64 = (file, callback) => {
   const reader = new FileReader();
@@ -40,155 +63,92 @@ const getBase64 = (file, callback) => {
   reader.readAsDataURL(file);
 };
 
-const PlanForm = ({ visible, update }) => {
-  const [form] = Form.useForm();
-
-  const getProjectData = () => {
-    const formData = form.getFieldsValue();
-    return (
-      formData.bibliography !== undefined &&
-      formData.general_objective !== undefined &&
-      formData.hypothesis !== undefined &&
-      formData.justification !== undefined &&
-      formData.knowledge_area !== undefined &&
-      formData.methodology !== undefined &&
-      formData.problem !== undefined &&
-      formData.project_type !== undefined &&
-      formData.research_line !== undefined &&
-      formData.specifics_objectives !== undefined &&
-      formData.work_plan !== undefined
-    );
-  };
-
+const PlanForm = () => {
   const { projects, isLoading } = useStudentProject();
   const { teachers } = useTeachers();
-  const [imageUrl, setImageUrl] = useState(
-    projects[0] && projects[0].schedule
-      ? `http://localhost:8000/api/project/getSchedule/${projects[0].id}`
-      : ""
-  );
-  const [fileList, setFileList] = useState([]);
+  const [imageUrl, setImageUrl] = useState(null);
   const [sending, setSending] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [isFinished, setIsFinished] = useState(() => {
-    getProjectData();
-  });
+  const [isFinished, setIsFinished] = useState(true);
   const [showComments, showViewCommentsModal] = useState(false);
   const [comments, setComments] = useState(" ");
+  const [form] = Form.useForm();
+  const autoSaveTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    if (projects && projects[0] && projects[0].schedule) {
+      setImageUrl(
+        `${process.env.REACT_APP_API_BASE_URL}/${projects[0].schedule}`
+      );
+    }
+  }, [projects]);
+
+  useEffect(() => {
+    if (form) {
+      const formData = form.getFieldsValue();
+      return (
+        formData.bibliography !== undefined &&
+        formData.general_objective !== undefined &&
+        formData.hypothesis !== undefined &&
+        formData.justification !== undefined &&
+        formData.knowledge_area !== undefined &&
+        formData.methodology !== undefined &&
+        formData.problem !== undefined &&
+        formData.project_type !== undefined &&
+        formData.research_line !== undefined &&
+        formData.specifics_objectives !== undefined &&
+        formData.work_plan !== undefined
+      );
+    }
+  }, [form]);
 
   const showViewComments = async (values) => {
     showViewCommentsModal(true);
     setComments(values);
   };
 
-  const layout = {
-    labelCol: { span: 9 },
-    wrapperCol: { span: 15 },
-  };
-
-  const tailLayout = {
-    wrapperCol: {
-      offset: 8,
-      span: 16,
-    },
-  };
-
-  const validateMessages = {
-    required: "${label} es requerido!",
-    types: {
-      email: "${label} is not validate email!",
-      number: "${label} is not a validate number!",
-    },
-    number: {
-      range: "${label} must be between ${min} and ${max}",
-    },
-  };
-
-  const onCreate = async (values) => {
-    const data = new FormData();
-    data.append("codirector", values.codirector ? values.codirector : "");
-    data.append("partner", values.partner ? values.partner : "");
-    data.append("project_type", values.project_type ? values.project_type : "");
-    data.append(
-      "research_line",
-      values.research_line ? values.research_line : ""
-    );
-    data.append(
-      "knowledge_area",
-      values.knowledge_area ? values.knowledge_area : ""
-    );
-    data.append("title", values.title);
-    data.append("problem", values.problem ? values.problem : "");
-    data.append(
-      "justification",
-      values.justification ? values.justification : ""
-    );
-    data.append("hypothesis", values.hypothesis ? values.hypothesis : "");
-    data.append(
-      "general_objective",
-      values.general_objective ? values.general_objective : ""
-    );
-    data.append(
-      "specifics_objectives",
-      values.specifics_objectives ? values.specifics_objectives : ""
-    );
-    data.append("methodology", values.methodology ? values.methodology : "");
-    data.append("work_plan", values.work_plan ? values.work_plan : "");
-    data.append("schedule", values.schedule ? values.schedule[0] : null);
-    data.append("bibliography", values.bibliography ? values.bibliography : "");
-    data.append("teacher_id", values.teacher_id);
-
-    console.log("DATOS", values);
-
-    try {
-      await API.post("/students/projects", data); // post data to server
-      setImageUrl(null);
-      message.success("Cambios guardados correctamente!");
-    } catch (e) {
-      console.log("ERROR", e);
-      //.error( `No se guardaron los datos:¨${ e }` );
-    }
-  };
-
   const onUpdate = async () => {
-    const formData = form.getFieldsValue();
-    const data = {
-      ...formData,
-    };
+    if (canEditPlan()) {
+      const formData = form.getFieldsValue();
+      console.log("formData", formData);
 
-    const forms = new FormData();
-    if (
-      formData.schedule &&
-      formData.schedule !== `storage/schedule/${projects[0].id}/schedule.jpg`
-    ) {
-      forms.append("schedule", formData.schedule[0]);
-    }
-    if (projects.length > 0) {
-      try {
-        await API.post(`/projects/${projects[0].id}`, forms);
-        await API.post(`/projects/${projects[0].id}`, {
-          codirector: data.codirector,
-          partner: data.partner,
-          project_type: data.project_type,
-          research_line: data.research_line,
-          knowledge_area: data.knowledge_area,
-          title: data.title,
-          problem: data.problem,
-          justification: data.justification,
-          hypothesis: data.hypothesis,
-          general_objective: data.general_objective,
-          specifics_objectives: data.specifics_objectives,
-          methodology: data.methodology,
-          work_plan: data.work_plan,
-          bibliography: data.bibliography,
-          teacher_id: data.teacher_id,
-        });
-      } catch (e) {
-        console.log("ERROR", e);
+      if (formData.title && formData.teacher_id) {
+        setSending(true);
+        const forms = new FormData();
+        forms.append("codirector", formData.codirector || "");
+        forms.append("partner", formData.partner || "");
+        forms.append("project_type", formData.project_type || "");
+        forms.append("research_line", formData.research_line || "");
+        forms.append("knowledge_area", formData.knowledge_area || "");
+        forms.append("title", formData.title);
+        forms.append("problem", formData.problem || "");
+        forms.append("justification", formData.justification || "");
+        forms.append("hypothesis", formData.hypothesis || "");
+        forms.append("general_objective", formData.general_objective || "");
+        forms.append(
+          "specifics_objectives",
+          formData.specifics_objectives || ""
+        );
+        forms.append("methodology", formData.methodology || "");
+        forms.append("work_plan", formData.work_plan || "");
+        forms.append("bibliography", formData.bibliography || "");
+        forms.append("teacher_id", formData.teacher_id);
+
+        if (formData.schedule && formData.schedule.length > 0) {
+          forms.append("schedule", formData.schedule[0]);
+        }
+        try {
+          if (projects[0]) {
+            await API.post(`/projects/${projects[0].id}`, forms);
+          } else {
+            await API.post("/students/projects", forms); // post data to server
+            // message.success("Cambios guardados correctamente!");
+          }
+        } catch (e) {
+          console.log("ERROR", e);
+        } finally {
+          setSending(false);
+        }
       }
-    } else {
-      onCreate(data);
     }
   };
 
@@ -214,7 +174,7 @@ const PlanForm = ({ visible, update }) => {
   const modal = () => {
     confirm({
       icon: <ExclamationCircleOutlined />,
-      title: "¿Estás seguro de mandar el plan?",
+      title: "¿Estás seguro de enviar el plan?",
       content: (
         <>
           {projects[0].status === "plan_review_commission" ? (
@@ -235,7 +195,7 @@ const PlanForm = ({ visible, update }) => {
       okText: "Si",
       cancelText: "No",
       onOk() {
-        onFinish();
+        form.submit();
       },
       onCancel() {
         console.log("Cancel");
@@ -244,11 +204,19 @@ const PlanForm = ({ visible, update }) => {
     });
   };
 
+  const handleFormChange = () => {
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+    onCompleteForm();
+    autoSaveTimeoutRef.current = setTimeout(async () => {
+      await onUpdate();
+    }, 500);
+  };
+
   const onFinish = async () => {
     setSending(true);
-    const data = form.getFieldsValue();
-    let dataToSent = { ...data };
-
+    console.log("onfinish");
     try {
       if (projects[0].status === "plan_review_teacher") {
         await API.post(`/projects/${projects[0].id}/plan-corrections-done`);
@@ -257,7 +225,7 @@ const PlanForm = ({ visible, update }) => {
       } else {
         await API.post(`/projects/${projects[0].id}/plan-sent`);
       }
-      setSending(false);
+
       confirm({
         icon: <CheckCircleOutlined />,
         title: (
@@ -310,6 +278,8 @@ const PlanForm = ({ visible, update }) => {
     } catch (e) {
       console.log("ERROR", e);
       message.error(`No se guardaron los datos:¨${e}`);
+    } finally {
+      setSending(false);
     }
   };
 
@@ -318,20 +288,17 @@ const PlanForm = ({ visible, update }) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
       message.error("La imagen debe tener formato JPG o PNG");
-      setFileList([]);
       setImageUrl(null);
       return null;
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
       message.error("La imagen debe ser menor a 2MB");
-      setFileList([]);
       setImageUrl(null);
       return null;
     }
 
     if (file.status === "removed") {
-      setFileList([]);
       setImageUrl(null);
       return null;
     }
@@ -341,9 +308,37 @@ const PlanForm = ({ visible, update }) => {
     if (Array.isArray(e)) {
       return e;
     }
-    setFileList([file]);
 
     return e && [e.file];
+  };
+
+  const canEditPlan = () => {
+    return (
+      projects.length === 0 ||
+      (projects[0] &&
+        (projects[0].status === "plan_saved" ||
+          projects[0].status === "plan_review_teacher" ||
+          projects[0].status === "plan_review_commission"))
+    );
+  };
+
+  const renderCommentIcon = (field) => {
+    return (
+      projects[0] &&
+      projects[0][field] &&
+      (projects[0].status === "plan_review_teacher" ||
+        projects[0].status === "plan_review_commission") && (
+        <CommentOutlined
+          style={{
+            color: "#034c70",
+            fontSize: 25,
+            marginLeft: 15,
+            float: "right",
+          }}
+          onClick={() => showViewComments(field)}
+        />
+      )
+    );
   };
 
   if (isLoading) {
@@ -363,624 +358,303 @@ const PlanForm = ({ visible, update }) => {
           >
             Datos Generales
           </Title>
-          <Form.Provider
-            onFormChange={() => {
-              onCompleteForm();
-              setTimeout(() => {
-                onUpdate().then(() => {
-                  console.log("Cambios guardados correctamente!");
-                });
-              }, 2000);
-            }}
+
+          <Form
+            {...layout}
+            name="plan-form"
+            onFinish={onFinish}
+            initialValues={
+              projects.length > 0 ? { ...projects[0], schedule: [] } : {}
+            }
+            validateMessages={validateMessages}
+            form={form}
+            onFieldsChange={handleFormChange}
+            className="plan-form"
           >
-            <Form
-              {...layout}
-              name="nest-messages"
-              onFinish={projects.length > 0 ? onUpdate : onCreate}
-              initialValues={projects.length > 0 ? projects[0] : {}}
-              validateMessages={validateMessages}
-              form={form}
-            >
-              <Row justify="center">
-                <Col>
-                  <Form.Item
-                    name="teacher_id"
-                    label="Seleccione su director"
-                    rules={[{ required: true }]}
+            <Row justify="center">
+              <Col>
+                <Form.Item
+                  name="teacher_id"
+                  label="Seleccione su director"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    placeholder="Seleccione"
+                    style={{ width: 300 }}
+                    loading={isLoading}
+                    disabled={projects.length > 0}
                   >
-                    <Select
-                      placeholder="Seleccione"
-                      style={{ width: 300 }}
-                      loading={isLoading}
-                      disabled={projects.length > 0}
-                    >
-                      {teachers &&
-                        teachers.map((teacher, index) => (
-                          <Option value={teacher.id} key={index}>
-                            {teacher.name}
-                          </Option>
-                        ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item
-                    name="codirector"
-                    label="Seleccione su co-director"
+                    {teachers &&
+                      teachers.map((teacher, index) => (
+                        <Option value={teacher.id} key={index}>
+                          {teacher.name}
+                        </Option>
+                      ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item name="codirector" label="Seleccione su co-director">
+                  <Input
+                    style={{ width: 300 }}
+                    placeholder="Nombre del co-director"
+                    disabled={!canEditPlan()}
+                  />
+                </Form.Item>
+                <Form.Item name="partner" label="Seleccione su compañero">
+                  <Select
+                    placeholder="Seleccione"
+                    style={{ width: 300 }}
+                    disabled={!canEditPlan()}
                   >
-                    <Input
-                      style={{ width: 300 }}
-                      placeholder="Nombre del co-director"
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    />
-                  </Form.Item>
-                  <Form.Item name="partner" label="Seleccione su compañero">
-                    <Select
-                      placeholder="Seleccione"
-                      style={{ width: 300 }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    >
-                      <Option value="jack">Jack</Option>
-                      <Option value="lucy">Lucy</Option>
-                      <Option value="Yiminghe">yiminghe</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item name="project_type" label="Tipo de proyecto">
-                    <Select
-                      placeholder="Seleccione"
-                      style={{ width: 300 }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    >
-                      <Option value="areaInvestigation">
-                        Investigación de campo
-                      </Option>
-                      <Option value="documentalInvestigation">
-                        Investigación documental
-                      </Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item
-                    name="research_line"
-                    label="Línea de investigación"
+                    <Option value="jack">Jack</Option>
+                    <Option value="lucy">Lucy</Option>
+                    <Option value="Yiminghe">yiminghe</Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="project_type"
+                  label="Tipo de proyecto"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    placeholder="Seleccione"
+                    style={{ width: 300 }}
+                    disabled={!canEditPlan()}
                   >
-                    <Select
-                      placeholder="Seleccione"
-                      style={{ width: 300 }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    >
-                      <Option value="jack">Jack</Option>
-                      <Option value="lucy">Lucy</Option>
-                      <Option value="Yiminghe">yiminghe</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item
-                    name="knowledge_area"
-                    label="Área de investigación"
+                    <Option value="areaInvestigation">
+                      Investigación de campo
+                    </Option>
+                    <Option value="documentalInvestigation">
+                      Investigación documental
+                    </Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="research_line"
+                  label="Línea de investigación"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    placeholder="Seleccione"
+                    style={{ width: 300 }}
+                    disabled={!canEditPlan()}
                   >
-                    <Select
-                      placeholder="Seleccione"
-                      style={{ width: 300 }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    >
-                      <Option value="jack">Jack</Option>
-                      <Option value="lucy">Lucy</Option>
-                      <Option value="Yiminghe">yiminghe</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-              </Row>
+                    <Option value="jack">Jack</Option>
+                    <Option value="lucy">Lucy</Option>
+                    <Option value="Yiminghe">yiminghe</Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="knowledge_area"
+                  label="Área de investigación"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    placeholder="Seleccione"
+                    style={{ width: 300 }}
+                    disabled={!canEditPlan()}
+                  >
+                    <Option value="jack">Jack</Option>
+                    <Option value="lucy">Lucy</Option>
+                    <Option value="Yiminghe">yiminghe</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
 
-              <Row>
-                <Col>
-                  <Title
-                    justify={"left"}
-                    level={4}
-                    style={{
-                      color: "#034c70",
-                      marginLeft: 30,
+            <Row>
+              <Col>
+                <Title
+                  justify={"left"}
+                  level={4}
+                  style={{
+                    color: "#034c70",
+                    marginLeft: 30,
+                  }}
+                >
+                  Plan
+                </Title>
+              </Col>
+            </Row>
+
+            <Row justify={"left"}>
+              <Col>
+                {renderCommentIcon("title_comment")}
+                <Form.Item
+                  name="title"
+                  label="Título"
+                  rules={[{ required: true }]}
+                >
+                  <TextArea
+                    style={{ width: 600 }}
+                    placeholder="Máximo 15 palabras"
+                    autoSize={{
+                      minRows: 2,
+                      // maxRows: 5,
                     }}
+                    disabled={!canEditPlan()}
+                  />
+                </Form.Item>
+
+                {renderCommentIcon("problem_comment")}
+                <Form.Item
+                  name="problem"
+                  label="Planteamiento del problema"
+                  rules={[{ required: true }]}
+                >
+                  <TextArea
+                    style={{ width: 600 }}
+                    autoSize={{
+                      minRows: 4,
+                      // maxRows: 15,
+                    }}
+                    disabled={!canEditPlan()}
+                  />
+                </Form.Item>
+
+                {renderCommentIcon("justification_comment")}
+                <Form.Item
+                  name="justification"
+                  label="Justificación"
+                  rules={[{ required: true }]}
+                >
+                  <TextArea
+                    style={{ width: 600 }}
+                    autoSize={{
+                      minRows: 4,
+                      // maxRows: 15,
+                    }}
+                    disabled={!canEditPlan()}
+                  />
+                </Form.Item>
+
+                {renderCommentIcon("hypothesis_comment")}
+                <Form.Item name="hypothesis" label="Hipótesis">
+                  <TextArea
+                    style={{ width: 600 }}
+                    autoSize={{
+                      minRows: 4,
+                      // maxRows: 15,
+                    }}
+                    disabled={!canEditPlan()}
+                  />
+                </Form.Item>
+
+                {renderCommentIcon("general_objective_comment")}
+                <Form.Item
+                  name="general_objective"
+                  label="Objetivo General"
+                  rules={[{ required: true }]}
+                >
+                  <TextArea
+                    style={{ width: 600 }}
+                    autoSize={{
+                      minRows: 4,
+                      maxRows: 7,
+                    }}
+                    disabled={!canEditPlan()}
+                  />
+                </Form.Item>
+
+                {renderCommentIcon("specifics_objectives_comment")}
+                <Form.Item
+                  name="specifics_objectives"
+                  label="Objetivos Específicos"
+                  rules={[{ required: true }]}
+                >
+                  <TextArea
+                    style={{ width: 600 }}
+                    autoSize={{
+                      minRows: 4,
+                      // maxRows: 15,
+                    }}
+                    disabled={!canEditPlan()}
+                  />
+                </Form.Item>
+
+                {renderCommentIcon("methodology_comment")}
+                <Form.Item
+                  name="methodology"
+                  label="Metodología"
+                  rules={[{ required: true }]}
+                >
+                  <TextArea
+                    style={{ width: 600 }}
+                    autoSize={{
+                      minRows: 4,
+                      // maxRows: 15,
+                    }}
+                    disabled={!canEditPlan()}
+                  />
+                </Form.Item>
+
+                {renderCommentIcon("work_plan_comment")}
+                <Form.Item
+                  name="work_plan"
+                  label="Plan de trabajo"
+                  rules={[{ required: true }]}
+                >
+                  <TextArea
+                    style={{ width: 600 }}
+                    autoSize={{
+                      minRows: 4,
+                      // maxRows: 15,
+                    }}
+                    disabled={!canEditPlan()}
+                  />
+                </Form.Item>
+
+                {renderCommentIcon("schedule_comment")}
+                <Form.Item
+                  name="schedule"
+                  label="Cronograma"
+                  getValueFromEvent={normPhotoFile}
+                  valuePropName="fileList"
+                  rules={[{ required: !imageUrl }]}
+                >
+                  <Upload
+                    name="files"
+                    accept="image/jpeg,image/png"
+                    listType="text"
+                    multiple={false}
+                    showUploadList={false}
+                    beforeUpload={() => false}
+                    disabled={!canEditPlan()}
                   >
-                    Plan
-                  </Title>
-                </Col>
-              </Row>
+                    <Button icon={<UploadOutlined />} disabled={!canEditPlan()}>
+                      Subir Imagen
+                    </Button>
+                  </Upload>
+                </Form.Item>
 
-              <Row justify={"left"}>
-                <Col>
-                  {projects[0] &&
-                  projects[0].title_comment &&
-                  (projects[0].status === "plan_review_teacher" ||
-                    projects[0].status === "plan_review_commission") ? (
-                    <CommentOutlined
-                      style={{
-                        color: "#034c70",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                      onClick={() => showViewComments("title_comment")}
-                    />
-                  ) : (
-                    <CommentOutlined
-                      style={{
-                        color: "transparent",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
+                <div style={{ marginLeft: 300, marginBottom: 20 }}>
+                  {imageUrl && (
+                    <Image
+                      src={imageUrl}
+                      alt="Cronograma"
+                      style={{ width: "200px" }}
                     />
                   )}
-                  <Form.Item
-                    name="title"
-                    label="Título"
-                    rules={[{ required: true }]}
-                  >
-                    <TextArea
-                      style={{ width: 600 }}
-                      placeholder="Máximo 15 palabras"
-                      autoSize={{
-                        minRows: 2,
-                        maxRows: 5,
-                      }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    />
-                  </Form.Item>
+                </div>
 
-                  {projects[0] &&
-                  projects[0].problem_comment &&
-                  (projects[0].status === "plan_review_teacher" ||
-                    projects[0].status === "plan_review_commission") ? (
-                    <CommentOutlined
-                      style={{
-                        color: "#034c70",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                      onClick={() => showViewComments("problem_comment")}
-                    />
-                  ) : (
-                    <CommentOutlined
-                      style={{
-                        color: "transparent",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                    />
-                  )}
+                {renderCommentIcon("bibliography_comment")}
+                <Form.Item
+                  name="bibliography"
+                  label="Bibliografía"
+                  rules={[{ required: true }]}
+                >
+                  <TextArea
+                    style={{ width: 600 }}
+                    autoSize={{
+                      minRows: 4,
+                      // maxRows: 7,
+                    }}
+                    disabled={!canEditPlan()}
+                  />
+                </Form.Item>
 
-                  <Form.Item name="problem" label="Planteamiento del problema">
-                    <TextArea
-                      style={{ width: 600 }}
-                      autoSize={{
-                        minRows: 4,
-                        maxRows: 15,
-                      }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    />
-                  </Form.Item>
-
-                  {projects[0] &&
-                  projects[0].justification_comment &&
-                  (projects[0].status === "plan_review_teacher" ||
-                    projects[0].status === "plan_review_commission") ? (
-                    <CommentOutlined
-                      style={{
-                        color: "#034c70",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                      onClick={() => showViewComments("justification_comment")}
-                    />
-                  ) : (
-                    <CommentOutlined
-                      style={{
-                        color: "transparent",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                    />
-                  )}
-                  <Form.Item name="justification" label="Justificación">
-                    <TextArea
-                      style={{ width: 600 }}
-                      autoSize={{
-                        minRows: 4,
-                        maxRows: 15,
-                      }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    />
-                  </Form.Item>
-
-                  {projects[0] &&
-                  projects[0].hypothesis_comment &&
-                  (projects[0].status === "plan_review_teacher" ||
-                    projects[0].status === "plan_review_commission") ? (
-                    <CommentOutlined
-                      style={{
-                        color: "#034c70",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                      onClick={() => showViewComments("hypothesis_comment")}
-                    />
-                  ) : (
-                    <CommentOutlined
-                      style={{
-                        color: "transparent",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                    />
-                  )}
-                  <Form.Item name="hypothesis" label="Hipótesis">
-                    <TextArea
-                      style={{ width: 600 }}
-                      placeholder="Si no aplica escribir N/A"
-                      autoSize={{
-                        minRows: 4,
-                        maxRows: 15,
-                      }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    />
-                  </Form.Item>
-
-                  {projects[0] &&
-                  projects[0].general_objective_comment &&
-                  (projects[0].status === "plan_review_teacher" ||
-                    projects[0].status === "plan_review_commission") ? (
-                    <CommentOutlined
-                      style={{
-                        color: "#034c70",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                      onClick={() =>
-                        showViewComments("general_objective_comment")
-                      }
-                    />
-                  ) : (
-                    <CommentOutlined
-                      style={{
-                        color: "transparent",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                    />
-                  )}
-                  <Form.Item name="general_objective" label="Objetivo General">
-                    <TextArea
-                      style={{ width: 600 }}
-                      autoSize={{
-                        minRows: 4,
-                        maxRows: 7,
-                      }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    />
-                  </Form.Item>
-
-                  {projects[0] &&
-                  projects[0].specifics_objectives_comment &&
-                  (projects[0].status === "plan_review_teacher" ||
-                    projects[0].status === "plan_review_commission") ? (
-                    <CommentOutlined
-                      style={{
-                        color: "#034c70",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                      onClick={() =>
-                        showViewComments("specifics_objectives_comment")
-                      }
-                    />
-                  ) : (
-                    <CommentOutlined
-                      style={{
-                        color: "transparent",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                    />
-                  )}
-                  <Form.Item
-                    name="specifics_objectives"
-                    label="Objetivos Específicos"
-                  >
-                    <TextArea
-                      style={{ width: 600 }}
-                      autoSize={{
-                        minRows: 4,
-                        maxRows: 15,
-                      }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    />
-                  </Form.Item>
-
-                  {projects[0] &&
-                  projects[0].methodology_comment &&
-                  (projects[0].status === "plan_review_teacher" ||
-                    projects[0].status === "plan_review_commission") ? (
-                    <CommentOutlined
-                      style={{
-                        color: "#034c70",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                      onClick={() => showViewComments("methodology_comment")}
-                    />
-                  ) : (
-                    <CommentOutlined
-                      style={{
-                        color: "transparent",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                    />
-                  )}
-                  <Form.Item name="methodology" label="Metodología">
-                    <TextArea
-                      style={{ width: 600 }}
-                      autoSize={{
-                        minRows: 4,
-                        maxRows: 15,
-                      }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    />
-                  </Form.Item>
-
-                  {projects[0] &&
-                  projects[0].work_plan_comment &&
-                  (projects[0].status === "plan_review_teacher" ||
-                    projects[0].status === "plan_review_commission") ? (
-                    <CommentOutlined
-                      style={{
-                        color: "#034c70",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                      onClick={() => showViewComments("work_plan_comment")}
-                    />
-                  ) : (
-                    <CommentOutlined
-                      style={{
-                        color: "transparent",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                    />
-                  )}
-                  <Form.Item name="work_plan" label="Plan de trabajo">
-                    <TextArea
-                      style={{ width: 600 }}
-                      autoSize={{
-                        minRows: 4,
-                        maxRows: 15,
-                      }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    />
-                  </Form.Item>
-
-                  {projects[0] &&
-                  projects[0].schedule_comment &&
-                  (projects[0].status === "plan_review_teacher" ||
-                    projects[0].status === "plan_review_commission") ? (
-                    <CommentOutlined
-                      style={{
-                        color: "#034c70",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                      onClick={() => showViewComments("schedule_comment")}
-                    />
-                  ) : (
-                    <CommentOutlined
-                      style={{
-                        color: "transparent",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                    />
-                  )}
-                  <Form.Item
-                    name="schedule"
-                    label="Cronograma"
-                    getValueFromEvent={normPhotoFile}
-                  >
-                    <Upload
-                      name="files"
-                      accept="image/jpeg,image/png"
-                      listType="text"
-                      multiple={false}
-                      showUploadList={false}
-                      beforeUpload={() => false}
-                      filelist={imageUrl}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    >
-                      <Button
-                        icon={<UploadOutlined />}
-                        disabled={
-                          projects[0] &&
-                          !(
-                            projects[0].status === "plan_saved" ||
-                            projects[0].status === "plan_review_teacher" ||
-                            projects[0].status === "plan_review_commission"
-                          )
-                        }
-                      >
-                        Subir Imagen
-                      </Button>
-                    </Upload>
-                  </Form.Item>
-
-                  <div style={{ marginLeft: 300, marginBottom: 20 }}>
-                    {imageUrl && (
-                      <Image
-                        src={imageUrl}
-                        alt="Foto"
-                        style={{ width: "490px" }}
-                      />
-                    )}
-                  </div>
-
-                  {projects[0] &&
-                  projects[0].bibliography_comment &&
-                  (projects[0].status === "plan_review_teacher" ||
-                    projects[0].status === "plan_review_commission") ? (
-                    <CommentOutlined
-                      style={{
-                        color: "#034c70",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                      onClick={() => showViewComments("bibliography_comment")}
-                    />
-                  ) : (
-                    <CommentOutlined
-                      style={{
-                        color: "transparent",
-                        fontSize: 25,
-                        marginLeft: 15,
-                        float: "right",
-                      }}
-                    />
-                  )}
-                  <Form.Item name="bibliography" label="Bibliografía">
-                    <TextArea
-                      style={{ width: 600 }}
-                      autoSize={{
-                        minRows: 4,
-                        maxRows: 7,
-                      }}
-                      disabled={
-                        projects[0] &&
-                        !(
-                          projects[0].status === "plan_saved" ||
-                          projects[0].status === "plan_review_teacher" ||
-                          projects[0].status === "plan_review_commission"
-                        )
-                      }
-                    />
-                  </Form.Item>
+                {canEditPlan() && (
                   <Form.Item {...tailLayout}>
                     <Row>
-                      <Col>
-                        <p>
-                          Todos los cambios serán <br />
-                          guardados automáticamente
-                        </p>
-                      </Col>
                       <Col>
                         <Button
                           className={"submit"}
@@ -989,17 +663,37 @@ const PlanForm = ({ visible, update }) => {
                           style={{ marginLeft: 10 }}
                           loading={sending}
                         >
-                          <SendOutlined /> Enviar plan
+                          <SendOutlined /> Enviar plan para revisión
                         </Button>
                       </Col>
                     </Row>
+
+                    <Row>
+                      <Col>
+                        {!sending ? (
+                          <Text type="secondary" disabled>
+                            Todos los cambios serán guardados automáticamente.
+                          </Text>
+                        ) : (
+                          <>
+                            <Spin /> Guardando cambios...
+                          </>
+                        )}
+                      </Col>
+                    </Row>
                   </Form.Item>
-                </Col>
-              </Row>
-            </Form>
-          </Form.Provider>
+                )}
+              </Col>
+            </Row>
+          </Form>
         </Col>
       </Row>
+
+      {sending && (
+        <div style={{ position: "fixed", bottom: 15, right: 15 }}>
+          <Spin /> Guardando cambios...
+        </div>
+      )}
 
       <Modal
         visible={showComments}

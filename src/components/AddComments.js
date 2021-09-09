@@ -8,203 +8,28 @@ const { TextArea } = Input;
 const AddComments = (props) => {
   const [sending, setSending] = useState(false);
   const [comments, setComments] = useState([]);
-  useEffect(() => {
-    let comment = [];
-    switch (props.comments) {
-      case "title_comment":
-        comment = [
-          {
-            content: (
-              <div>
-                {props.plan.title_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan.title_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-            ),
-          },
-        ];
-        break;
-      case "problem_comment":
-        comment = [
-          {
-            content: (
-              <div>
-                {props.plan.problem_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan.problem_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-            ),
-          },
-        ];
-        break;
-      case "justification_comment":
-        comment = [
-          {
-            content: (
-              <div>
-                {props.plan.justification_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan.justification_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-            ),
-          },
-        ];
-        break;
-      case "hypothesis_comment":
-        comment = [
-          {
-            content: (
-              <div>
-                {props.plan.hypothesis_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan.hypothesis_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-            ),
-          },
-        ];
-        break;
-      case "general_objective_comment":
-        comment = [
-          {
-            content: (
-              <div>
-                {props.plan.general_objective_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan.general_objective_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-            ),
-          },
-        ];
-        break;
-      case "specifics_objectives_comment":
-        comment = [
-          {
-            content: (
-              <div>
-                {props.plan.specifics_objectives_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan.specifics_objectives_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-            ),
-          },
-        ];
-        break;
-      case "methodology_comment":
-        comment = [
-          {
-            content: (
-              <div>
-                {props.plan.methodology_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan.methodology_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-            ),
-          },
-        ];
-        break;
-      case "work_plan_comment":
-        comment = [
-          {
-            content: (
-              <div>
-                {props.plan.work_plan_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan.work_plan_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-            ),
-          },
-        ];
-        break;
-      case "schedule_comment":
-        comment = [
-          {
-            content: (
-              <div>
-                {props.plan.schedule_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan.schedule_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-            ),
-          },
-        ];
-        break;
-      case "bibliography_comment":
-        comment = [
-          {
-            content: (
-              <div>
-                {props.plan.bibliography_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan.bibliography_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-            ),
-          },
-        ];
-        break;
-      default:
-        console.log("No existe el campo");
-        comment = [];
-        break;
-    }
-    console.log(comment);
-    setComments(() => comment);
-    return () => {
-      setComments([]);
-      console.log("se va xd");
-    };
-  }, [props.comments]);
 
-  console.log("Comentarios para", props.comments);
+  useEffect(() => {
+    let comment = [
+      {
+        content: (
+          <div>
+            {props.plan[props.comments] ? (
+              <p>
+                <b>Comentario: </b>
+                {props.plan[props.comments]}
+              </p>
+            ) : (
+              "No has realizado ningún comentario aún."
+            )}
+          </div>
+        ),
+      },
+    ];
+
+    console.log(comment);
+    setComments(comment);
+  }, [props.comments, props.plan]);
 
   const CommentList = ({ comments }) => (
     <List
@@ -219,12 +44,17 @@ const AddComments = (props) => {
       <Form onFinish={onSubmit}>
         <Form.Item name={props.comments}>
           <TextArea
-            placeholder={"Ingresa tu comentario"}
+            placeholder={
+              !props.plan[props.comments]
+                ? "Ingresa tu comentario"
+                : "Editar tu comentario"
+            }
             rows={2}
             style={{ width: 500 }}
             onChange={onChange}
           />
         </Form.Item>
+
         <Form.Item>
           <Button
             htmlType="submit"
@@ -234,7 +64,11 @@ const AddComments = (props) => {
               color: "#ffffff",
             }}
           >
-            Agregar Comentario
+            Guardar Comentario
+          </Button>
+
+          <Button type="link" onClick={props.onClose}>
+            Cancelar
           </Button>
         </Form.Item>
       </Form>
@@ -252,132 +86,25 @@ const AddComments = (props) => {
       await API.post(`/projects/${props.planID}`, data);
       setSending(false);
       message.success("Comentario agregado con éxito!");
-      switch (props.comments) {
-        case "title_comment":
-          setComments([
-            {
-              content: (
+      let comment = [
+        {
+          content: (
+            <div>
+              {values[props.comments] ? (
                 <p>
-                  <b>Comentarios: </b>
-                  {values.title_comment}
+                  <b>Comentario: </b>
+                  {values[props.comments]}
                 </p>
-              ),
-            },
-          ]);
-          break;
-        case "problem_comment":
-          setComments([
-            {
-              content: (
-                <p>
-                  <b>Comentarios: </b>
-                  {values.problem_comment}
-                </p>
-              ),
-            },
-          ]);
-          break;
-        case "justification_comment":
-          setComments([
-            {
-              content: (
-                <p>
-                  <b>Comentarios: </b>
-                  {values.justification_comment}
-                </p>
-              ),
-            },
-          ]);
-          break;
-        case "hypothesis_comment":
-          setComments([
-            {
-              content: (
-                <p>
-                  <b>Comentarios: </b>
-                  {values.hypothesis_comment}
-                </p>
-              ),
-            },
-          ]);
-          break;
-        case "general_objective_comment":
-          setComments([
-            {
-              content: (
-                <p>
-                  <b>Comentarios: </b>
-                  {values.general_objective_comment}
-                </p>
-              ),
-            },
-          ]);
-          break;
-        case "specifics_objectives_comment":
-          setComments([
-            {
-              content: (
-                <p>
-                  <b>Comentarios: </b>
-                  {values.specifics_objectives_comment}
-                </p>
-              ),
-            },
-          ]);
-          break;
-        case "methodology_comment":
-          setComments([
-            {
-              content: (
-                <p>
-                  <b>Comentarios: </b>
-                  {values.methodology_comment}
-                </p>
-              ),
-            },
-          ]);
-          break;
-        case "work_plan_comment":
-          setComments([
-            {
-              content: (
-                <p>
-                  <b>Comentarios: </b>
-                  {values.work_plan_comment}
-                </p>
-              ),
-            },
-          ]);
-          break;
-        case "schedule_comment":
-          setComments([
-            {
-              content: (
-                <p>
-                  <b>Comentarios: </b>
-                  {values.schedule_comment}
-                </p>
-              ),
-            },
-          ]);
-          break;
-        case "bibliography_comment":
-          setComments([
-            {
-              content: (
-                <p>
-                  <b>Comentarios: </b>
-                  {values.bibliography_comment}
-                </p>
-              ),
-            },
-          ]);
-          break;
+              ) : (
+                "No has realizado ningún comentario aún."
+              )}
+            </div>
+          ),
+        },
+      ];
 
-        default:
-          console.log("No existe el campo");
-          break;
-      }
+      console.log(comment);
+      setComments(comment);
     } catch (e) {
       console.log("ERROR", e);
       message.error(`No se guardaron los datos:¨${e}`);
