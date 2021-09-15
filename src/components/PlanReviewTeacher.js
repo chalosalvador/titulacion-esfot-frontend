@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/plan-form.css";
 import withAuth from "../hocs/withAuth";
-import PlanReview from "./planReview";
+import PlanReview from "./PlanReview";
 
 const PlanReviewTeacher = ({ idPlan }) => {
   return (

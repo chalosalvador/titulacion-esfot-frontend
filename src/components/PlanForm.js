@@ -77,9 +77,10 @@ const PlanForm = () => {
   useEffect(() => {
     if (projects && projects[0] && projects[0].schedule) {
       setImageUrl(
-        `${process.env.REACT_APP_API_BASE_URL}/${projects[0].schedule}`
+        `${process.env.REACT_APP_API_BASE_URL}/project/getSchedule/${projects[0].id}`
       );
     }
+    console.log("image", imageUrl);
   }, [projects]);
 
   useEffect(() => {

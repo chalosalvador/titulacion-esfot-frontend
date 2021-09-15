@@ -54,7 +54,9 @@ const PlanReview = ({ idPlan, user }) => {
 
   useEffect(() => {
     if (plan && plan.schedule) {
-      setImageUrl(`${process.env.REACT_APP_API_BASE_URL}/${plan.schedule}`);
+      setImageUrl(
+        `${process.env.REACT_APP_API_BASE_URL}/project/getSchedule/${plan.id}`
+      );
     }
   }, [plan]);
 
@@ -139,6 +141,7 @@ const PlanReview = ({ idPlan, user }) => {
       });
     } catch (e) {
       console.log("ERROR", e);
+      setSending(false);
       message.error(`No se guardaron los datos:¨${e}`);
     }
   };
@@ -201,7 +204,7 @@ const PlanReview = ({ idPlan, user }) => {
       loading: sendingPlan,
       style: {
         marginRight: 250,
-        // backgroundColor: "#034c70",
+        backgroundColor: "#034c70",
       },
       disabled: !checked,
     },
@@ -451,6 +454,7 @@ const PlanReview = ({ idPlan, user }) => {
     } catch (e) {
       console.log("ERROR", e);
       message.error(`No se guardaron los datos:¨${e}`);
+      setSendingPlan(false);
     }
   };
 
@@ -530,21 +534,26 @@ const PlanReview = ({ idPlan, user }) => {
   const canEditPlan = () => {
     return (
       user === "director" &&
-      !(plan.status === "plan_sent" || plan.status === "plan_corrections_done")
+      (plan.status === "plan_sent" || plan.status === "plan_corrections_done")
     );
   };
 
   const renderCommentIcon = (field) => {
     return (
-      <CommentOutlined
-        style={{
-          color: "#034c70",
-          fontSize: 25,
-          marginLeft: 15,
-          float: "right",
-        }}
-        onClick={() => showAddComments(field)}
-      />
+      (canEditPlan() ||
+        (user === "committee" &&
+          (plan.status === "san_curriculum_1" ||
+            plan.status === "plan_corrections_done2"))) && (
+        <CommentOutlined
+          style={{
+            color: "#034c70",
+            fontSize: 25,
+            marginLeft: 15,
+            float: "right",
+          }}
+          onClick={() => showAddComments(field)}
+        />
+      )
     );
   };
 
@@ -632,17 +641,7 @@ const PlanReview = ({ idPlan, user }) => {
                     <Select
                       placeholder="Seleccione"
                       style={{ width: 300 }}
-                      disabled={
-                        user === "director"
-                          ? !(
-                              plan.status === "plan_sent" ||
-                              plan.status === "plan_corrections_done"
-                            )
-                          : !(
-                              plan.status === "san_curriculum_1" ||
-                              plan.status === "plan_corrections_done2"
-                            )
-                      }
+                      disabled={!canEditPlan()}
                     >
                       <Option value="areaInvestigation">
                         Investigación de campo
@@ -833,51 +832,31 @@ const PlanReview = ({ idPlan, user }) => {
                       disabled={!canEditPlan()}
                     />
                   </Form.Item>
-                  <Form.Item {...tailLayout}>
-                    <Button
-                      className={"submit"}
-                      htmlType="submit"
-                      loading={sending}
-                      disabled={
-                        user === "director"
-                          ? canEditPlan()
-                          : !(
-                              plan.status === "san_curriculum_1" ||
-                              plan.status === "plan_corrections_done2"
-                            )
-                      }
-                    >
-                      Enviar Comentarios
-                    </Button>
-                    <Button
-                      className={"submit"}
-                      disabled={
-                        user === "director"
-                          ? canEditPlan()
-                          : !(
-                              plan.status === "san_curriculum_1" ||
-                              plan.status === "plan_corrections_done2"
-                            )
-                      }
-                      onClick={() => setApprovePlan(true)}
-                    >
-                      <SendOutlined /> Aprobar Plan
-                    </Button>
-                    {user === "committee" && (
+                  {(canEditPlan() ||
+                    (user === "committee" &&
+                      (plan.status === "san_curriculum_1" ||
+                        plan.status === "plan_corrections_done2"))) && (
+                    <Form.Item {...tailLayout}>
                       <Button
                         className={"submit"}
-                        disabled={
-                          !(
-                            plan.status === "san_curriculum_1" ||
-                            plan.status === "plan_corrections_done2"
-                          )
-                        }
-                        onClick={modalReject}
+                        htmlType="submit"
+                        loading={sending}
                       >
-                        <CloseOutlined /> Rechazar Plan
+                        Enviar Comentarios
                       </Button>
-                    )}
-                  </Form.Item>
+                      <Button
+                        className={"submit"}
+                        onClick={() => setApprovePlan(true)}
+                      >
+                        <SendOutlined /> Aprobar Plan
+                      </Button>
+                      {user === "committee" && (
+                        <Button className={"submit"} onClick={modalReject}>
+                          <CloseOutlined /> Rechazar Plan
+                        </Button>
+                      )}
+                    </Form.Item>
+                  )}
                 </Col>
               </Row>
             </Form>
@@ -890,12 +869,14 @@ const PlanReview = ({ idPlan, user }) => {
       <Modal
         visible={showComments}
         footer={null}
+        closable={false}
         onCancel={() => showAddCommentsModal(false)}
       >
         <AddComments
           comments={comments}
           planID={idPlan}
           plan={plan}
+          user={user}
           onClose={() => showAddCommentsModal(false)}
         />
       </Modal>

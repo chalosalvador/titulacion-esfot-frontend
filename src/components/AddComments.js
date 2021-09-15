@@ -34,14 +34,33 @@ const AddComments = (props) => {
 
   const CommentList = ({ comments }) => (
     <>
-      <List
-        dataSource={comments}
-        itemLayout="horizontal"
-        renderItem={(props) => <Comment {...props} />}
-      />
-      <Button loading={solving} danger onClick={solveComment(props.comments)}>
-        Solventar comentario
-      </Button>
+      <Row>
+        <Col span={15}>
+          <List
+            dataSource={comments}
+            itemLayout="horizontal"
+            renderItem={(props) => <Comment {...props} />}
+          />
+        </Col>
+        <Col span={9}>
+          {(props.user === "director" &&
+            props.plan.status === "plan_corrections_done") ||
+          (props.user === "committee" &&
+            props.plan.status === "plan_corrections_done2") ? (
+            <Button
+              loading={solving}
+              style={{ marginTop: 5 }}
+              danger
+              disabled={!props.plan[props.comments]}
+              onClick={() => solveComment()}
+            >
+              Solventar comentario
+            </Button>
+          ) : (
+            <></>
+          )}
+        </Col>
+      </Row>
     </>
   );
 
@@ -121,10 +140,10 @@ const AddComments = (props) => {
     console.log("value", e.target.value);
   };
 
-  const solveComment = async ({ comments }) => {
+  const solveComment = async () => {
     setSolving(true);
     const data = {};
-    data[comments] = "";
+    data[props.comments] = "";
 
     console.log("DATOS", data);
 
@@ -132,6 +151,12 @@ const AddComments = (props) => {
       await API.post(`/projects/${props.planID}`, data);
       setSolving(false);
       message.success("Comentario solventado con éxito!");
+      let noComment = [
+        {
+          content: <div>No has realizado ningún comentario aún.</div>,
+        },
+      ];
+      setComments(noComment);
     } catch (e) {
       console.log("ERROR", e);
       setSolving(false);
