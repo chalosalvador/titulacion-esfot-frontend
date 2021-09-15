@@ -10,7 +10,7 @@ import { useLocation } from "react-router-dom";
 import { useAuth } from "../providers/Auth";
 import "../styles/home-teacher.css";
 import SearchColumnFilter from "./SearchColumnFilter";
-import PlanReview from "./PlansReviewCollapse";
+import PlanReviewCollapse from "./PlansReviewCollapse";
 
 const { Title } = Typography;
 const { Link } = Typography;
@@ -256,10 +256,10 @@ const TeacherPanel = () => {
       />
     );
   } else {
-    content = <PlanReview planId={state.idPlan} status={state.status} />;
+    content = (
+      <PlanReviewCollapse planId={state.idPlan} status={state.status} />
+    );
   }
-
-  // console.log("Pilas",getDataSource());
 
   return (
     <>
@@ -284,113 +284,6 @@ const TeacherPanel = () => {
       </Row>
     </>
   );
-
-  // <div style={ { height: 1500 } }>
-  //   {/*<Menu mode='horizontal' className={ 'menus' } onClick={ handleClick }>*/}
-  //     <Menu mode='horizontal' className={ 'menus' }>
-  //     <Menu.Item key='notification' icon={ <BellOutlined /> } />
-  //     {
-  //       isAuthenticated
-  //         ? <SubMenu icon={ <UserOutlined /> } title={ currentUser && currentUser.name }>
-  //           <Menu.Item key='password'>Cambiar clave</Menu.Item>
-  //
-  //           <Menu.Item key={ Routes.LOGIN }>
-  //             <Link to={ Routes.LOGOUT } className='logout-link'>
-  //               {
-  //                 isCheckingAuth
-  //                   ? <LoadingOutlined />
-  //                   : <><LogoutOutlined /> Cerrar sesión </>
-  //               }
-  //             </Link>
-  //           </Menu.Item>
-  //         </SubMenu>
-  //         : <Menu.Item key={ Routes.LOGIN }>
-  //           <Link to={ Routes.LOGIN }>
-  //             {
-  //               isCheckingAuth
-  //                 ? <LoadingOutlined />
-  //                 : <><LoginOutlined /> Ingresar</>
-  //             }
-  //           </Link>
-  //         </Menu.Item>
-  //     }
-  //   </Menu>
-  //   <Card className={ 'statistics' }>
-  //     <h1 className={ 'titles' }>Director</h1>
-  //     <Card className={ 'statistics-content' } title='Tesis dirigidas' bordered={ false }>
-  //       <p className={ 'numbers' }>10</p>
-  //     </Card>
-  //
-  //     <Card className={ 'statistics-content2' } title='Planes por revisar' bordered={ false }>
-  //       <p className={ 'numbers' }>2</p>
-  //     </Card>
-  //
-  //     <Card className={ 'statistics-content2' } title='Proyectos por revisar' bordered={ false }>
-  //       <p className={ 'numbers' }>2</p>
-  //     </Card>
-  //
-  //     <h1 className={ 'jury' }>Jurado</h1>
-  //
-  //     <Card className={ 'jury-statistics' } title='Proyectos por revisar' bordered={ false }>
-  //       <p className={ 'numbers' }>1</p>
-  //     </Card>
-  //   </Card>
-  //
-  //   <Row className='principal'>
-  //
-  //     <h1 className={ 'title' }>
-  //       Director
-  //     </h1>
-  //
-  //     <h1 className={'subtitle1'}>
-  //       Planes y proyectos de titulación
-  //     </h1>
-  //
-  //     <br />
-  //     <Search className={'searchInput'} placeholder="Búsqueda de tema o estudiante(s)" enterButton />
-  //     <br />
-  //
-  //     <Col span={ 24 }>
-  //
-  //       <Row justify='center' >
-  //         <Table
-  //                dataSource={getDataSource()}
-  //                columns={columns}
-  //                locale={
-  //                  {
-  //                    emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}
-  //                                      description={<span>No hay proyectos ni planes registrados</span>}
-  //                    />
-  //                  }
-  //                }
-  //         />;
-  //       </Row>
-  //     </Col>
-  //   </Row>
-  //
-  //   <Row className='resources'>
-  //
-  //     <h1 className={ 'title2' }>
-  //       Otros recursos:
-  //     </h1>
-  //
-  //     <Col span={ 24 }>
-  //
-  //       <Row justify='center' className={ 'principal-options' }>
-  //         <Col span={ 6 }>
-  //           <Card className={ 'options-resources' } bordered={ false }>
-  //             <br />
-  //             Mira las normativas de titulación de la EPN<br /><br />
-  //             <Button
-  // href={'https://esfot.epn.edu.ec/index.php/unidad-titulacion/normativa-proyectos-titulacion'}>Ver
-  // normativas</Button> </Card> </Col> <Col span={ 6 }> <Card className={ 'options-resources' } bordered={ false }>
-  // <br /> Mira los formatos de titulación de la EPN<br /><br /> <Button
-  // href={'https://esfot.epn.edu.ec/index.php/solicitudes/documentos-solicitudes'}>Ver formatos</Button> </Card>
-  // </Col> <Col span={ 6 } /> </Row> </Col> </Row>  <Row className='commission'>  <h1 className={ 'title3' }> Comisión
-  // titulación: </h1>  <Col span={ 24 }>  <Row justify='center' className={ 'principal-options' }> <Col span={ 6 }>
-  // <Card className={ 'options-commission' } title='Planes Comisión' bordered={ false }> <div> <SelectOutlined
-  // className={ 'big-icon' } /> </div> <br /> Revisa los planes que llegan a la comisión de titulación<br /><br />
-  // <Button>Ver planes</Button> </Card> </Col> <Col span={ 6 } /> <Col span={ 6 } /> </Row> </Col> </Row> </div>
 };
 
 export default TeacherPanel;

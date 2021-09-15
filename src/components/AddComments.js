@@ -7,6 +7,7 @@ const { TextArea } = Input;
 
 const AddComments = (props) => {
   const [sending, setSending] = useState(false);
+  const [solving, setSolving] = useState(false);
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
@@ -32,11 +33,16 @@ const AddComments = (props) => {
   }, [props.comments, props.plan]);
 
   const CommentList = ({ comments }) => (
-    <List
-      dataSource={comments}
-      itemLayout="horizontal"
-      renderItem={(props) => <Comment {...props} />}
-    />
+    <>
+      <List
+        dataSource={comments}
+        itemLayout="horizontal"
+        renderItem={(props) => <Comment {...props} />}
+      />
+      <Button loading={solving} danger onClick={solveComment(props.comments)}>
+        Solventar comentario
+      </Button>
+    </>
   );
 
   const Editor = ({ onChange, onSubmit }) => (
@@ -115,20 +121,31 @@ const AddComments = (props) => {
     console.log("value", e.target.value);
   };
 
+  const solveComment = async ({ comments }) => {
+    setSolving(true);
+    const data = {};
+    data[comments] = "";
+
+    console.log("DATOS", data);
+
+    try {
+      await API.post(`/projects/${props.planID}`, data);
+      setSolving(false);
+      message.success("Comentario solventado con éxito!");
+    } catch (e) {
+      console.log("ERROR", e);
+      setSolving(false);
+      message.error(`No se guardaron los datos:¨${e}`);
+    }
+  };
+
   return (
     <>
       <Row>
         <Col>
           {comments.length > 0 && <CommentList comments={comments} />}
           <Comment
-            content={
-              <Editor
-                onChange={handleChange}
-                onSubmit={onFinish}
-                // submitting={ submitting }
-                // value={ value }
-              />
-            }
+            content={<Editor onChange={handleChange} onSubmit={onFinish} />}
           />
         </Col>
       </Row>
