@@ -212,7 +212,7 @@ const TeacherPanel = () => {
     return {
       key: index,
       title: project.title,
-      student_name: project.student_name,
+      student_name: project.student_name + ' ' + project.student_last_name,
       status: project.status,
       id: project.id,
     };
