@@ -1,6 +1,6 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
-import withAuth from '../hocs/withAuth';
+import React from "react";
+import { Route } from "react-router-dom";
+import withAuth from "../hocs/withAuth";
 
 /**
  * Utilizado para lás páginas que son protegidas,
@@ -10,16 +10,12 @@ import withAuth from '../hocs/withAuth';
  * @returns {JSX.Element}
  * @constructor
  */
-const PrivateRoute = ( {
-  component: Component,
-  ...rest
-} ) => {
-
-  const getComponent = ( props ) => {
-    return <Component { ...props } />;
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  const getComponent = (props) => {
+    return <Component {...props} />;
   };
 
-  return <Route { ...rest } component={ getComponent } />;
+  return <Route {...rest} component={getComponent} />;
 };
 
-export default withAuth( PrivateRoute );
+export default withAuth(PrivateRoute);

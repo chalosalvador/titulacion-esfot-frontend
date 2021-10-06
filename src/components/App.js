@@ -1,12 +1,11 @@
-import React from 'react';
-import { AuthProvider } from '../providers/Auth';
-import MainLayout from './Layout';
+import React from "react";
+import { AuthProvider } from "../providers/Auth";
+import MainLayout from "./LayoutMain";
 // import NProgress from 'nprogress';
-import { Router } from 'react-router-dom';
-import AppRouter from '../routers/AppRouter';
-import history from '../utils/history';
-import 'antd/dist/antd.css';
-import '../styles/app.css';
+import { Router } from "react-router-dom";
+import AppRouter from "../routers/AppRouter";
+import history from "../utils/history";
+import "../styles/app.css";
 
 /**
  * Show the loading bar on page transition
@@ -29,7 +28,7 @@ import '../styles/app.css';
  * @constructor
  */
 const App = () => (
-  <Router history={ history }>
+  <Router history={history}>
     <AuthProvider>
       <MainLayout>
         <AppRouter />
