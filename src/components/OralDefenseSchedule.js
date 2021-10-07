@@ -24,8 +24,11 @@ const OralDefenseSchedule = (project) => {
     const [hourSelected, setHourSelected] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    let oralDefenseDay = null;
-    let oralDefenseTime = null;
+    const [oralDefenseDay, setOralDefenseDay] = useState();
+    const [oralDefenseTime, setOralDefenseTime] = useState();
+
+    // let oralDefenseDay = null;
+    // let oralDefenseTime = null;
 
     if (isLoading) {
         return <Loading/>;
@@ -160,20 +163,20 @@ const OralDefenseSchedule = (project) => {
     ];
 
     const onChangeDay = (date, dateString) => {
-        oralDefenseDay = dateString;
+        setOralDefenseDay(dateString);
         console.log("Fecha", oralDefenseDay);
         setDaySelected(false);
     }
 
     const onChangeHour = (time, timeString) => {
-        oralDefenseTime = timeString;
+        setOralDefenseTime(timeString);
         console.log("Hora", oralDefenseTime);
         setHourSelected(true);
     }
 
-    const saveDate = () => {
+    const saveTempDate = () => {
         const oralDefenseDate = oralDefenseDay + ' ' + oralDefenseTime;
-        console.log("Datos antes de armar", project.project);
+        console.log("Datos antes de armar", project.project, oralDefenseDate);
         try {
             const schedule = {
                 tribunalSchedule: oralDefenseDate,
@@ -186,6 +189,25 @@ const OralDefenseSchedule = (project) => {
             message.error("No se pudo guardar los datos correctamente")
         }
     }
+
+    const saveFinalDate = async () => {
+        const oralDefenseDate = oralDefenseDay + ' ' + oralDefenseTime;
+        console.log("Datos antes de armar", project.project, oralDefenseDate);
+        try {
+            const schedule = {
+                tribunalSchedule: oralDefenseDate,
+                project_id: project.project
+            }
+            console.log("datos que se envian al API", schedule);
+            await API.put("/juries/assignSchedule", schedule);
+            await API.post(`/projects/${project.project}/date-defense-assigned`);
+            message.success("Fecha definitiva de defensa guardada exitosamente");
+        } catch (e) {
+            message.error("No se pudo guardar los datos correctamente")
+        }
+    }
+
+
 
     return (
         <div>
@@ -259,13 +281,13 @@ const OralDefenseSchedule = (project) => {
 
             <Row type='flex' justify='center'>
                 <Col span={10} style={{paddingLeft: 280}}>
-                    <Button onClick={saveDate} disabled={daySelected}>
+                    <Button onClick={saveTempDate} disabled={daySelected}>
                         <FieldTimeOutlined/>
                         Enviar fecha tentativa
                     </Button>
                 </Col>
                 <Col span={10} style={{paddingLeft: 20}}>
-                    <Button style={{backgroundColor: "#034c70", color: "white"}} disabled={daySelected}>
+                    <Button onClick={saveFinalDate} style={{backgroundColor: "#034c70", color: "white"}} disabled={daySelected}>
                         <CheckOutlined/>
                         Confirmar fecha definitiva
                     </Button>
