@@ -488,6 +488,7 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     } catch (e) {
       console.log("ERROR", e);
       message.error(`No se guardaron los datos:¨${e}`);
+      setSendingPlan(false);
     }
   };
 

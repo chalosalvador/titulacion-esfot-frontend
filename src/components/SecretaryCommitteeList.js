@@ -247,7 +247,7 @@ const SecretaryCommitteeList = () => {
           onClick={() => setVisible(true)}
         >
           <PlusOutlined />
-          Agregar Carrera
+          Agregar comisión
         </Button>
       </Row>
       <br />
