@@ -25,9 +25,14 @@ import Routes from "../constants/routes";
 import withAuth from "../hocs/withAuth";
 import { useStudentProject } from "../data/useStudentProjects";
 import { useTeachers } from "../data/useTeachers";
+import { useStudentsList } from "../data/useStudentsList";
+import { useCareer } from "../data/useCareer";
+import CIAL from "../utils/careersInvestigationAreasAndLines";
+import { useAuth } from "../providers/Auth";
 import Loading from "./Loading";
 import API from "../data";
 import ViewComments from "./ViewComments";
+import ErrorList from "./ErrorList";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -64,13 +69,25 @@ const getBase64 = (file, callback) => {
 };
 
 const PlanForm = () => {
-  const { projects, isLoading } = useStudentProject();
+  const { projects, isLoading, isError } = useStudentProject();
+  const { currentUser } = useAuth();
+  const {
+    career,
+    isLoading: isLoadingCareer,
+    isError: isErrorCareer,
+  } = useCareer(currentUser.career_id);
   const { teachers } = useTeachers();
+  const {
+    students,
+    isLoading: isLoadingStudents,
+    isError: isErrorStudents,
+  } = useStudentsList();
   const [imageUrl, setImageUrl] = useState(null);
   const [sending, setSending] = useState(false);
   const [isFinished, setIsFinished] = useState(true);
   const [showComments, showViewCommentsModal] = useState(false);
   const [comments, setComments] = useState(" ");
+  const [investigationLines, setInvestigationLines] = useState([]);
   const [form] = Form.useForm();
   const autoSaveTimeoutRef = useRef(null);
 
@@ -102,10 +119,22 @@ const PlanForm = () => {
     }
   }, [form]);
 
+  if (isLoading || isLoadingStudents || isLoadingCareer) {
+    return <Loading />;
+  }
+
+  if (isError || isErrorStudents || isErrorCareer) {
+    return <ErrorList errors={isError || isErrorStudents} />;
+  }
+
   const showViewComments = async (values) => {
     showViewCommentsModal(true);
     setComments(values);
   };
+
+  const careerInvestigationAreaAndLines = CIAL.filter(
+    (data) => data.career === career.name
+  );
 
   const onUpdate = async () => {
     if (canEditPlan()) {
@@ -217,7 +246,6 @@ const PlanForm = () => {
 
   const onFinish = async () => {
     setSending(true);
-    console.log("onfinish");
     try {
       if (projects[0].status === "plan_review_teacher") {
         await API.post(`/projects/${projects[0].id}/plan-corrections-done`);
@@ -342,10 +370,25 @@ const PlanForm = () => {
     );
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const onChangeInvestigationArea = (value) => {
+    const careerInvestigationArea =
+      careerInvestigationAreaAndLines[0].data.areas.filter(
+        (area) => area.title === value
+      );
+    const careerInvestigationLines = careerInvestigationArea[0].lines.map(
+      (line) => {
+        return {
+          label: line,
+          value: line,
+        };
+      }
+    );
+    setInvestigationLines(careerInvestigationLines);
+  };
 
+  const careerStudents = students.filter(
+    (student) => student.career_id === currentUser.career_id
+  );
   return (
     <>
       <Row>
@@ -393,7 +436,7 @@ const PlanForm = () => {
                       ))}
                   </Select>
                 </Form.Item>
-                <Form.Item name="codirector" label="Seleccione su co-director">
+                <Form.Item name="codirector" label="Co-director">
                   <Input
                     style={{ width: 300 }}
                     placeholder="Nombre del co-director"
@@ -406,9 +449,11 @@ const PlanForm = () => {
                     style={{ width: 300 }}
                     disabled={!canEditPlan()}
                   >
-                    <Option value="jack">Jack</Option>
-                    <Option value="lucy">Lucy</Option>
-                    <Option value="Yiminghe">yiminghe</Option>
+                    {careerStudents.map((student, index) => (
+                      <Option value={student.id} key={index}>
+                        {student.user.name}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
                 <Form.Item
@@ -430,21 +475,6 @@ const PlanForm = () => {
                   </Select>
                 </Form.Item>
                 <Form.Item
-                  name="research_line"
-                  label="Línea de investigación"
-                  rules={[{ required: true }]}
-                >
-                  <Select
-                    placeholder="Seleccione"
-                    style={{ width: 300 }}
-                    disabled={!canEditPlan()}
-                  >
-                    <Option value="jack">Jack</Option>
-                    <Option value="lucy">Lucy</Option>
-                    <Option value="Yiminghe">yiminghe</Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item
                   name="knowledge_area"
                   label="Área de investigación"
                   rules={[{ required: true }]}
@@ -453,11 +483,28 @@ const PlanForm = () => {
                     placeholder="Seleccione"
                     style={{ width: 300 }}
                     disabled={!canEditPlan()}
+                    onChange={onChangeInvestigationArea}
                   >
-                    <Option value="jack">Jack</Option>
-                    <Option value="lucy">Lucy</Option>
-                    <Option value="Yiminghe">yiminghe</Option>
+                    {careerInvestigationAreaAndLines[0].data.areas.map(
+                      (area, index) => (
+                        <Option value={area.title} key={index}>
+                          {area.title}
+                        </Option>
+                      )
+                    )}
                   </Select>
+                </Form.Item>
+                <Form.Item
+                  name="research_line"
+                  label="Línea de investigación"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    placeholder="Seleccione"
+                    style={{ width: 300 }}
+                    disabled={!canEditPlan()}
+                    options={investigationLines}
+                  />
                 </Form.Item>
               </Col>
             </Row>

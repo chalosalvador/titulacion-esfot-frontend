@@ -35,6 +35,7 @@ const ProjectsList = ({
   const [projectData, setProjectData] = useState(null);
   let titleModal = "";
   const history = useHistory();
+  console.log("DATOS", projectsList);
 
   if (isLoading) {
     return (

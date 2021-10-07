@@ -165,6 +165,17 @@ const SecretaryUpdateTeacherForm = ({teacher, teacherId, closeModal}) => {
                     >
                         <Input/>
                     </Item>
+                    <Item label="Apellido"
+                          name="last_name"
+                          rules={[{
+                              required: true,
+                              message: "Por favor ingrese el apellido del profesor"
+                          }
+                          ]}
+                          initialValue={teacher.last_name}
+                    >
+                        <Input/>
+                    </Item>
                     <Item label="Carrera"
                           name="career_id"
                           rules={[{

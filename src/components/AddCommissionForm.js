@@ -42,7 +42,7 @@ const AddCommissionForm = ({ form, careers, closeModal, loadingModal }) => {
       return {
         id: teacher.id,
         value: teacher.id,
-        label: teacher.name,
+        label: teacher.name + ' ' + teacher.last_name,
       };
     });
     setTeachersList(teacherCareerList);

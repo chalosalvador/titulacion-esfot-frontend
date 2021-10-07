@@ -119,7 +119,7 @@ const SecretaryAddTeacherForm = ({closeModal}) => {
     // Funcion de guardado de nuevo profesor
     const formSuccess = async (datos) => {
         console.log("Datos recibidos del form", datos);
-        const {name, email, career_id, monday, tuesday, wednesday, thursday, friday} = datos;
+        const {name, last_name, email, career_id, monday, tuesday, wednesday, thursday, friday} = datos;
         const schedule = {
             monday: {...monday},
             tuesday: {...tuesday},
@@ -133,6 +133,7 @@ const SecretaryAddTeacherForm = ({closeModal}) => {
         setLoading(true);
         const teacher = {
             name: name,
+            last_name: last_name,
             email: email,
             career_id: career_id,
             schedule: textSchedule
@@ -165,6 +166,15 @@ const SecretaryAddTeacherForm = ({closeModal}) => {
                           rules={[{
                               required: true,
                               message: "Por favor ingrese el nombre del profesor"
+                          }
+                          ]}>
+                        <Input/>
+                    </Item>
+                    <Item label="Apellido"
+                          name="last_name"
+                          rules={[{
+                              required: true,
+                              message: "Por favor ingrese el apellido del profesor"
                           }
                           ]}>
                         <Input/>
