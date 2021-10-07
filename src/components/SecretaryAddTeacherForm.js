@@ -121,14 +121,50 @@ const SecretaryAddTeacherForm = ({closeModal}) => {
         console.log("Datos recibidos del form", datos);
         const {name, last_name, email, career_id, monday, tuesday, wednesday, thursday, friday} = datos;
         const schedule = {
-            monday: {...monday},
-            tuesday: {...tuesday},
-            wednesday: {...wednesday},
-            thursday: {...thursday},
-            friday: {...friday}
+            monday: {
+                ...monday.map((item) => {
+                    if (item === undefined) {
+                        return false;
+                    }
+                    return item;
+                })
+            },
+            tuesday: {
+                ...tuesday.map((item) => {
+                    if (item === undefined) {
+                        return false;
+                    }
+                    return item;
+                })
+            },
+            wednesday: {
+                ...wednesday.map((item) => {
+                    if (item === undefined) {
+                        return false;
+                    }
+                    return item;
+                })
+            },
+            thursday: {
+                ...thursday.map((item) => {
+                    if (item === undefined) {
+                        return false;
+                    }
+                    return item;
+                })
+            },
+            friday: {
+                ...friday.map((item) => {
+                    if (item === undefined) {
+                        return false;
+                    }
+                    return item;
+                })
+            }
         };
+        console.log("Horario", schedule);
         const textSchedule = JSON.stringify(schedule);
-        console.log("Horario en texto", textSchedule);
+        console.log("Horario en texto", typeof textSchedule);
 
         setLoading(true);
         const teacher = {
@@ -159,8 +195,8 @@ const SecretaryAddTeacherForm = ({closeModal}) => {
         <div>
             <div>
                 <Form
-                      onFinish={formSuccess}
-                      onFinishFailed={formFailed} className='schedule-form'>
+                    onFinish={formSuccess}
+                    onFinishFailed={formFailed} className='schedule-form'>
                     <Item label="Nombre"
                           name="name"
                           rules={[{
