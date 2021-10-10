@@ -55,21 +55,6 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     setComments(values);
   };
 
-  // const [menuState, setMenuState] = useState({
-  //   current: location.pathname, // set the current selected item in menu, by default the current page
-  //   collapsed: false,
-  //   openKeys: [],
-  // });
-
-  // const { isAuthenticated } = useAuth();
-
-  // React.useEffect(() => {
-  //   setMenuState({
-  //     ...menuState,
-  //     current: location.pathname,
-  //   });
-  // }, [location, isAuthenticated, menuState]);
-
   useEffect(() => {
     if (plan && plan.schedule) {
       setImageUrl(`${process.env.REACT_APP_API_BASE_URL}/${plan.schedule}`);
@@ -105,11 +90,6 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
 
   const onSentComments = async (values) => {
     setSending(true);
-    const data = {
-      ...values,
-    };
-
-    console.log("DATOS", data);
 
     try {
       if (user === "director") {
@@ -158,6 +138,7 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     } catch (e) {
       console.log("ERROR", e);
       message.error(`No se guardaron los datos:¨${e}`);
+      setSending(false);
     }
   };
 
@@ -488,14 +469,11 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     } catch (e) {
       console.log("ERROR", e);
       message.error(`No se guardaron los datos:¨${e}`);
+      setSendingPlan(false);
     }
   };
 
   const onReject = async () => {
-    const data = form.getFieldsValue();
-    let dataToSent = {
-      ...data,
-    };
     try {
       await API.post(`/projects/${plan.id}/plan-rejected`); // put data to server
       setSending(false);
@@ -539,6 +517,7 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
     } catch (e) {
       console.log("ERROR", e);
       message.error(`No se guardaron los datos:¨${e}`);
+      setSending(false);
     }
   };
 
@@ -636,7 +615,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                     <Input
                       style={{ width: 300 }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -654,7 +635,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                       placeholder="Seleccione"
                       style={{ width: 300 }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -675,7 +658,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                       placeholder="Seleccione"
                       style={{ width: 300 }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -703,7 +688,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                       placeholder="Seleccione"
                       style={{ width: 300 }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -727,7 +714,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                       placeholder="Seleccione"
                       style={{ width: 300 }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -786,7 +775,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                         maxRows: 5,
                       }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -818,7 +809,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                         maxRows: 15,
                       }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -849,7 +842,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                         maxRows: 15,
                       }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -881,7 +876,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                         maxRows: 6,
                       }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -912,7 +909,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                         maxRows: 6,
                       }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -948,7 +947,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                         maxRows: 6,
                       }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -979,7 +980,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                         maxRows: 15,
                       }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -1010,7 +1013,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                         maxRows: 15,
                       }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -1064,7 +1069,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                         maxRows: 6,
                       }}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -1082,7 +1089,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                       htmlType="submit"
                       loading={sending}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -1098,7 +1107,9 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                     <Button
                       className={"submit"}
                       disabled={
-                        user === "director"
+                        user === "committee"
+                          ? true
+                          : user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"

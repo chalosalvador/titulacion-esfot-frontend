@@ -76,39 +76,40 @@ const AddComments = (props) => {
   );
 
   const onFinish = async (values) => {
-    setSending(true);
+    // setSending(true);
     console.log("values", values);
     const data = { ...values };
 
     console.log("DATOS", data);
 
-    try {
-      await API.post(`/projects/${props.planID}`, data);
-      setSending(false);
-      message.success("Comentario agregado con éxito!");
-      let comment = [
-        {
-          content: (
-            <div>
-              {values[props.comments] ? (
-                <p>
-                  <b>Comentario: </b>
-                  {values[props.comments]}
-                </p>
-              ) : (
-                "No has realizado ningún comentario aún."
-              )}
-            </div>
-          ),
-        },
-      ];
-
-      console.log(comment);
-      setComments(comment);
-    } catch (e) {
-      console.log("ERROR", e);
-      message.error(`No se guardaron los datos:¨${e}`);
-    }
+    // try {
+    //   await API.post(`/projects/${props.planID}`, data);
+    //   setSending(false);
+    //   message.success("Comentario agregado con éxito!");
+    //   let comment = [
+    //     {
+    //       content: (
+    //         <div>
+    //           {values[props.comments] ? (
+    //             <p>
+    //               <b>Comentario: </b>
+    //               {values[props.comments]}
+    //             </p>
+    //           ) : (
+    //             "No has realizado ningún comentario aún."
+    //           )}
+    //         </div>
+    //       ),
+    //     },
+    //   ];
+    //
+    //   console.log(comment);
+    //   setComments(comment);
+    // } catch (e) {
+    //   console.log("ERROR", e);
+    //   message.error("No se guardaron los datos, intente de nuevo");
+    //   setSending(false);
+    // }
   };
 
   const handleChange = (e) => {
