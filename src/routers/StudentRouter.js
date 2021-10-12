@@ -27,6 +27,11 @@ const AsyncProjectUpload = loadable(
   loadableOptions
 );
 
+const AsyncTeacherIdeasList = loadable(
+  () => import("../pages/TeacherIdeasPage"),
+  loadableOptions
+);
+
 /**
  * Este es el componente que se encarga de renderizar el componente adecuado
  * de acuerdo a la ruta en la que se encuentra el navegador.
@@ -48,6 +53,10 @@ const StudentRouter = () => (
     <PrivateRoute path={Routes.PROJECT_UPLOAD} component={AsyncProjectUpload} />
 
     <PrivateRoute path={Routes.LOGOUT} component={AsyncLogout} />
+    <PublicRoute
+      path={Routes.TEACHERS_IDEAS}
+      component={AsyncTeacherIdeasList}
+    />
     <PublicRoute path={Routes.ABOUT} component={AsyncAbout} />
 
     <Route component={NotFoundPage} />

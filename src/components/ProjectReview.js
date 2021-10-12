@@ -279,6 +279,7 @@ const ProjectReview = ({ idPlan, user }) => {
       });
     } catch (e) {
       message.error("No se pudo enviar la información, intente de nuevo");
+      setSendingProject(false);
     }
   };
   const onChange = (checkedValue) => {

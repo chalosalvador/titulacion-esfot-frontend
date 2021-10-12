@@ -127,7 +127,7 @@ const SecretaryStudentsList = () => {
             key: index,
             id: student.id,
             originalData: student,
-            name: student.user.name,
+            name: student.user.name + ' ' + student.user.last_name,
             career: student.career,
             email: student.user.email
         }
