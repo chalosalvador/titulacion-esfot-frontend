@@ -2,26 +2,19 @@ import React, { useState } from "react";
 import { useTeachersIdeasList } from "../data/useTeachersIdeasList";
 import Loading from "./Loading";
 import {
-  Button,
   Col,
-  Dropdown,
   Layout,
   Menu,
   Modal,
-  PageHeader,
   Row,
   Table,
   Typography,
 } from "antd";
 import {
-  BellOutlined,
-  HomeOutlined,
   LoadingOutlined,
   LogoutOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import SearchColumnFilter from "./SearchColumnFilter";
-import StepsSider from "./SiderStudent";
 import { useAuth } from "../providers/Auth";
 import Routes from "../constants/routes";
 import { Link, useLocation } from "react-router-dom";
@@ -175,52 +168,6 @@ const TeachersIdeasList = () => {
   return (
     <>
       <Layout>
-        <Sider
-          theme="light"
-          width={300}
-          style={{
-            backgroundColor: "#dddddd",
-            padding: 40,
-          }}
-        >
-          <StepsSider />
-        </Sider>
-
-        <Layout>
-          <PageHeader
-            className="inner-menu"
-            title={
-              <Title level={2} style={{ color: "#034c70" }}>
-                Temas de titulación
-              </Title>
-            }
-            extra={[
-              <Button key="home" type="text" style={{ color: "#034c70" }}>
-                <Link to={Routes.HOME}>
-                  <HomeOutlined />
-                </Link>
-              </Button>,
-              <Button
-                key="notifications"
-                type="text"
-                style={{ color: "#034c70" }}
-                icon={<BellOutlined />}
-              />,
-              <Dropdown
-                key="user-menu"
-                overlay={userMenu}
-                placement="bottomLeft"
-              >
-                <Button
-                  type="text"
-                  style={{ color: "#034c70" }}
-                  icon={<UserOutlined />}
-                >
-                  {currentUser && currentUser.name}
-                </Button>
-              </Dropdown>,
-            ]}
-          />
           <Content
             style={{
               padding: 50,
@@ -230,17 +177,18 @@ const TeachersIdeasList = () => {
             <Row>
               <Col>
                 <Title level={3} style={{ color: "#034c70" }}>
-                  Propuestos por docentes ESFOT
+                  Temas para proyectos de titulación propuestos por docentes ESFOT
                 </Title>
               </Col>
             </Row>
+            <br>
+            </br>
             <Row justify="center">
               <Col>
                 <Table columns={columns} dataSource={data} />
               </Col>
             </Row>
           </Content>
-        </Layout>
       </Layout>
     </>
   );
