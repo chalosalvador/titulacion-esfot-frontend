@@ -7,7 +7,7 @@ import "../styles/plan-collapse.css";
 
 const { Panel } = Collapse;
 
-const PlanReview = (props) => {
+const PlanReviewCollapse = (props) => {
   console.log("status", props.status);
   return (
     <>
@@ -26,7 +26,7 @@ const PlanReview = (props) => {
               key="1"
               className="site-collapse-custom-panel"
             >
-              <PlanReviewTeacher idPlan={props.planId} user={"director"} />
+              <PlanReviewTeacher idPlan={props.planId} />
             </Panel>
             <Panel
               header="Proyecto de titulación"
@@ -56,4 +56,4 @@ const PlanReview = (props) => {
   );
 };
 
-export default PlanReview;
+export default PlanReviewCollapse;

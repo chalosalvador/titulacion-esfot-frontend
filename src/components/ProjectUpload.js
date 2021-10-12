@@ -65,7 +65,7 @@ const ProjectUpload = () => {
 
   console.log("projects", projects[0]);
 
-  const PRIMARY_PDF_URL = `http://localhost:8000/api/project/getPDF/${projects[0].id}`;
+  const PRIMARY_PDF_URL = `${process.env.REACT_APP_API_BASE_URL}/project/getPDF/${projects[0].id}`;
   const initialUrl = PRIMARY_PDF_URL;
 
   const url = initialUrl;

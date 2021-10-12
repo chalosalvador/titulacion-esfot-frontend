@@ -7,6 +7,7 @@ const { TextArea } = Input;
 
 const AddComments = (props) => {
   const [sending, setSending] = useState(false);
+  const [solving, setSolving] = useState(false);
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
@@ -32,11 +33,35 @@ const AddComments = (props) => {
   }, [props.comments, props.plan]);
 
   const CommentList = ({ comments }) => (
-    <List
-      dataSource={comments}
-      itemLayout="horizontal"
-      renderItem={(props) => <Comment {...props} />}
-    />
+    <>
+      <Row>
+        <Col span={15}>
+          <List
+            dataSource={comments}
+            itemLayout="horizontal"
+            renderItem={(props) => <Comment {...props} />}
+          />
+        </Col>
+        <Col span={9}>
+          {(props.user === "director" &&
+            props.plan.status === "plan_corrections_done") ||
+          (props.user === "committee" &&
+            props.plan.status === "plan_corrections_done2") ? (
+            <Button
+              loading={solving}
+              style={{ marginTop: 5 }}
+              danger
+              disabled={!props.plan[props.comments]}
+              onClick={() => solveComment()}
+            >
+              Solventar comentario
+            </Button>
+          ) : (
+            <></>
+          )}
+        </Col>
+      </Row>
+    </>
   );
 
   const Editor = ({ onChange, onSubmit }) => (
@@ -115,20 +140,37 @@ const AddComments = (props) => {
     console.log("value", e.target.value);
   };
 
+  const solveComment = async () => {
+    setSolving(true);
+    const data = {};
+    data[props.comments] = "";
+
+    console.log("DATOS", data);
+
+    try {
+      await API.post(`/projects/${props.planID}`, data);
+      setSolving(false);
+      message.success("Comentario solventado con éxito!");
+      let noComment = [
+        {
+          content: <div>No has realizado ningún comentario aún.</div>,
+        },
+      ];
+      setComments(noComment);
+    } catch (e) {
+      console.log("ERROR", e);
+      setSolving(false);
+      message.error(`No se guardaron los datos:¨${e}`);
+    }
+  };
+
   return (
     <>
       <Row>
         <Col>
           {comments.length > 0 && <CommentList comments={comments} />}
           <Comment
-            content={
-              <Editor
-                onChange={handleChange}
-                onSubmit={onFinish}
-                // submitting={ submitting }
-                // value={ value }
-              />
-            }
+            content={<Editor onChange={handleChange} onSubmit={onFinish} />}
           />
         </Col>
       </Row>
