@@ -1089,9 +1089,7 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                       htmlType="submit"
                       loading={sending}
                       disabled={
-                        user === "committee"
-                          ? true
-                          : user === "director"
+                        user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
@@ -1107,9 +1105,7 @@ const PlanReviewTeacher = ({ idPlan, user }) => {
                     <Button
                       className={"submit"}
                       disabled={
-                        user === "committee"
-                          ? true
-                          : user === "director"
+                        user === "director"
                           ? !(
                               plan.status === "plan_sent" ||
                               plan.status === "plan_corrections_done"
