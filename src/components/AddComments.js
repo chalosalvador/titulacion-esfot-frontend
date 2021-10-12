@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import withAuth from "../hocs/withAuth";
+import { useAuth } from "../providers/Auth";
 import { Button, Col, Comment, Form, Input, List, message, Row } from "antd";
 import API from "../data";
 
@@ -9,27 +10,40 @@ const AddComments = (props) => {
   const [sending, setSending] = useState(false);
   const [solving, setSolving] = useState(false);
   const [comments, setComments] = useState([]);
+  const { currentUser } = useAuth();
 
   useEffect(() => {
-    let comment = [
+    let comments = [];
+    if (props.plan[props.comments]) {
+      comments = JSON.parse(props.plan[props.comments]);
+    }
+    let renderComment = [
       {
         content: (
           <div>
-            {props.plan[props.comments] ? (
-              <p>
-                <b>Comentario: </b>
-                {props.plan[props.comments]}
-              </p>
-            ) : (
-              "No has realizado ningún comentario aún."
-            )}
+            {comments.length > 0
+              ? comments.map((data, index) => (
+                  <div key={index}>
+                    <p>
+                      <b>
+                        {data.author ===
+                        `${currentUser.name} ${currentUser.last_name}`
+                          ? "Yo"
+                          : data.author}
+                        :{" "}
+                      </b>
+                      {data.comment}
+                    </p>
+                    <br />
+                  </div>
+                ))
+              : "No has realizado ningún comentario aún."}
           </div>
         ),
       },
     ];
 
-    console.log(comment);
-    setComments(comment);
+    setComments(renderComment);
   }, [props.comments, props.plan]);
 
   const CommentList = ({ comments }) => (
@@ -102,37 +116,55 @@ const AddComments = (props) => {
 
   const onFinish = async (values) => {
     setSending(true);
-    console.log("values", values);
-    const data = { ...values };
-
-    console.log("DATOS", data);
+    let commentsArray = [];
+    let dataToSend = {};
+    const commentData = {
+      author: `${currentUser.name} ${currentUser.last_name}`,
+      comment: values[props.comments],
+    };
+    if (props.plan[props.comments]) {
+      commentsArray = JSON.parse(props.plan[props.comments]);
+      commentsArray.push(commentData);
+    } else {
+      commentsArray.push(commentData);
+    }
+    dataToSend[props.comments] = JSON.stringify(commentsArray);
 
     try {
-      await API.post(`/projects/${props.planID}`, data);
+      await API.post(`/projects/${props.planID}`, dataToSend);
       setSending(false);
       message.success("Comentario agregado con éxito!");
       let comment = [
         {
           content: (
             <div>
-              {values[props.comments] ? (
-                <p>
-                  <b>Comentario: </b>
-                  {values[props.comments]}
-                </p>
-              ) : (
-                "No has realizado ningún comentario aún."
-              )}
+              {commentsArray.length > 0
+                ? commentsArray.map((data, index) => (
+                    <div key={index}>
+                      <p>
+                        <b>
+                          {data.author ===
+                          `${currentUser.name} ${currentUser.last_name}`
+                            ? "Yo"
+                            : data.author}
+                          :{" "}
+                        </b>
+                        {data.comment}
+                      </p>
+                      <br />
+                    </div>
+                  ))
+                : "No se han realizado comentarios aún."}
             </div>
           ),
         },
       ];
 
-      console.log(comment);
       setComments(comment);
     } catch (e) {
       console.log("ERROR", e);
-      message.error(`No se guardaron los datos:¨${e}`);
+      message.error("No se guardaron los datos, intente de nuevo");
+      setSending(false);
     }
   };
 

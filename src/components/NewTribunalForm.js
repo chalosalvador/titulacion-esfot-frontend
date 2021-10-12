@@ -34,7 +34,6 @@ const NewTribunalForm = ({
     const jury = {
       project_id: project.id,
       members: values.members,
-      tribunalSchedule: new Date(),
     };
 
     loadingModal(true);

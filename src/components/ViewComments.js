@@ -5,183 +5,216 @@ import { Col, Comment, List, Row } from "antd";
 const ViewComments = (props) => {
   const [comments, setComments] = useState([]);
   useEffect(() => {
-    let comment = [];
+    let renderComment = [];
+    let comments = [];
     switch (props.comments) {
       case "title_comment":
-        comment = [
+        comments = JSON.parse(props.plan[0].title_comment);
+        renderComment = [
           {
             content: (
               <div>
-                {props.plan[0].title_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan[0].title_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
+                {comments.length > 0
+                  ? comments.map((data, index) => (
+                      <div key={index}>
+                        <p>
+                          <b>{data.author}: </b>
+                          {data.comment}
+                        </p>
+                      </div>
+                    ))
+                  : ""}
               </div>
             ),
           },
         ];
         break;
       case "problem_comment":
-        comment = [
+        if (props.plan[0].problem_comment) {
+          comments = JSON.parse(props.plan[0].problem_comment);
+        }
+        renderComment = [
           {
             content: (
               <div>
-                {props.plan[0].problem_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan[0].problem_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
+                {comments.length > 0
+                  ? comments.map((data, index) => (
+                      <div key={index}>
+                        <p>
+                          <b>{data.author}: </b>
+                          {data.comment}
+                        </p>
+                      </div>
+                    ))
+                  : ""}
               </div>
             ),
           },
         ];
         break;
       case "justification_comment":
-        comment = [
+        comments = JSON.parse(props.plan[0].justification_comment);
+        renderComment = [
           {
             content: (
               <div>
-                {props.plan[0].justification_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan[0].justification_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
+                {comments.length > 0
+                  ? comments.map((data, index) => (
+                      <div key={index}>
+                        <p>
+                          <b>{data.author}: </b>
+                          {data.comment}
+                        </p>
+                      </div>
+                    ))
+                  : ""}
               </div>
             ),
           },
         ];
         break;
       case "hypothesis_comment":
-        comment = [
+        comments = JSON.parse(props.plan[0].hypothesis_comment);
+        renderComment = [
           {
             content: (
               <div>
-                {props.plan[0].hypothesis_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan[0].hypothesis_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
+                {comments.length > 0
+                  ? comments.map((data, index) => (
+                      <div key={index}>
+                        <p>
+                          <b>{data.author}: </b>
+                          {data.comment}
+                        </p>
+                      </div>
+                    ))
+                  : ""}
               </div>
             ),
           },
         ];
         break;
       case "general_objective_comment":
-        comment = [
+        comments = JSON.parse(props.plan[0].general_objective_comment);
+        renderComment = [
           {
             content: (
               <div>
-                {props.plan[0].general_objective_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan[0].general_objective_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
+                {comments.length > 0
+                  ? comments.map((data, index) => (
+                      <div key={index}>
+                        <p>
+                          <b>{data.author}: </b>
+                          {data.comment}
+                        </p>
+                      </div>
+                    ))
+                  : ""}
               </div>
             ),
           },
         ];
         break;
       case "specifics_objectives_comment":
-        comment = [
+        comments = JSON.parse(props.plan[0].specifics_objectives_comment);
+        renderComment = [
           {
             content: (
               <div>
-                {props.plan[0].specifics_objectives_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan[0].specifics_objectives_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
+                {comments.length > 0
+                  ? comments.map((data, index) => (
+                      <div key={index}>
+                        <p>
+                          <b>{data.author}: </b>
+                          {data.comment}
+                        </p>
+                      </div>
+                    ))
+                  : ""}
               </div>
             ),
           },
         ];
         break;
       case "methodology_comment":
-        comment = [
+        comments = JSON.parse(props.plan[0].methodology_comment);
+        renderComment = [
           {
             content: (
               <div>
-                {props.plan[0].methodology_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan[0].methodology_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
+                {comments.length > 0
+                  ? comments.map((data, index) => (
+                      <div key={index}>
+                        <p>
+                          <b>{data.author}: </b>
+                          {data.comment}
+                        </p>
+                      </div>
+                    ))
+                  : ""}
               </div>
             ),
           },
         ];
         break;
       case "work_plan_comment":
-        comment = [
+        comments = JSON.parse(props.plan[0].work_plan_comment);
+        renderComment = [
           {
             content: (
               <div>
-                {props.plan[0].work_plan_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan[0].work_plan_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
+                {comments.length > 0
+                  ? comments.map((data, index) => (
+                      <div key={index}>
+                        <p>
+                          <b>{data.author}: </b>
+                          {data.comment}
+                        </p>
+                      </div>
+                    ))
+                  : ""}
               </div>
             ),
           },
         ];
         break;
       case "schedule_comment":
-        comment = [
+        comments = JSON.parse(props.plan[0].schedule_comment);
+        renderComment = [
           {
             content: (
               <div>
-                {props.plan[0].schedule_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan[0].schedule_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
+                {comments.length > 0
+                  ? comments.map((data, index) => (
+                      <div key={index}>
+                        <p>
+                          <b>{data.author}: </b>
+                          {data.comment}
+                        </p>
+                      </div>
+                    ))
+                  : ""}
               </div>
             ),
           },
         ];
         break;
       case "bibliography_comment":
-        comment = [
+        comments = JSON.parse(props.plan[0].bibliography_comment);
+        renderComment = [
           {
             content: (
               <div>
-                {props.plan[0].bibliography_comment ? (
-                  <p>
-                    <b>Comentarios: </b>
-                    {props.plan[0].bibliography_comment}
-                  </p>
-                ) : (
-                  ""
-                )}
+                {comments.length > 0
+                  ? comments.map((data, index) => (
+                      <div key={index}>
+                        <p>
+                          <b>{data.author}: </b>
+                          {data.comment}
+                        </p>
+                      </div>
+                    ))
+                  : ""}
               </div>
             ),
           },
@@ -189,18 +222,14 @@ const ViewComments = (props) => {
         break;
       default:
         console.log("No existe el campo");
-        comment = [];
+        renderComment = [];
         break;
     }
-    console.log(comment);
-    setComments(() => comment);
+    setComments(() => renderComment);
     return () => {
       setComments([]);
-      console.log("se va xd");
     };
   }, [props.comments]);
-
-  console.log("Comentarios para", props.comments);
 
   const CommentList = ({ comments }) => (
     <List
