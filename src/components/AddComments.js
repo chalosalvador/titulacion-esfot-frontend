@@ -68,7 +68,7 @@ const AddComments = (props) => {
               disabled={!props.plan[props.comments]}
               onClick={() => solveComment()}
             >
-              Solventar comentario
+              Solventar comentarios
             </Button>
           ) : (
             <></>

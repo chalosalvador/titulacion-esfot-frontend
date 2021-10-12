@@ -265,7 +265,7 @@ const ProjectDetailSecretary = ({ id }) => {
         <Panel header="Requisitos para declarar apta defensa oral" key="4">
           <Checkbox.Group
             onChange={onChangeCheckBoxGroup}
-            disabled={plan.status !== "project_graded"}
+            disabled={plan.status !== "project_approved_send"}
           >
             <Row>
               {optionsAptDefense.map((option, index) => (
