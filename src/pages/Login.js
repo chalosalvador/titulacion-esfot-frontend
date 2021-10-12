@@ -13,31 +13,13 @@ import { Link } from "react-router-dom";
 import "../styles/login.css";
 
 const Login = () => {
-  const { setAuthenticated, setCurrentUser, login } = useAuth();
+  const { login } = useAuth();
 
   const onFinish = async (userData) => {
     login({
       email: userData.username,
       password: userData.password,
     });
-    // try {
-    //   const response = await API.post( '/login', {
-    //     email: userData.username,
-    //     password: userData.password
-    //   } );
-    //   console.log( 'response login', response );
-    //
-    //   localStorage.setItem( 'login', JSON.stringify( true ) ); // this is to sync auth state in local storage
-    //   // Cookies.set( 'token', response.data.token, { expires: 1 } );
-    //   // API.headers[ 'Authorization' ] = 'Bearer ' + response.data.token; // start sending authorization header
-    //   setCurrentUser( response.data.user );
-    //   setAuthenticated( true );
-    // } catch( e ) {
-    //   console.error( 'No se pudo iniciar sesión', e.message );
-    //   setAuthenticated( false );
-    //   const errorList = e.error && <ErrorList errors={ e.error } />;
-    //   message.error( <>{ translateMessage( e.message ) }{ errorList }</> );
-    // }
   };
 
   return (
@@ -114,7 +96,7 @@ const Login = () => {
                     Ingresar
                   </Button>
                   <div>
-                    Soy nuevo, <Link to={Routes.REGISTER}>registrarme</Link>
+                    <Link to={Routes.INDEX}>Regresar</Link>
                   </div>
                 </Form.Item>
               </Form>

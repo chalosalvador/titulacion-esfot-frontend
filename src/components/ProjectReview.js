@@ -72,7 +72,7 @@ const ProjectReview = ({ idPlan, user }) => {
     plan.highlights ? JSON.parse(plan.highlights) : []
   );
 
-  const PRIMARY_PDF_URL = `http://localhost:8000/api/project/getPDF/${idPlan}`;
+  const PRIMARY_PDF_URL = `${process.env.REACT_APP_API_BASE_URL}/project/getPDF/${plan.id}`;
   const initialUrl = PRIMARY_PDF_URL;
 
   const [url, setUrl] = useState(initialUrl);
@@ -279,6 +279,7 @@ const ProjectReview = ({ idPlan, user }) => {
       });
     } catch (e) {
       message.error("No se pudo enviar la información, intente de nuevo");
+      setSendingProject(false);
     }
   };
   const onChange = (checkedValue) => {

@@ -5,6 +5,7 @@ import { useProjects } from "../data/useProjects";
 import Loading from "./Loading";
 import SearchColumnFilter from "./SearchColumnFilter";
 import PlanReviewTeacher from "./PlanReviewTeacher";
+import PlanReviewCommittee from "./PlanReviewCommittee";
 
 const { Title } = Typography;
 const { Link } = Typography;
@@ -127,7 +128,7 @@ const CommitteePlansTable = () => {
       />
     );
   } else {
-    content = <PlanReviewTeacher idPlan={state.idPlan} user={"committee"} />;
+    content = <PlanReviewCommittee idPlan={state.idPlan} />;
   }
 
   return (

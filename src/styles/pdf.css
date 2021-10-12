@@ -19,9 +19,9 @@ body {
     );
 }
 
-button {
-    display: none;
-}
+/*button {*/
+/*    display: none;*/
+/*}*/
 
 .sidebar__highlights {
     list-style: "none";
