@@ -162,6 +162,11 @@ const SecretaryProjectsListPage = () => {
               name = "Proyecto calificado";
               break;
 
+            case "project_approved_send":
+              color = "cyan";
+              name = "Proyecto aprobado para envío";
+              break;
+
             case "test_defense_apt":
               color = "green";
               name = "Apto para defensa oral";

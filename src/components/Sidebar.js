@@ -22,41 +22,37 @@ function Sidebar({ highlights, resetHighlights, teacher }) {
       </div>
 
       <ul className="sidebar__highlights">
-        {highlights.map((highlight, index) => (
-          <li
-            key={index}
-            className="sidebar__highlight"
-            // onClick={() => {
-            //   updateHash(highlight);
-            // }}
-          >
-            <div>
-              <strong>{highlight.comment.text}</strong>
-              {highlight.content.text ? (
-                <blockquote style={{ marginTop: "0.5rem" }}>
-                  {`${highlight.content.text.slice(0, 90).trim()}…`}
-                </blockquote>
-              ) : null}
-              {highlight.content.image ? (
-                <div
-                  className="highlight__image"
-                  style={{ marginTop: "0.5rem" }}
-                >
-                  <img src={highlight.content.image} alt={"Screenshot"} />
-                </div>
-              ) : null}
-            </div>
-            <div className="highlight__location">
-              Página {highlight.position.pageNumber}
-            </div>
-          </li>
-        ))}
+        {highlights &&
+          highlights.map((highlight, index) => (
+            <li
+              key={index}
+              className="sidebar__highlight"
+              // onClick={() => {
+              //   updateHash(highlight);
+              // }}
+            >
+              <div>
+                <strong>{highlight.comment.text}</strong>
+                {highlight.content.text ? (
+                  <blockquote style={{ marginTop: "0.5rem" }}>
+                    {`${highlight.content.text.slice(0, 90).trim()}…`}
+                  </blockquote>
+                ) : null}
+                {highlight.content.image ? (
+                  <div
+                    className="highlight__image"
+                    style={{ marginTop: "0.5rem" }}
+                  >
+                    <img src={highlight.content.image} alt={"Screenshot"} />
+                  </div>
+                ) : null}
+              </div>
+              <div className="highlight__location">
+                Página {highlight.position.pageNumber}
+              </div>
+            </li>
+          ))}
       </ul>
-      {highlights.length > 0 ? (
-        <div style={{ padding: "1rem" }}>
-          <button onClick={resetHighlights}>Borrar comentarios</button>
-        </div>
-      ) : null}
     </div>
   );
 }

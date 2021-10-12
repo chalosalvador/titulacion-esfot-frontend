@@ -42,12 +42,13 @@ const NewTribunalForm = ({
       await API.post("/juries/", jury);
       await API.post(`/projects/${project.id}/tribunal-assigned`);
       message.success("Cambios guardados correctamente!");
-      mutate();
+      await mutate();
       loadingModal(false);
       closeModal();
     } catch (e) {
       loadingModal(false);
-      message.error(e);
+      // message.error(e);
+      console.log("error", e);
     }
   };
 

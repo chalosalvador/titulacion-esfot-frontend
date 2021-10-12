@@ -68,20 +68,9 @@ const ProjectReview = ({ idPlan, user }) => {
   const { plan, isLoading } = usePlanContent(idPlan);
   const { pdf, isLoading1 } = useGetProjectPDF(idPlan);
   console.log("plan", idPlan);
-  const [highlights, setHighlights] = useState(
-    plan.highlights ? JSON.parse(plan.highlights) : []
-  );
 
-  const PRIMARY_PDF_URL = `${process.env.REACT_APP_API_BASE_URL}/project/getPDF/${plan.id}`;
-  const initialUrl = PRIMARY_PDF_URL;
+  let highlights = [];
 
-  const [url, setUrl] = useState(initialUrl);
-
-  if (isLoading && isLoading1) {
-    return <h1>Loading...</h1>;
-  }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const getHighlightById = useCallback(
     (id) => {
       return highlights.find((highlight) => highlight.id === id);
@@ -89,7 +78,6 @@ const ProjectReview = ({ idPlan, user }) => {
     [highlights]
   );
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const scrollToHighlightFromHash = useCallback(() => {
     const highlight = getHighlightById(parseIdFromHash());
 
@@ -98,7 +86,6 @@ const ProjectReview = ({ idPlan, user }) => {
     }
   }, [getHighlightById]);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false);
     return () => {
@@ -107,8 +94,18 @@ const ProjectReview = ({ idPlan, user }) => {
   }, [scrollToHighlightFromHash]);
 
   const resetHighlights = () => {
-    setHighlights([]);
+    highlights = [];
   };
+
+  if (isLoading || isLoading1) {
+    return <h1>Loading...</h1>;
+  }
+
+  const PRIMARY_PDF_URL = `${process.env.REACT_APP_API_BASE_URL}/project/getPDF/${plan.id}`;
+
+  const url = PRIMARY_PDF_URL;
+
+  highlights = JSON.parse(plan.highlights);
 
   let scrollViewerTo = () => {};
 
@@ -117,7 +114,7 @@ const ProjectReview = ({ idPlan, user }) => {
       "highlights",
       JSON.stringify([{ ...highlight, id: getNextId() }, ...highlights])
     );
-    setHighlights([{ ...highlight, id: getNextId() }, ...highlights]);
+    highlights = [{ ...highlight, id: getNextId() }, ...highlights];
 
     let dataToSent = {
       highlights: JSON.stringify([
@@ -134,24 +131,22 @@ const ProjectReview = ({ idPlan, user }) => {
   };
 
   const updateHighlight = (highlightId, position, content) => {
-    setHighlights(
-      highlights.map((h) => {
-        const {
-          id,
-          position: originalPosition,
-          content: originalContent,
-          ...rest
-        } = h;
-        return id === highlightId
-          ? {
-              id,
-              position: { ...originalPosition, ...position },
-              content: { ...originalContent, ...content },
-              ...rest,
-            }
-          : h;
-      })
-    );
+    highlights = highlights.map((h) => {
+      const {
+        id,
+        position: originalPosition,
+        content: originalContent,
+        ...rest
+      } = h;
+      return id === highlightId
+        ? {
+            id,
+            position: { ...originalPosition, ...position },
+            content: { ...originalContent, ...content },
+            ...rest,
+          }
+        : h;
+    });
   };
 
   const modal = async () => {

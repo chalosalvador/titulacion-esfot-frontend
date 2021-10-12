@@ -237,29 +237,6 @@ const ProjectUpload = () => {
       >
         Proyecto de Titulación
       </Title>
-      <Title level={3} style={{ color: "#407088" }}>
-        Formato proyecto de titulación
-      </Title>
-      <div style={{ textAlign: "center" }}>
-        <Button
-          style={{
-            backgroundColor: "#034c70",
-            color: "#fff",
-            fontSize: 13,
-            marginLeft: 15,
-          }}
-          href={
-            "https://esfot.epn.edu.ec/index.php/component/jdownloads/category/47-unidad-de-titulacion?Itemid=0/Formulario%20F_AA_225%20-%20Formato%20Plan%20Trabajo%20de%20Titulaci%C3%B3n%20y%20Tesis.docx"
-          }
-        >
-          <DownloadOutlined />
-          Descargar formato proyecto de titulación .docx
-        </Button>
-      </div>
-
-      <Title level={3} style={{ color: "#407088", marginTop: 30 }}>
-        Proyecto
-      </Title>
       {projects[0].status !== "plan_approved_commission" && (
         <div className="App" style={{ display: "flex", height: "100vh" }}>
           {projects[0].status === "project_review_teacher" ||

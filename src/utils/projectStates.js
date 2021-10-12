@@ -16,8 +16,11 @@ const projectStates = [
   "san_curriculum_2",
   "tribunal_assigned",
   "project_graded",
+  "project_approved_send",
   "test_defense_apt",
   "date_defense_assigned",
+  "project_rejected",
+  "project_completed",
 ];
 
 export default projectStates;
