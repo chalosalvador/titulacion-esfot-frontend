@@ -13,21 +13,8 @@ const formItemLayout = {
 };
 
 const TeacherPlanForm = ({ form }) => {
-  // const [ currentSpecifics, setCurrentSpecifics ] = useState( [] );
-
-  // const handleChangeWideField = ( value ) => {
-  //   form.setFieldsValue( { specific_field: null } );
-  //   setCurrentSpecifics( specificFields[ wideFields.indexOf( value ) ] );
-  // };
-
   return (
-    <Form
-      {...formItemLayout}
-      name="teacher_plan"
-      // onFinish={ onSubmit }
-      form={form}
-      // initialValues={ props.internship }
-    >
+    <Form {...formItemLayout} name="teacher_plan" form={form}>
       <Form.Item
         name="title"
         label="Tema:"
@@ -76,11 +63,6 @@ const TeacherPlanForm = ({ form }) => {
           autoSize={{ maxRows: 4 }}
         />
       </Form.Item>
-      {/*<Form.Item justify='center'>*/}
-      {/*  <Button type={ 'primary' } htmlType={ 'submit' }>*/}
-      {/*    Agregar Tema*/}
-      {/*  </Button>*/}
-      {/*</Form.Item>*/}
     </Form>
   );
 };

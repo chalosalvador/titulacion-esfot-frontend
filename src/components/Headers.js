@@ -21,11 +21,6 @@ const Headers = () => {
               <img className="logo" src={logoEPN} alt="" />
             </a>
           </Col>
-
-          {/*<Col md={ 14 } align='right' className='main-menu'>*/}
-          {/*  <Navigation mode='horizontal' />*/}
-          {/*</Col>*/}
-
           <Col xs={2} align="right" className="responsive-menu-button">
             <Popover
               trigger="click"

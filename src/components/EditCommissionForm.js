@@ -1,149 +1,144 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Input, message, Select } from 'antd';
-import {useTeachers} from '../data/useTeachers';
-import {useCareer} from '../data/useCareer';
-import Loading from './Loading';
+import React, { useState, useEffect } from "react";
+import { Form, Input, Select } from "antd";
+import { useTeachers } from "../data/useTeachers";
+import { useCareer } from "../data/useCareer";
+import Loading from "./Loading";
 
 const formItemLayout = {
   labelCol: {
-    md: { span: 12 }
+    md: { span: 12 },
   },
   wrapperCol: {
-    md: { span: 24 }
-  }
-}
+    md: { span: 24 },
+  },
+};
 
-const EditCommissionForm = ({form, commission,careers, closeModal}) => {
+const EditCommissionForm = ({ form, commission, careers }) => {
+  const [teachersList, setTeachersList] = useState([]);
+  const { career, isLoading, isError } = useCareer(commission.career_id);
+  const { teachers } = useTeachers();
 
-  const [teachersList,setTeachersList] = useState([]);
-  const {career, isLoading, isError} = useCareer(commission.career_id);
-  const {teachers} = useTeachers();
-
-  const onChange = ( value ) => {
-    const teachersCareer = teachers.filter((teacher)=>teacher.career_id===value);
-    const teacherCareerList = teachersCareer.map((teacher)=>{
+  const onChange = (value) => {
+    const teachersCareer = teachers.filter(
+      (teacher) => teacher.career_id === value
+    );
+    const teacherCareerList = teachersCareer.map((teacher) => {
       return {
         id: teacher.id,
         value: teacher.id,
         label: teacher.name,
-      }
+      };
     });
     setTeachersList(teacherCareerList);
   };
 
-  const careersList = careers.map((career)=>{
+  const careersList = careers.map((career) => {
     return {
       label: career.name,
-      value: career.id
-    }
+      value: career.id,
+    };
   });
 
-  const onSubmit = (values) =>{
-    console.log('values', values);
-  }
+  const onSubmit = (values) => {
+    console.log("values", values);
+  };
 
-  useEffect(()=>{
-    if(career){
-      setTeachersList(career.teachers.data.map((teacher)=>{
-        return {
-          id: teacher.id,
-          value: teacher.id,
-          label: teacher.name
-        }
-      }));
+  useEffect(() => {
+    if (career) {
+      setTeachersList(
+        career.teachers.data.map((teacher) => {
+          return {
+            id: teacher.id,
+            value: teacher.id,
+            label: teacher.name,
+          };
+        })
+      );
     }
   }, [career]);
 
-  useEffect(()=>{
+  useEffect(() => {
     return () => {
       form.resetFields();
-    }
-  },[]);
+    };
+  }, []);
 
-  if(isLoading){
+  if (isLoading) {
     return <Loading />;
   }
 
-  if(isError){
+  if (isError) {
     return "Error";
   }
 
-  console.log('career', career);
-
-
-
   return (
     <Form
-      { ...formItemLayout }
-      name='committee'
-      onFinish={ onSubmit }
-      form={ form }
-      layout={'vertical'}
+      {...formItemLayout}
+      name="committee"
+      onFinish={onSubmit}
+      form={form}
+      layout={"vertical"}
       initialValues={{
-        'career_id': career.name,
-        'commission_schedule': career.commission.commission_schedule,
-        'members': career.commission.members.map((member)=>member.name)
+        career_id: career.name,
+        commission_schedule: career.commission.commission_schedule,
+        members: career.commission.members.map((member) => member.name),
       }}
     >
       <Form.Item
-        name='career_id'
-        label='Carrera:'
-        rules={ [
+        name="career_id"
+        label="Carrera:"
+        rules={[
           {
             required: true,
-            message: 'Escoje el nombre de la carrera',
+            message: "Escoje el nombre de la carrera",
           },
-        ] }
+        ]}
       >
         <Select
           showSearch
-          style={ { width: '100%' } }
-          placeholder='Selecciona una carrera'
-          optionFilterProp='children'
-          onChange={ onChange }
-          filterOption={ ( input, option ) =>
-            option.children.toLowerCase().indexOf( input.toLowerCase() ) >= 0
+          style={{ width: "100%" }}
+          placeholder="Selecciona una carrera"
+          optionFilterProp="children"
+          onChange={onChange}
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
           options={careersList}
         />
       </Form.Item>
       <Form.Item
-        name='commission_schedule'
-        label='Horario de la comisión:'
-        rules={ [
+        name="commission_schedule"
+        label="Horario de la comisión:"
+        rules={[
           {
             required: true,
             whitespace: true,
-            message: 'Coloca un horario para la reunión de la comisión',
+            message: "Coloca un horario para la reunión de la comisión",
           },
-        ] }
+        ]}
       >
-        <Input.TextArea
-          placeholder='Horario'
-          autoSize={ { maxRows: 4 } }
-        />
+        <Input.TextArea placeholder="Horario" autoSize={{ maxRows: 4 }} />
       </Form.Item>
       <Form.Item
-        name='members'
-        label='Miembros de la comisión'
-        rules={ [
+        name="members"
+        label="Miembros de la comisión"
+        rules={[
           {
             required: true,
-            message: 'Debe haber al menos dos miembros'
-          }
-        ] }>
+            message: "Debe haber al menos dos miembros",
+          },
+        ]}
+      >
         <Select
-          mode='multiple'
-          placeholder='Selcciona los profesores'
+          mode="multiple"
+          placeholder="Selcciona los profesores"
           showArrow
-          // defaultValue={ [ 'a10', 'c12' ] }
-          // onChange={ handleChange }
-          style={ { width: '100%' } }
+          style={{ width: "100%" }}
           options={teachersList}
         />
       </Form.Item>
     </Form>
   );
-}
+};
 
 export default EditCommissionForm;

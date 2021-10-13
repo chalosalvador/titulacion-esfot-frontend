@@ -123,16 +123,16 @@ const SecretaryCommitteeList = () => {
       key: commission.career_id,
       career_id: commission.career_name,
       first_member: commission.members[0]
-        ? commission.members[0].name + ' ' + commission.members[0].last_name
+        ? commission.members[0].name + " " + commission.members[0].last_name
         : "Por asignar",
       second_member: commission.members[1]
-        ? commission.members[1].name + ' ' + commission.members[1].last_name
+        ? commission.members[1].name + " " + commission.members[1].last_name
         : "Por asignar",
       third_member: commission.members[2]
-        ? commission.members[2].name + ' ' + commission.members[2].last_name
+        ? commission.members[2].name + " " + commission.members[2].last_name
         : "Por asignar",
       fourth_member: commission.members[3]
-        ? commission.members[3].name + ' ' + commission.members[3].last_name
+        ? commission.members[3].name + " " + commission.members[3].last_name
         : "Por asignar",
       commission_schedule: commission.commission_schedule,
       pending: "3 pendientes",
@@ -160,7 +160,6 @@ const SecretaryCommitteeList = () => {
           onClick: (event) => {
             event.stopPropagation();
             setVisibleEdit(true);
-            console.log("record", record);
             const commissionFormData = {
               career_id: record.key,
             };

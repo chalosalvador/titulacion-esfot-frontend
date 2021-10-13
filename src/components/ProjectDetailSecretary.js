@@ -74,7 +74,6 @@ const ProjectDetailSecretary = ({ id }) => {
     console.log(key);
   };
   const onChange = async (e, option) => {
-    console.log(`checked = ${e.target.checked}`);
     try {
       switch (option) {
         case "san_curriculum_1":
@@ -114,7 +113,7 @@ const ProjectDetailSecretary = ({ id }) => {
         message.success("Cambios guardados");
       } catch (e) {
         console.log("ERROR", e);
-        message.error(`No se guardaron los datos:¨${e}`);
+        message.error(`No se guardaron los datos:¨${e.message}`);
       }
     }
   };
