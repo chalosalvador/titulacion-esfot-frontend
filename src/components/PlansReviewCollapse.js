@@ -4,6 +4,7 @@ import { CaretRightOutlined } from "@ant-design/icons";
 import PlanReviewTeacher from "./PlanReviewTeacher";
 import ProjectReview from "./ProjectReview";
 import "../styles/plan-collapse.css";
+import projectStates from "../utils/projectStates";
 
 const { Panel } = Collapse;
 
@@ -15,7 +16,9 @@ const PlanReviewCollapse = (props) => {
         <Col span={24} className="planCollapse">
           <Collapse
             bordered={false}
-            defaultActiveKey={["1"]}
+            defaultActiveKey={
+              projectStates.indexOf(props.status) > 10 ? ["2"] : ["1"]
+            }
             expandIcon={({ isActive }) => (
               <CaretRightOutlined rotate={isActive ? 90 : 0} />
             )}
@@ -33,18 +36,7 @@ const PlanReviewCollapse = (props) => {
               key="2"
               className="site-collapse-custom-panel"
               collapsible={
-                props.status === "plan_saved" ||
-                props.status === "plan_sent" ||
-                props.status === "plan_review_teacher" ||
-                props.status === "plan_corrections_done" ||
-                props.status === "plan_approved_director" ||
-                props.status === "plan_review_commission" ||
-                props.status === "plan_corrections_done2" ||
-                props.status === "plan_approved_commission" ||
-                props.status === "plan_rejected" ||
-                props.status === "san_curriculum_1"
-                  ? "disabled"
-                  : "header"
+                projectStates.indexOf(props.status) < 10 ? "disabled" : "header"
               }
             >
               <ProjectReview idPlan={props.planId} user={"director"} />

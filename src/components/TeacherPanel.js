@@ -23,7 +23,7 @@ const TeacherPanel = () => {
   });
   let location = useLocation();
   const { isAuthenticated } = useAuth();
-  const { teachersProjects, meta, isLoading, isError } = useProjectsList();
+  const { teachersProjects, isLoading, isError } = useProjectsList();
 
   const [menuState, setMenuState] = useState({
     current: location.pathname, // set the current selected item in menu, by default the current page
@@ -192,12 +192,6 @@ const TeacherPanel = () => {
     },
   ];
 
-  let pagination = {
-    current: 1,
-    pageSize: 10,
-    total: 10,
-    showSizeChanger: false,
-  };
   if (isLoading) {
     return <Loading />;
   }
@@ -206,26 +200,15 @@ const TeacherPanel = () => {
     return <ShowError error={isError} />;
   }
 
-  console.log(teachersProjects);
-
   const data = teachersProjects.map((project, index) => {
     return {
       key: index,
       title: project.title,
-      student_name: project.student_name + ' ' + project.student_last_name,
+      student_name: project.student_name + " " + project.student_last_name,
       status: project.status,
       id: project.id,
     };
   });
-
-  if (meta) {
-    pagination = {
-      current: meta.current_page,
-      pageSize: meta.per_page,
-      total: meta.total,
-      showSizeChanger: false,
-    };
-  }
 
   let content = "";
   let titleTable = "";

@@ -1,70 +1,31 @@
 import React, { useState } from "react";
 import { useTeachersIdeasList } from "../data/useTeachersIdeasList";
 import Loading from "./Loading";
-import {
-  Col,
-  Layout,
-  Menu,
-  Modal,
-  Row,
-  Table,
-  Typography,
-} from "antd";
-import {
-  LoadingOutlined,
-  LogoutOutlined,
-} from "@ant-design/icons";
+import { Col, Layout, Modal, Row, Table, Typography } from "antd";
 import SearchColumnFilter from "./SearchColumnFilter";
 import { useAuth } from "../providers/Auth";
-import Routes from "../constants/routes";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const { Title } = Typography;
-const { Content, Sider } = Layout;
+const { Content } = Layout;
 
 const TeachersIdeasList = () => {
   const { ideas, isLoading, isError } = useTeachersIdeasList();
   let location = useLocation();
 
-  const { isAuthenticated, isCheckingAuth, currentUser } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [menuState, setMenuState] = useState({
     current: location.pathname, // set the current selected item in menu, by default the current page
     collapsed: false,
     openKeys: [],
   });
 
-  console.log("ideas", ideas);
-
-  const handleClick = (e) => {
-    console.log("click ", e);
-    setMenuState({
-      ...menuState,
-      current: e.key,
-    });
-  };
   React.useEffect(() => {
     setMenuState({
       ...menuState,
       current: location.pathname,
     });
   }, [location, isAuthenticated]);
-
-  const userMenu = (
-    <Menu onClick={handleClick}>
-      <Menu.Item key="password">Cambiar clave</Menu.Item>
-      <Menu.Item key={Routes.LOGIN}>
-        <Link to={Routes.LOGOUT} className="logout-link">
-          {isCheckingAuth ? (
-            <LoadingOutlined />
-          ) : (
-            <>
-              <LogoutOutlined /> Cerrar sesión{" "}
-            </>
-          )}
-        </Link>
-      </Menu.Item>
-    </Menu>
-  );
 
   const openModalInFo = (text, record) => {
     console.log(text, record);
@@ -168,27 +129,26 @@ const TeachersIdeasList = () => {
   return (
     <>
       <Layout>
-          <Content
-            style={{
-              padding: 50,
-              marginTop: -65,
-            }}
-          >
-            <Row>
-              <Col>
-                <Title level={3} style={{ color: "#034c70" }}>
-                  Temas para proyectos de titulación propuestos por docentes ESFOT
-                </Title>
-              </Col>
-            </Row>
-            <br>
-            </br>
-            <Row justify="center">
-              <Col>
-                <Table columns={columns} dataSource={data} />
-              </Col>
-            </Row>
-          </Content>
+        <Content
+          style={{
+            padding: 50,
+            marginTop: -65,
+          }}
+        >
+          <Row>
+            <Col>
+              <Title level={3} style={{ color: "#034c70" }}>
+                Temas para proyectos de titulación propuestos por docentes ESFOT
+              </Title>
+            </Col>
+          </Row>
+          <br />
+          <Row justify="center">
+            <Col>
+              <Table columns={columns} dataSource={data} />
+            </Col>
+          </Row>
+        </Content>
       </Layout>
     </>
   );

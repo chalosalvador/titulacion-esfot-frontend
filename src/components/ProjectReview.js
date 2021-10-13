@@ -66,8 +66,7 @@ const ProjectReview = ({ idPlan, user }) => {
   const [sendingProject, setSendingProject] = useState(false);
   const [checked, setChecked] = useState(false);
   const { plan, isLoading } = usePlanContent(idPlan);
-  const { pdf, isLoading1 } = useGetProjectPDF(idPlan);
-  console.log("plan", idPlan);
+  const { isLoading1 } = useGetProjectPDF(idPlan);
 
   let highlights = [];
 

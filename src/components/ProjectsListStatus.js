@@ -38,7 +38,6 @@ const ProjectsList = ({
   const [projectData, setProjectData] = useState(null);
   let titleModal = "";
   const history = useHistory();
-  console.log("DATOS", projectsList);
 
   if (isLoading) {
     return (
@@ -329,21 +328,7 @@ const ProjectsList = ({
             };
           }}
         />
-      ) : // ) : assignDate ? (
-      //     <Table
-      //         columns={columns}
-      //         dataSource={dataDate}
-      //         rowKey={(dataDate) => dataDate.id}
-      //         onRow={(record) => {
-      //             return {
-      //                 onClick: (event) => {
-      //                     event.stopPropagation();
-      //                     setShowDefenseSchedule(true);
-      //                 },
-      //             };
-      //         }}
-      //     />
-      assignDate && showDefenseSchedule === false ? (
+      ) : assignDate && showDefenseSchedule === false ? (
         <Table
           columns={columns}
           dataSource={dataDate}

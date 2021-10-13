@@ -8,7 +8,6 @@ import {
   Col,
   Row,
   Alert,
-  Icon,
   Switch,
   Table,
 } from "antd";
@@ -70,18 +69,6 @@ const SecretaryAddTeacherForm = ({ closeModal }) => {
     },
   ];
 
-  useEffect(() => {
-    console.log("hoursSelected", hoursSelected);
-    // for( let i = 7; i < 20; i++ ) {
-    //     days.forEach( ( day ) => {
-    //         if( this.props.teacher && this.props.teacher.schedule[ day ][ i ] ) {
-    //             this.setState( ( prevState ) => ({ hoursSelected: prevState.hoursSelected + 1 }) );
-    //         }
-    //     } );
-    //
-    // }
-  });
-
   const handleScheduleChange = (checked) => {
     setScheduleEdited(true);
     if (checked) {
@@ -113,8 +100,6 @@ const SecretaryAddTeacherForm = ({ closeModal }) => {
       ...daysByHour,
     });
   }
-
-  console.log("data", data);
 
   if (isLoading) {
     return <Loading />;
@@ -180,9 +165,7 @@ const SecretaryAddTeacherForm = ({ closeModal }) => {
         }),
       },
     };
-    console.log("Horario", schedule);
     const textSchedule = JSON.stringify(schedule);
-    console.log("Horario en texto", typeof textSchedule);
 
     setLoading(true);
     const teacher = {
@@ -192,7 +175,6 @@ const SecretaryAddTeacherForm = ({ closeModal }) => {
       career_id: career_id,
       schedule: textSchedule,
     };
-    console.log("Arreglo", teacher);
     try {
       await API.post("/teachers", teacher);
       console.log("Profesor creado exitosamente: ", teacher);
@@ -203,6 +185,7 @@ const SecretaryAddTeacherForm = ({ closeModal }) => {
     } catch (e) {
       message.error(e.message);
       console.log("error", e);
+      setLoading(false);
     }
   };
 
@@ -307,7 +290,12 @@ const SecretaryAddTeacherForm = ({ closeModal }) => {
           <Row type="flex" justify="center">
             <Col>
               <Item>
-                <Button type="primary" htmlType="submit" size="large">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  size="large"
+                  loading={loading}
+                >
                   Guardar
                 </Button>
               </Item>

@@ -1,7 +1,6 @@
 import React from "react";
 import { AuthProvider } from "../providers/Auth";
 import MainLayout from "./LayoutMain";
-// import NProgress from 'nprogress';
 import { Router } from "react-router-dom";
 import AppRouter from "../routers/AppRouter";
 import history from "../utils/history";

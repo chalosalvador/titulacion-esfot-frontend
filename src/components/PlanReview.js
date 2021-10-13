@@ -87,13 +87,8 @@ const PlanReview = ({ idPlan, user }) => {
     },
   };
 
-  const onSentComments = async (values) => {
+  const onSentComments = async () => {
     setSending(true);
-    const data = {
-      ...values,
-    };
-
-    console.log("DATOS", data);
 
     try {
       if (user === "director") {
