@@ -194,7 +194,7 @@ const SecretaryAddTeacherForm = ({ closeModal }) => {
     };
     console.log("Arreglo", teacher);
     try {
-      await API.post("/teachers/", teacher);
+      await API.post("/teachers", teacher);
       console.log("Profesor creado exitosamente: ", teacher);
       message.success("Cambios guardados correctamente!");
       setLoading(false);
