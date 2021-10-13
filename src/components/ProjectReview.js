@@ -212,7 +212,7 @@ const ProjectReview = ({ idPlan, user }) => {
         cancelButtonProps: { hidden: true },
       });
     } catch (e) {
-      message.error(`No se guardaron los datos:¨${e}`);
+      message.error("Ocurrió un error, intente de nuevo");
     }
   };
 
@@ -272,7 +272,7 @@ const ProjectReview = ({ idPlan, user }) => {
         cancelButtonProps: { hidden: true },
       });
     } catch (e) {
-      message.error("No se pudo enviar la información, intente de nuevo");
+      message.error("Ocurrió un error, intente de nuevo");
       setSendingProject(false);
     }
   };

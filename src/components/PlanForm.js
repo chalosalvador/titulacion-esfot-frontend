@@ -108,6 +108,7 @@ const PlanForm = () => {
             // message.success("Cambios guardados correctamente!");
           }
         } catch (e) {
+          message.error("Ocurrió un error, intente de nuevo");
           console.log("ERROR", e);
         } finally {
           setSending(false);
@@ -312,7 +313,7 @@ const PlanForm = () => {
       });
     } catch (e) {
       console.log("ERROR", e);
-      message.error(`No se guardaron los datos:¨${e}`);
+      message.error("Ocurrió un error, intente de nuevo");
     } finally {
       setSending(false);
     }

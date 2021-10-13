@@ -183,7 +183,7 @@ const SecretaryAddTeacherForm = ({ closeModal }) => {
       mutate();
       closeModal();
     } catch (e) {
-      message.error(e.message);
+      message.error("Ocurrió un error, intente de nuevo");
       console.log("error", e);
       setLoading(false);
     }

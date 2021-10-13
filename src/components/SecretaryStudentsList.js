@@ -44,7 +44,7 @@ const SecretaryStudentsList = () => {
       message.success("Los datos de los estudiante se han cargado con exito!");
     } catch (e) {
       console.log("Ha ocurrido un error", e);
-      message.error("Ha ocurrido un error al subir el archivo");
+      message.error("Ocurrió un error, intente de nuevo");
     }
   };
 

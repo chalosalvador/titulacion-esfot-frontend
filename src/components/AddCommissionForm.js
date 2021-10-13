@@ -42,7 +42,7 @@ const AddCommissionForm = ({ form, careers, closeModal, loadingModal }) => {
       return {
         id: teacher.id,
         value: teacher.id,
-        label: teacher.name + ' ' + teacher.last_name,
+        label: teacher.name + " " + teacher.last_name,
       };
     });
     setTeachersList(teacherCareerList);
@@ -57,7 +57,7 @@ const AddCommissionForm = ({ form, careers, closeModal, loadingModal }) => {
       loadingModal(false);
       closeModal();
     } catch (e) {
-      message.error("Ocurrió un error");
+      message.error("Ocurrió un error, intente de nuevo");
       loadingModal(false);
       console.log("error", e);
     }

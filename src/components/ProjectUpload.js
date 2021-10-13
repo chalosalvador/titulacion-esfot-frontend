@@ -1,7 +1,17 @@
 /* eslint import/no-webpack-loader-syntax: 0 */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { Upload, Typography, Button, Form, Row, Col, Modal, Image } from "antd";
+import {
+  Upload,
+  Typography,
+  Button,
+  Form,
+  Row,
+  Col,
+  Modal,
+  Image,
+  message,
+} from "antd";
 import {
   InboxOutlined,
   SendOutlined,
@@ -165,6 +175,7 @@ const ProjectUpload = () => {
       });
     } catch (error) {
       console.log("ERROR", error);
+      message.error("Ocurrió un error, intente de nuevo");
       setIsSending(false);
     }
   };
