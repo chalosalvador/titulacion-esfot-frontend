@@ -82,7 +82,10 @@ const Login = () => {
                 </Form.Item>
 
                 <Form.Item>
-                  <Link className="login-form-forgot" to="">
+                  <Link
+                    className="login-form-forgot"
+                    to={Routes.FORGET_PASSWORD}
+                  >
                     ¡Olvidé mi clave!
                   </Link>
                 </Form.Item>

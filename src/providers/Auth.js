@@ -126,6 +126,64 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {}
   }
 
+  const sendPasswordResetEmail = async (email) => {
+    // try {
+    await api.post("/forgot-password", { email });
+    // } catch (error) {
+    //   if (error.response) {
+    //     // The request was made and the server responded with a status code
+    //     // that falls out of the range of 2xx
+    //     console.log(error.response.data);
+    //     console.log(error.response.status);
+    //     console.log(error.response.headers);
+    //     return error.response;
+    //   } else if (error.request) {
+    //     // The request was made but no response was received
+    //     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    //     // http.ClientRequest in node.js
+    //     console.log(error.request);
+    //   } else {
+    //     // Something happened in setting up the request that triggered an Error
+    //     console.log("Error", error.message);
+    //   }
+    //   console.log(error.config);
+    // }
+  };
+
+  const confirmPasswordReset = async (
+    email,
+    password,
+    password_confirmation,
+    token
+  ) => {
+    // try {
+    await api.post("/reset-password", {
+      email,
+      password,
+      password_confirmation,
+      token,
+    });
+    // } catch (error) {
+    //   if (error.response) {
+    //     // The request was made and the server responded with a status code
+    //     // that falls out of the range of 2xx
+    //     console.log(error.response.data);
+    //     console.log(error.response.status);
+    //     console.log(error.response.headers);
+    //     return error.response;
+    //   } else if (error.request) {
+    //     // The request was made but no response was received
+    //     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    //     // http.ClientRequest in node.js
+    //     console.log(error.request);
+    //   } else {
+    //     // Something happened in setting up the request that triggered an Error
+    //     console.log("Error", error.message);
+    //   }
+    //   console.log(error.config);
+    // }
+  };
+
   /**
    * Este efecto se lanza cuando se monta el contexto y
    * determina si existe una sesión activa en el navegador
@@ -209,6 +267,8 @@ export const AuthProvider = ({ children }) => {
         login,
         // register,
         logout,
+        sendPasswordResetEmail,
+        confirmPasswordReset,
       }}
     >
       {children}
