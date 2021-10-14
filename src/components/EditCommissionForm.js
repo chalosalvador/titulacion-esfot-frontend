@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Select } from "antd";
+import { Form, message, Row, Col, Select } from "antd";
 import { useTeachers } from "../data/useTeachers";
 import { useCareer } from "../data/useCareer";
 import Loading from "./Loading";
+import { SchedulePickerTable } from "./SchedulePickerTable";
+import "../styles/schedule-form.css";
+import API from "../data";
 
 const formItemLayout = {
   labelCol: {
@@ -13,10 +16,18 @@ const formItemLayout = {
   },
 };
 
-const EditCommissionForm = ({ form, commission, careers }) => {
+const EditCommissionForm = ({
+  form,
+  commission,
+  careers,
+  closeModal,
+  loading,
+  mutate,
+}) => {
   const [teachersList, setTeachersList] = useState([]);
   const { career, isLoading, isError } = useCareer(commission.career_id);
   const { teachers } = useTeachers();
+  const scheduleData = JSON.parse(commission.commission_schedule);
 
   const onChange = (value) => {
     const teachersCareer = teachers.filter(
@@ -39,8 +50,70 @@ const EditCommissionForm = ({ form, commission, careers }) => {
     };
   });
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     console.log("values", values);
+    const { career_id, members, monday, tuesday, wednesday, thursday, friday } =
+      values;
+    const schedule = {
+      monday: {
+        ...monday.map((item) => {
+          if (item === undefined) {
+            return false;
+          }
+          return item;
+        }),
+      },
+      tuesday: {
+        ...tuesday.map((item) => {
+          if (item === undefined) {
+            return false;
+          }
+          return item;
+        }),
+      },
+      wednesday: {
+        ...wednesday.map((item) => {
+          if (item === undefined) {
+            return false;
+          }
+          return item;
+        }),
+      },
+      thursday: {
+        ...thursday.map((item) => {
+          if (item === undefined) {
+            return false;
+          }
+          return item;
+        }),
+      },
+      friday: {
+        ...friday.map((item) => {
+          if (item === undefined) {
+            return false;
+          }
+          return item;
+        }),
+      },
+    };
+    const textSchedule = JSON.stringify(schedule);
+    const dataToSend = {
+      career_id: career_id,
+      members: members,
+      commission_schedule: textSchedule,
+    };
+    loading(true);
+    try {
+      await API.put(`/commissions/${commission.commission_id}`, dataToSend);
+      message.success("Comisión editada con éxito");
+      await mutate();
+      loading(false);
+      closeModal();
+    } catch (e) {
+      message.error("Ocurrió un error");
+      loading(false);
+      console.log("error", e);
+    }
   };
 
   useEffect(() => {
@@ -79,9 +152,9 @@ const EditCommissionForm = ({ form, commission, careers }) => {
       form={form}
       layout={"vertical"}
       initialValues={{
-        career_id: career.name,
+        career_id: career.id,
         commission_schedule: career.commission.commission_schedule,
-        members: career.commission.members.map((member) => member.name),
+        members: career.commission.members.map((member) => member.id),
       }}
     >
       <Form.Item
@@ -107,19 +180,6 @@ const EditCommissionForm = ({ form, commission, careers }) => {
         />
       </Form.Item>
       <Form.Item
-        name="commission_schedule"
-        label="Horario de la comisión:"
-        rules={[
-          {
-            required: true,
-            whitespace: true,
-            message: "Coloca un horario para la reunión de la comisión",
-          },
-        ]}
-      >
-        <Input.TextArea placeholder="Horario" autoSize={{ maxRows: 4 }} />
-      </Form.Item>
-      <Form.Item
         name="members"
         label="Miembros de la comisión"
         rules={[
@@ -137,6 +197,14 @@ const EditCommissionForm = ({ form, commission, careers }) => {
           options={teachersList}
         />
       </Form.Item>
+      <Row type="flex" justify="center">
+        <Col span={40}>
+          <SchedulePickerTable
+            scheduleFor={"comisión"}
+            scheduleData={scheduleData}
+          />
+        </Col>
+      </Row>
     </Form>
   );
 };

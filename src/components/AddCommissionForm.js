@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Form, Input, message, Select } from "antd";
+import { Col, Form, message, Row, Select } from "antd";
 import { useTeachers } from "../data/useTeachers";
 import { useCommissionsList } from "../data/useCommissionsList";
 import Loading from "./Loading";
+import { SchedulePickerTable } from "./SchedulePickerTable";
 import API from "../data";
+import "../styles/schedule-form.css";
 
 const formItemLayout = {
   labelCol: {
@@ -49,9 +51,59 @@ const AddCommissionForm = ({ form, careers, closeModal, loadingModal }) => {
   };
 
   const onSubmit = async (values) => {
+    const { career_id, members, monday, tuesday, wednesday, thursday, friday } =
+      values;
+    const schedule = {
+      monday: {
+        ...monday.map((item) => {
+          if (item === undefined) {
+            return false;
+          }
+          return item;
+        }),
+      },
+      tuesday: {
+        ...tuesday.map((item) => {
+          if (item === undefined) {
+            return false;
+          }
+          return item;
+        }),
+      },
+      wednesday: {
+        ...wednesday.map((item) => {
+          if (item === undefined) {
+            return false;
+          }
+          return item;
+        }),
+      },
+      thursday: {
+        ...thursday.map((item) => {
+          if (item === undefined) {
+            return false;
+          }
+          return item;
+        }),
+      },
+      friday: {
+        ...friday.map((item) => {
+          if (item === undefined) {
+            return false;
+          }
+          return item;
+        }),
+      },
+    };
+    const textSchedule = JSON.stringify(schedule);
+    const dataToSend = {
+      career_id: career_id,
+      members: members,
+      commission_schedule: textSchedule,
+    };
     loadingModal(true);
     try {
-      await API.post("/commissions/commissions", values);
+      await API.post("/commissions/commissions", dataToSend);
       message.success("Comisión creada con éxito");
       await mutate();
       loadingModal(false);
@@ -109,19 +161,6 @@ const AddCommissionForm = ({ form, careers, closeModal, loadingModal }) => {
         />
       </Form.Item>
       <Form.Item
-        name="commission_schedule"
-        label="Horario de la comisión:"
-        rules={[
-          {
-            required: true,
-            whitespace: true,
-            message: "Coloca un horario para la reunión de la comisión",
-          },
-        ]}
-      >
-        <Input.TextArea placeholder="Horario" autoSize={{ maxRows: 4 }} />
-      </Form.Item>
-      <Form.Item
         name="members"
         label="Miembros de la comisión"
         rules={[
@@ -140,6 +179,11 @@ const AddCommissionForm = ({ form, careers, closeModal, loadingModal }) => {
           options={teachersList}
         />
       </Form.Item>
+      <Row type="flex" justify="center">
+        <Col span={40}>
+          <SchedulePickerTable scheduleFor={"comisión"} />
+        </Col>
+      </Row>
     </Form>
   );
 };

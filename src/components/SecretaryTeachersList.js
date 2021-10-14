@@ -4,7 +4,6 @@ import "../styles/teacher-panel.css";
 import Table from "antd/es/table";
 import { PlusOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
-import { useAuth } from "../providers/Auth";
 import "../styles/home-teacher.css";
 import SearchColumnFilter from "./SearchColumnFilter";
 import { useTeachers } from "../data/useTeachers";
@@ -12,6 +11,7 @@ import Loading from "./Loading";
 import ShowError from "./ShowError";
 import SecretaryAddTeacherForm from "./SecretaryAddTeacherForm";
 import SecretaryUpdateTeacherForm from "./SecretaryUpdateTeacherForm";
+import { useAuth } from "../providers/Auth";
 
 const { Title } = Typography;
 
@@ -29,8 +29,6 @@ const SecretaryTeachersList = () => {
     collapsed: false,
     openKeys: [],
   });
-
-  // Handles modal agregar profesor
 
   const showModal = () => {
     setVisible(true);

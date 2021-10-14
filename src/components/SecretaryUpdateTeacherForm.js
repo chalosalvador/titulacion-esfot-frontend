@@ -1,29 +1,31 @@
 import React, { useState } from "react";
-import {
-  Form,
-  Input,
-  message,
-  Button,
-  Select,
-  Col,
-  Row,
-  Alert,
-  Switch,
-  Table,
-} from "antd";
+import { Form, Input, message, Button, Select, Col, Row } from "antd";
 import { useTeachers } from "../data/useTeachers";
 import { useCareersList } from "../data/useCareersList";
 import Loading from "./Loading";
 import ShowError from "./ShowError";
+import { SchedulePickerTable } from "./SchedulePickerTable";
 import API from "../data";
 
 const { Item } = Form;
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 18 },
+    sm: { span: 6 },
+    md: { span: 12 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 20 },
+    md: { span: 24 },
+  },
+};
 
 const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
   const [loading, setLoading] = useState(false);
   const { careers, isLoading, isError } = useCareersList();
   const { mutate } = useTeachers();
-  const [hoursSelected, setHoursSelected] = useState(0);
   console.log("Props", teacher);
 
   const scheduleData = JSON.parse(teacher.schedule);
@@ -35,78 +37,6 @@ const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
 
   if (isError) {
     return <ShowError error={isError} />;
-  }
-
-  const handleScheduleChange = (checked) => {
-    if (checked) {
-      setHoursSelected(hoursSelected + 1);
-    } else {
-      setHoursSelected(hoursSelected - 1);
-    }
-  };
-
-  const days = ["monday", "tuesday", "wednesday", "thursday", "friday"];
-
-  const columns = [
-    {
-      title: "Hora",
-      dataIndex: "hour",
-      key: "hour",
-      width: 150,
-    },
-    {
-      title: "Lunes",
-      dataIndex: "monday",
-      key: "monday",
-      width: 200,
-    },
-    {
-      title: "Martes",
-      dataIndex: "tuesday",
-      key: "tuesday",
-      width: 200,
-    },
-    {
-      title: "Miércoles",
-      dataIndex: "wednesday",
-      key: "wednesday",
-      width: 200,
-    },
-    {
-      title: "Jueves",
-      dataIndex: "thursday",
-      key: "thursday",
-      width: 200,
-    },
-    {
-      title: "Viernes",
-      dataIndex: "friday",
-      key: "friday",
-      width: 200,
-    },
-  ];
-
-  const data = [];
-  for (let i = 7; i < 20; i++) {
-    let daysByHour = {};
-    days.forEach((day) => {
-      daysByHour[day] = (
-        <Item name={[day, i]} initialValue={scheduleData[day][i]}>
-          <Switch
-            checked={scheduleData[day][i]}
-            valuepropname="checked"
-            className={"schedule-form__switch"}
-            onChange={handleScheduleChange}
-          />
-        </Item>
-      );
-    });
-
-    data.push({
-      key: i,
-      hour: `${i}h00 - ${i + 1}h00`,
-      ...daysByHour,
-    });
   }
 
   // Funcion de guardado de nuevo profesor
@@ -139,13 +69,12 @@ const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
     };
     try {
       await API.put(`/teachers/${teacherId}`, teacher);
-      console.log("Profesor creado exitosamente: ", teacher);
-      message.success("Cambios guardados correctamente!");
+      message.success("¡Cambios guardados correctamente!");
       setLoading(false);
       mutate();
       closeModal();
     } catch (e) {
-      message.error("Ocurrió un error, intente de nuevo");
+      message.error("No se pudo actualizar al profesor, intente de nuevo");
       setLoading(false);
     }
   };
@@ -159,9 +88,11 @@ const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
     <div>
       <div>
         <Form
+          {...formItemLayout}
           className="schedule-form"
           onFinish={formSuccess}
           onFinishFailed={formFailed}
+          layout={"vertical"}
         >
           <Item
             label="Nombre"
@@ -200,7 +131,7 @@ const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
             ]}
             initialValue={teacher.career_id}
           >
-            <Select style={{ width: 300 }} loading={isLoading}>
+            <Select style={{ width: "100%" }} loading={isLoading}>
               {careers &&
                 careers.map((career, index) => (
                   <Select.Option value={career.id} key={index}>
@@ -224,28 +155,9 @@ const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
           </Item>
           <Row type="flex" justify="center">
             <Col span={40}>
-              <Table
-                pagination={false}
-                columns={columns}
-                className={"schedule-form__table"}
-                dataSource={data}
-                size={"large"}
-                bordered
-                title={() =>
-                  hoursSelected < 1 ? (
-                    <Alert
-                      message="Selecciona las horas en las que el profesor está disponible"
-                      banner
-                      type="error"
-                    />
-                  ) : (
-                    <Alert
-                      message="Asegúrate de que el horario esté ingresado correctamente"
-                      banner
-                      type="info"
-                    />
-                  )
-                }
+              <SchedulePickerTable
+                scheduleFor={"profesor"}
+                scheduleData={scheduleData}
               />
             </Col>
           </Row>
