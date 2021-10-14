@@ -225,7 +225,11 @@ const ProjectReview = ({ idPlan, user }) => {
     const dataToSent = { highlights: null };
     try {
       await API.post(`/projects/${plan.id}`, dataToSent); //put data to server
-      await API.post(`/projects/${plan.id}/project-approved-director`); // change status
+      if (plan.status === "project_corrections_done") {
+        await API.post(`/projects/${plan.id}/project-approved-director`);
+      } else {
+        await API.post(`/projects/${plan.id}/project-approved-send`);
+      }
       setSendingProject(false);
       confirm({
         icon: <CheckCircleOutlined />,
