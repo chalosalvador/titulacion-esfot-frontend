@@ -6,27 +6,43 @@ import {
   Row,
   Select,
   Table,
+  Typography,
   DatePicker,
   TimePicker,
   Button,
   message,
+  Image,
+  Modal,
 } from "antd";
 import { useTeachers } from "../data/useTeachers";
+import { useJuriesTeachers } from "../data/useJuriesTeachers";
 import Loading from "./Loading";
 import ShowError from "./ShowError";
 import API from "../data";
-import { CheckOutlined, FieldTimeOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CheckOutlined,
+  FieldTimeOutlined,
+} from "@ant-design/icons";
+import Routes from "../constants/routes";
 
 const { Option } = Select;
+const { Title } = Typography;
+const { confirm } = Modal;
 
 const OralDefenseSchedule = (project) => {
-  console.log("props", project);
+  console.log("props", project.project);
 
   let teachersSchedules = {};
   let teachersNameOptions = [];
 
   const [schedulesData, setSchedulesData] = useState([]);
   const { teachers, isLoading, isError } = useTeachers();
+  const {
+    juriesTeachers,
+    isLoading: isLoadingJuries,
+    isError: isErrorJuries,
+  } = useJuriesTeachers(project.project);
   const [teachersSelected, setTeachersSelected] = useState(false);
   const [daySelected, setDaySelected] = useState(true);
   const [hourSelected, setHourSelected] = useState(false);
@@ -36,15 +52,17 @@ const OralDefenseSchedule = (project) => {
   const [oralDefenseDay, setOralDefenseDay] = useState();
   const [oralDefenseTime, setOralDefenseTime] = useState();
 
-  if (isLoading) {
+  if (isLoading || isLoadingJuries) {
     return <Loading />;
   }
 
-  if (isError) {
-    return <ShowError error={isError} />;
+  if (isError || isErrorJuries) {
+    return "error";
   }
 
-  const getTeachersData = teachers.map((teacher, index) => {
+  console.log("jT", juriesTeachers);
+
+  const getTeachersData = juriesTeachers.map((teacher, index) => {
     const scheduleData = JSON.parse(teacher.schedule);
 
     teachersSchedules[teacher.id] = {
@@ -203,7 +221,41 @@ const OralDefenseSchedule = (project) => {
       console.log("datos que se envian al API", schedule);
       await API.put("/juries/assignSchedule", schedule);
       await API.post(`/projects/${project.project}/date-defense-assigned`);
-      message.success("Fecha definitiva de defensa guardada exitosamente");
+      confirm({
+        icon: <CheckCircleOutlined />,
+        title: (
+          <Title level={3} style={{ color: "#034c70" }}>
+            ¡Buen trabajo!
+          </Title>
+        ),
+        content: (
+          <>
+            <Row justify="center">
+              <Col>
+                <Image src="boy.png" width={100} />
+                <Image src="girl.png" width={100} />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <p style={{ color: "#034c70" }}>
+                  Se ha establecido la fecha de defensa oral.
+                </p>
+              </Col>
+            </Row>
+          </>
+        ),
+        okText: "Entendido",
+        okButtonProps: {
+          href: Routes.HOME,
+          style: {
+            backgroundColor: "#034c70",
+            marginRight: 125,
+          },
+        },
+        cancelButtonProps: { hidden: true },
+      });
       setSendingFinalDate(false);
     } catch (e) {
       message.error("Ocurrió un error, intente de nuevo");
