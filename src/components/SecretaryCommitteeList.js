@@ -19,7 +19,7 @@ const SecretaryCommitteeList = () => {
   let location = useLocation();
   const { isAuthenticated } = useAuth();
   const [form] = Form.useForm();
-  const { commissions, isLoading, isError } = useCommissionsList();
+  const { commissions, isLoading, isError, mutate } = useCommissionsList();
   const { careers } = useCareersList();
 
   const [menuState, setMenuState] = useState({
@@ -43,11 +43,7 @@ const SecretaryCommitteeList = () => {
   };
 
   const handleEditOk = () => {
-    setConfirmLoadingEdit(true);
-    setTimeout(() => {
-      setVisibleEdit(false);
-      setConfirmLoadingEdit(false);
-    }, 2000);
+    form.submit();
   };
 
   const handleEditCancel = () => {
@@ -102,40 +98,26 @@ const SecretaryCommitteeList = () => {
       width: 150,
       ...SearchColumnFilter("third_member"),
     },
-    {
-      title: "Horario comisión",
-      dataIndex: "commission_schedule",
-      key: "commission_schedule",
-      width: 150,
-      ...SearchColumnFilter("commission_schedule"),
-    },
-    {
-      title: "Pendientes",
-      dataIndex: "pending",
-      key: "pending",
-      width: 150,
-      ...SearchColumnFilter("pending"),
-    },
   ];
 
   const data = commissions.map((commission) => {
     return {
       key: commission.career_id,
+      commission_id: commission.id,
       career_id: commission.career_name,
       first_member: commission.members[0]
-        ? commission.members[0].name + ' ' + commission.members[0].last_name
+        ? commission.members[0].name + " " + commission.members[0].last_name
         : "Por asignar",
       second_member: commission.members[1]
-        ? commission.members[1].name + ' ' + commission.members[1].last_name
+        ? commission.members[1].name + " " + commission.members[1].last_name
         : "Por asignar",
       third_member: commission.members[2]
-        ? commission.members[2].name + ' ' + commission.members[2].last_name
+        ? commission.members[2].name + " " + commission.members[2].last_name
         : "Por asignar",
       fourth_member: commission.members[3]
-        ? commission.members[3].name + ' ' + commission.members[3].last_name
+        ? commission.members[3].name + " " + commission.members[3].last_name
         : "Por asignar",
       commission_schedule: commission.commission_schedule,
-      pending: "3 pendientes",
     };
   });
 
@@ -160,9 +142,10 @@ const SecretaryCommitteeList = () => {
           onClick: (event) => {
             event.stopPropagation();
             setVisibleEdit(true);
-            console.log("record", record);
             const commissionFormData = {
               career_id: record.key,
+              commission_id: record.commission_id,
+              commission_schedule: record.commission_schedule,
             };
             setCommissionToEdit(commissionFormData);
           },
@@ -186,10 +169,12 @@ const SecretaryCommitteeList = () => {
   const modalAddCommissionProps = {
     title: titleModal,
     visible: visible,
+    className: "schedule-modal",
     onOk() {
       handleOk();
     },
     closable: true,
+    destroyOnClose: true,
     confirmLoading: confirmLoading,
     onCancel() {
       handleCancel();
@@ -208,6 +193,8 @@ const SecretaryCommitteeList = () => {
   const modalEditCommissionProps = {
     title: titleModalEdit,
     visible: visibleEdit,
+    destroyOnClose: true,
+    className: "schedule-modal",
     onOk() {
       handleEditOk();
     },
@@ -272,10 +259,12 @@ const SecretaryCommitteeList = () => {
         <EditCommissionForm
           form={form}
           commission={commissionToEdit}
+          loading={setConfirmLoadingEdit}
           careers={careers}
           closeModal={() => {
             setVisibleEdit(false);
           }}
+          mutate={mutate}
         />
       </Modal>
     </>

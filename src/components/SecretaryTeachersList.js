@@ -1,16 +1,9 @@
-import { Button, Col, Layout, Menu, Row, Typography, Modal } from "antd";
-import React, { useEffect, useState } from "react";
+import { Button, Col, Row, Typography, Modal } from "antd";
+import React, { useState } from "react";
 import "../styles/teacher-panel.css";
 import Table from "antd/es/table";
-import {
-  LoadingOutlined,
-  LogoutOutlined,
-  PlusOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
-import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "../providers/Auth";
-import Routes from "../constants/routes";
+import { PlusOutlined } from "@ant-design/icons";
+import { useLocation } from "react-router-dom";
 import "../styles/home-teacher.css";
 import SearchColumnFilter from "./SearchColumnFilter";
 import { useTeachers } from "../data/useTeachers";
@@ -18,17 +11,16 @@ import Loading from "./Loading";
 import ShowError from "./ShowError";
 import SecretaryAddTeacherForm from "./SecretaryAddTeacherForm";
 import SecretaryUpdateTeacherForm from "./SecretaryUpdateTeacherForm";
+import { useAuth } from "../providers/Auth";
 
 const { Title } = Typography;
 
 const SecretaryTeachersList = () => {
   let location = useLocation();
-  const { isAuthenticated, isCheckingAuth, currentUser } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [visible, setVisible] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false);
-  const { teachers, isLoading, isError, mutate } = useTeachers();
+  const { teachers, isLoading, isError } = useTeachers();
   const [updateTeacher, setUpdateTeacher] = useState();
   const [updateTeacherId, setUpdateTeacherId] = useState();
 
@@ -38,50 +30,8 @@ const SecretaryTeachersList = () => {
     openKeys: [],
   });
 
-  // Handles modal agregar profesor
-
-  const handleClick = (e) => {
-    console.log("click ", e);
-    setMenuState({
-      ...menuState,
-      current: e.key,
-    });
-  };
-
   const showModal = () => {
     setVisible(true);
-  };
-
-  const handleOk = () => {
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setVisible(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
-
-  const handleCancel = () => {
-    console.log("Clicked cancel button");
-    setVisible(false);
-  };
-
-  // Handles modal editar profesor
-
-  const showEditModal = () => {
-    setVisibleEdit(true);
-  };
-
-  const handleEditOk = () => {
-    setConfirmLoadingEdit(true);
-    setTimeout(() => {
-      setVisibleEdit(false);
-      setConfirmLoadingEdit(false);
-    }, 2000);
-  };
-
-  const handleEditCancel = () => {
-    console.log("Clicked cancel button");
-    setVisibleEdit(false);
   };
 
   React.useEffect(() => {
@@ -117,29 +67,6 @@ const SecretaryTeachersList = () => {
     },
   ];
 
-  const userMenu = (
-      <Menu onClick={handleClick}>
-        <Menu.Item key="password">Cambiar clave</Menu.Item>
-        <Menu.Item key={Routes.LOGIN}>
-          <Link to={Routes.LOGOUT} className="logout-link">
-            {isCheckingAuth ? (
-                <LoadingOutlined />
-            ) : (
-                <>
-                  <LogoutOutlined /> Cerrar sesión{" "}
-                </>
-            )}
-          </Link>
-        </Menu.Item>
-      </Menu>
-  );
-
-  let pagination = {
-    current: 1,
-    pageSize: 10,
-    total: 10,
-    showSizeChanger: false,
-  };
   if (isLoading) {
     return <Loading />;
   }
@@ -154,7 +81,7 @@ const SecretaryTeachersList = () => {
       key: index,
       id: teacher.id,
       originalData: teacher,
-      name: teacher.name + ' ' + teacher.last_name,
+      name: teacher.name + " " + teacher.last_name,
       last_name: teacher.last_name,
       career: teacher.career,
       email: teacher.email,
@@ -162,9 +89,6 @@ const SecretaryTeachersList = () => {
     };
   });
 
-  console.log("Profesores", getTeachersData);
-
-  const onSearch = (value) => console.log(value);
   let content = "";
   let titleTable = "";
   let titleModal = "";
@@ -233,7 +157,6 @@ const SecretaryTeachersList = () => {
         title={titleModal}
         visible={visible}
         className="schedule-modal"
-        confirmLoading={confirmLoading}
         centered
         footer={null}
         closable={true}
@@ -247,7 +170,6 @@ const SecretaryTeachersList = () => {
         title={titleModalEdit}
         visible={visibleEdit}
         className="schedule-modal"
-        confirmLoading={confirmLoading}
         footer={null}
         closable={true}
         destroyOnClose={true}
