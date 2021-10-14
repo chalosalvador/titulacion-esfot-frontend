@@ -20,9 +20,9 @@ api.interceptors.response.use(
     // Do something with response error
     console.log("INTERCEPTED", error);
     return Promise.reject({
-      message: error.message,
-      error: error.error || error.errors,
-      status: error.status,
+      message: error.response.data.message,
+      error: error.response.data.errors,
+      status: error.response.status,
     });
     // return Promise.reject(error);
   }

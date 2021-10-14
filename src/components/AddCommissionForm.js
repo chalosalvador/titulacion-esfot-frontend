@@ -101,6 +101,7 @@ const AddCommissionForm = ({ form, careers, closeModal, loadingModal }) => {
       members: members,
       commission_schedule: textSchedule,
     };
+
     loadingModal(true);
     try {
       await API.post("/commissions/commissions", dataToSend);
@@ -109,7 +110,11 @@ const AddCommissionForm = ({ form, careers, closeModal, loadingModal }) => {
       loadingModal(false);
       closeModal();
     } catch (e) {
-      message.error("Ocurrió un error, intente de nuevo");
+      message.error(
+        e.error.career_id
+          ? e.error.career_id[0]
+          : "Ocurrió un problema, intente de nuevo"
+      );
       loadingModal(false);
       console.log("error", e);
     }
