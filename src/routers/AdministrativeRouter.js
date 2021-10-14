@@ -11,6 +11,10 @@ const loadableOptions = { fallback: <Loading /> };
 
 const AsyncIndex = loadable(() => import("../pages/Index"), loadableOptions);
 const AsyncLogin = loadable(() => import("../pages/Login"), loadableOptions);
+const AsyncForgetPassword = loadable(
+  () => import("../pages/ForgetPassword"),
+  loadableOptions
+);
 
 const AsyncHome = loadable(() => import("../pages/HomePage"), loadableOptions);
 
@@ -41,6 +45,10 @@ const AdministrativeRouter = () => (
     <PrivateRoute
       path={Routes.ADMINISTRATIVE_PANEL}
       component={AsyncAdministrativePanel}
+    />
+    <PublicRoute
+      path={Routes.FORGET_PASSWORD}
+      component={AsyncForgetPassword}
     />
     <PrivateRoute path={Routes.LOGOUT} component={AsyncLogout} />
 

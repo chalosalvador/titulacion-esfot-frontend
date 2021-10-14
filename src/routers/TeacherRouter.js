@@ -26,7 +26,10 @@ const AsyncTeachersPlans = loadable(
   () => import("../pages/TeacherPlansPage"),
   loadableOptions
 );
-
+const AsyncForgetPassword = loadable(
+  () => import("../pages/ForgetPassword"),
+  loadableOptions
+);
 const AsyncCommitteePlans = loadable(
   () => import("../pages/CommitteePlansPage"),
   loadableOptions
@@ -63,7 +66,10 @@ const TeacherRouter = () => (
   <Switch>
     <PublicRoute exact path={Routes.INDEX} component={AsyncIndex} />
     <PublicRoute path={Routes.LOGIN} component={AsyncLogin} />
-
+    <PublicRoute
+      path={Routes.FORGET_PASSWORD}
+      component={AsyncForgetPassword}
+    />
     <PrivateRoute path={Routes.HOME} component={AsyncHome} />
     <PrivateRoute path={Routes.TEACHER_PANEL} component={AsyncTeacherPanel} />
     <PrivateRoute path={Routes.TEACHERS_IDEAS} component={AsyncTeachersIdeas} />

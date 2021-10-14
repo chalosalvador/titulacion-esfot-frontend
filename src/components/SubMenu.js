@@ -38,7 +38,9 @@ const SubMenu = () => {
   };
   const userMenu = (
     <Menu onClick={handleClick}>
-      <Menu.Item key="password">Cambiar clave</Menu.Item>
+      <Menu.Item key={Routes.FORGET_PASSWORD}>
+        <Link to={Routes.FORGET_PASSWORD}>Cambiar clave</Link>
+      </Menu.Item>
       <Menu.Item key={Routes.LOGOUT}>
         <Link to={Routes.LOGOUT} className="logout-link">
           {isCheckingAuth ? (

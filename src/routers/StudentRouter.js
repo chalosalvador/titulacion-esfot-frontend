@@ -13,6 +13,10 @@ const AsyncIndex = loadable(() => import("../pages/Index"), loadableOptions);
 const AsyncLogin = loadable(() => import("../pages/Login"), loadableOptions);
 
 const AsyncHome = loadable(() => import("../pages/HomePage"), loadableOptions);
+const AsyncForgetPassword = loadable(
+  () => import("../pages/ForgetPassword"),
+  loadableOptions
+);
 const AsyncAbout = loadable(
   () => import("../pages/AboutPage"),
   loadableOptions
@@ -53,6 +57,10 @@ const StudentRouter = () => (
     <PrivateRoute path={Routes.PROJECT_UPLOAD} component={AsyncProjectUpload} />
 
     <PrivateRoute path={Routes.LOGOUT} component={AsyncLogout} />
+    <PublicRoute
+      path={Routes.FORGET_PASSWORD}
+      component={AsyncForgetPassword}
+    />
     <PublicRoute
       path={Routes.TEACHERS_IDEAS}
       component={AsyncTeacherIdeasList}

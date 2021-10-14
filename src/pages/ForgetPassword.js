@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useAuth } from "../providers/Auth";
 import { Button, Col, Form, Input, Row } from "antd";
 import { UserOutlined } from "@ant-design/icons/lib";
-import withoutAuth from "../hocs/withoutAuth";
 import { message } from "antd";
 import "../styles/login.css";
 
@@ -99,4 +98,4 @@ const SendPasswordResetEmailPage = () => {
   );
 };
 
-export default withoutAuth(SendPasswordResetEmailPage);
+export default SendPasswordResetEmailPage;
