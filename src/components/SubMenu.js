@@ -65,7 +65,7 @@ const SubMenu = () => {
             style={{ color: "#034c70" }}
             icon={<UserOutlined />}
           >
-            {currentUser && currentUser.name}
+            {currentUser && `${currentUser.name} ${currentUser.last_name}`}
           </Button>
         </Dropdown>,
       ]}

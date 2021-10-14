@@ -9,6 +9,19 @@ import API from "../data";
 
 const { Item } = Form;
 
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 18 },
+    sm: { span: 6 },
+    md: { span: 12 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 20 },
+    md: { span: 24 },
+  },
+};
+
 const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
   const [loading, setLoading] = useState(false);
   const { careers, isLoading, isError } = useCareersList();
@@ -75,9 +88,11 @@ const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
     <div>
       <div>
         <Form
+          {...formItemLayout}
           className="schedule-form"
           onFinish={formSuccess}
           onFinishFailed={formFailed}
+          layout={"vertical"}
         >
           <Item
             label="Nombre"
@@ -116,7 +131,7 @@ const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
             ]}
             initialValue={teacher.career_id}
           >
-            <Select style={{ width: 300 }} loading={isLoading}>
+            <Select style={{ width: "100%" }} loading={isLoading}>
               {careers &&
                 careers.map((career, index) => (
                   <Select.Option value={career.id} key={index}>
