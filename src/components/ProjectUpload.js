@@ -1,10 +1,19 @@
 /* eslint import/no-webpack-loader-syntax: 0 */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { Upload, Typography, Button, Form, Row, Col, Modal, Image } from "antd";
+import {
+  Upload,
+  Typography,
+  Button,
+  Form,
+  Row,
+  Col,
+  Modal,
+  Image,
+  message,
+} from "antd";
 import {
   InboxOutlined,
-  DownloadOutlined,
   SendOutlined,
   ExclamationCircleOutlined,
   CheckCircleOutlined,
@@ -52,7 +61,7 @@ const ProjectUpload = () => {
   const { projects, isLoading } = useStudentProject();
   const [isSending, setIsSending] = useState(false);
   const [form] = Form.useForm();
-  const { pdf, isLoading1 } = useGetProjectPDF(projects[0].id);
+  const { isLoading1 } = useGetProjectPDF(projects[0].id);
 
   if (
     (projects[0].status === "project_review_teacher" ||
@@ -62,8 +71,6 @@ const ProjectUpload = () => {
   ) {
     return <h1>Loading...</h1>;
   }
-
-  console.log("projects", projects[0]);
 
   const PRIMARY_PDF_URL = `${process.env.REACT_APP_API_BASE_URL}/project/getPDF/${projects[0].id}`;
   const initialUrl = PRIMARY_PDF_URL;
@@ -76,8 +83,6 @@ const ProjectUpload = () => {
       projects[0].status === "project_graded")
       ? JSON.parse(projects[0].highlights)
       : [];
-
-  console.log("highlights", highlights);
 
   const normFile = (e) => {
     console.log("Upload event:", e);
@@ -104,7 +109,6 @@ const ProjectUpload = () => {
   };
 
   const onFinish = async (formData) => {
-    console.log("fileUpload", formData.report_pdf[0]);
     setIsSending(true);
     const data = new FormData();
     data.append("report_pdf", formData.report_pdf[0]);
@@ -171,6 +175,8 @@ const ProjectUpload = () => {
       });
     } catch (error) {
       console.log("ERROR", error);
+      message.error("Ocurrió un error, intente de nuevo");
+      setIsSending(false);
     }
   };
 

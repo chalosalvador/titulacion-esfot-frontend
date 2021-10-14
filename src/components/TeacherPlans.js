@@ -6,7 +6,6 @@ import {
   Button,
   Col,
   Form,
-  Layout,
   message,
   Modal,
   Row,
@@ -22,7 +21,6 @@ import Loading from "./Loading";
 
 const { Title } = Typography;
 const { confirm } = Modal;
-const { Content, Sider } = Layout;
 
 const TeacherPlans = () => {
   const [form] = Form.useForm();
@@ -30,7 +28,6 @@ const TeacherPlans = () => {
   const { teacher_ideas, isLoading, isError, mutate } = useTeachersPlansList();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [finished, setFinished] = useState(false);
 
   const columns = [
     {
@@ -77,18 +74,13 @@ const TeacherPlans = () => {
           const teacherPlanData = form.getFieldsValue();
           let planId = teacherPlanData.id;
           teacherPlanData.status = "not_assigned";
-          console.log(teacherPlanData);
 
           if (!planId) {
             message.loading({
               content: "Guardando los datos del plan",
               key: messageKey,
             });
-            const plan = await API.post(
-              `/teacher/teachers-ideas`,
-              teacherPlanData
-            );
-            console.log("plan created", plan);
+            await API.post(`/teacher/teachers-ideas`, teacherPlanData);
           }
 
           message.success({
@@ -96,7 +88,6 @@ const TeacherPlans = () => {
             key: messageKey,
           });
           form.resetFields();
-          setFinished(true);
           mutate();
         } catch (e) {
           const errorList = e.error && <ErrorList errors={e.error} />;
@@ -136,7 +127,7 @@ const TeacherPlans = () => {
       <TeacherPlanForm form={form} />
       <Row justify="center">
         <Col span={12}>
-          <Button type="primary" onClick={handleCreate}>
+          <Button type="primary" onClick={handleCreate} loading={isSubmitting}>
             Enviar solicitud
           </Button>
         </Col>

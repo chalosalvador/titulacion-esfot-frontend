@@ -28,7 +28,6 @@ const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
 
   // Funcion de guardado de nuevo profesor
   const formSuccess = async (datos) => {
-    console.log("Lo que se queria enviar 1", datos);
     const {
       name,
       email,
@@ -47,7 +46,6 @@ const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
       friday: { ...friday },
     };
     const uniqueSchedule = Object.assign(scheduleData, schedule);
-    console.log("Dias antes de enviar", uniqueSchedule);
     const textSchedule = JSON.stringify(uniqueSchedule);
     setLoading(true);
     const teacher = {

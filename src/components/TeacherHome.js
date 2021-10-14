@@ -17,7 +17,6 @@ const { Title } = Typography;
 const TeacherHomePage = () => {
   const { currentUser } = useAuth();
 
-  // return <ProjectReview idPlan={1} />;
   return (
     <>
       <Row>

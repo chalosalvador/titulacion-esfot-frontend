@@ -4,7 +4,6 @@ import "../styles/home-teacher.css";
 import { useProjects } from "../data/useProjects";
 import Loading from "./Loading";
 import SearchColumnFilter from "./SearchColumnFilter";
-import PlanReviewTeacher from "./PlanReviewTeacher";
 import PlanReviewCommittee from "./PlanReviewCommittee";
 
 const { Title } = Typography;

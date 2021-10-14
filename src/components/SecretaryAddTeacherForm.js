@@ -97,7 +97,6 @@ const SecretaryAddTeacherForm = ({ closeModal }) => {
       career_id: career_id,
       schedule: textSchedule,
     };
-
     try {
       await API.post("/teachers", teacher);
       message.success("¡Profesor creado con éxito!");

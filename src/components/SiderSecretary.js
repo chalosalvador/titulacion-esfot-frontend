@@ -16,6 +16,9 @@ const SiderSecretary = ({ projectsList }) => {
   const projectsSanCurriculum2 = projectsList.filter(
     (project) => project.status === "project_approved_director"
   );
+  const projectsRegisterSaew = projectsList.filter(
+    (project) => project.status === "plan_approved_director"
+  );
   const projectsTestDefenseApt = projectsList.filter(
     (project) => project.status === "project_graded"
   );
@@ -48,7 +51,7 @@ const SiderSecretary = ({ projectsList }) => {
         title="Por registrar en SAEW"
         bordered={false}
       >
-        <Title level={2}>5</Title>
+        <Title level={2}>{projectsRegisterSaew.length}</Title>
       </Card>
 
       <Card

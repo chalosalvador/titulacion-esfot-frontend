@@ -85,6 +85,7 @@ const PlanForm = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [sending, setSending] = useState(false);
   const [isFinished, setIsFinished] = useState(true);
+  const [planData, setPlanData] = useState(null);
   const [showComments, showViewCommentsModal] = useState(false);
   const [comments, setComments] = useState(" ");
   const [investigationLines, setInvestigationLines] = useState([]);
@@ -97,8 +98,26 @@ const PlanForm = () => {
         `${process.env.REACT_APP_API_BASE_URL}/project/getSchedule/${projects[0].id}`
       );
     }
+    const updateOrCreateProject = async () => {
+      if (projects) {
+        try {
+          if (projects[0]) {
+            await API.post(`/projects/${projects[0].id}`, planData);
+          } else {
+            await API.post("/students/projects", planData); // post data to server
+            // message.success("Cambios guardados correctamente!");
+          }
+        } catch (e) {
+          message.error("Ocurrió un error, intente de nuevo");
+          console.log("ERROR", e);
+        } finally {
+          setSending(false);
+        }
+      }
+    };
+    updateOrCreateProject();
     console.log("image", imageUrl);
-  }, [projects]);
+  }, [projects, planData]);
 
   useEffect(() => {
     if (form) {
@@ -139,7 +158,6 @@ const PlanForm = () => {
   const onUpdate = async () => {
     if (canEditPlan()) {
       const formData = form.getFieldsValue();
-      console.log("formData", formData);
 
       if (formData.title && formData.teacher_id) {
         setSending(true);
@@ -166,18 +184,7 @@ const PlanForm = () => {
         if (formData.schedule && formData.schedule.length > 0) {
           forms.append("schedule", formData.schedule[0]);
         }
-        try {
-          if (projects[0]) {
-            await API.post(`/projects/${projects[0].id}`, forms);
-          } else {
-            await API.post("/students/projects", forms); // post data to server
-            // message.success("Cambios guardados correctamente!");
-          }
-        } catch (e) {
-          console.log("ERROR", e);
-        } finally {
-          setSending(false);
-        }
+        setPlanData(forms);
       }
     }
   };
@@ -306,7 +313,7 @@ const PlanForm = () => {
       });
     } catch (e) {
       console.log("ERROR", e);
-      message.error(`No se guardaron los datos:¨${e}`);
+      message.error("Ocurrió un error, intente de nuevo");
     } finally {
       setSending(false);
     }

@@ -105,7 +105,7 @@ const SecretaryTeachersList = () => {
       dataSource={getTeachersData}
       columns={columns}
       rowKey={(data) => data.id}
-      onRow={(record, index) => {
+      onRow={(record) => {
         return {
           onClick: (event) => {
             event.stopPropagation();

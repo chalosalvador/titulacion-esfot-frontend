@@ -109,7 +109,7 @@ const AddCommissionForm = ({ form, careers, closeModal, loadingModal }) => {
       loadingModal(false);
       closeModal();
     } catch (e) {
-      message.error("Ocurrió un error");
+      message.error("Ocurrió un error, intente de nuevo");
       loadingModal(false);
       console.log("error", e);
     }

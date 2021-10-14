@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Col, Form, message, Row, Select } from "antd";
+import { Form, Input, Select } from "antd";
 import { useTeachers } from "../data/useTeachers";
 import { useCareer } from "../data/useCareer";
 import Loading from "./Loading";
@@ -193,7 +193,6 @@ const EditCommissionForm = ({
           mode="multiple"
           placeholder="Selcciona los profesores"
           showArrow
-          // defaultValue={career.commission.members.map((member) => member.name)}
           style={{ width: "100%" }}
           options={teachersList}
         />

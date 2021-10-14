@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, Dropdown, Menu, PageHeader, Typography } from "antd";
 import {
-  BellOutlined,
   HomeOutlined,
   LoadingOutlined,
   LogoutOutlined,
@@ -11,7 +10,6 @@ import Routes from "../constants/routes";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../providers/Auth";
 
-const { Title } = Typography;
 const SubMenu = () => {
   let location = useLocation();
   const [menuState, setMenuState] = useState({
@@ -55,28 +53,12 @@ const SubMenu = () => {
   return (
     <PageHeader
       className="inner-menu"
-      // title={
-      // <Title
-      //   level={3}
-      //   style={{
-      //     color: "#034c70",
-      //   }}
-      // >
-      //   Panel Principal:
-      // </Title>
-      // }
       extra={[
         <Button key="home" type="text" style={{ color: "#034c70" }}>
           <Link to={Routes.HOME}>
             <HomeOutlined />
           </Link>
         </Button>,
-        // <Button
-        //     key="notifications"
-        //     type="text"
-        //     style={{color: "#034c70"}}
-        //     icon={<BellOutlined/>}
-        // />,
         <Dropdown key="user-menu" overlay={userMenu} placement="bottomLeft">
           <Button
             type="text"

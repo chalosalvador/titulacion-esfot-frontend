@@ -4,7 +4,7 @@ const updateHash = (highlight) => {
   document.location.hash = `highlight-${highlight.id}`;
 };
 
-function Sidebar({ highlights, resetHighlights, teacher }) {
+function Sidebar({ highlights, teacher }) {
   return (
     <div className="sidebar" style={{ width: "25vw" }}>
       <div className="description" style={{ padding: "1rem" }}>
@@ -24,13 +24,7 @@ function Sidebar({ highlights, resetHighlights, teacher }) {
       <ul className="sidebar__highlights">
         {highlights &&
           highlights.map((highlight, index) => (
-            <li
-              key={index}
-              className="sidebar__highlight"
-              // onClick={() => {
-              //   updateHash(highlight);
-              // }}
-            >
+            <li key={index} className="sidebar__highlight">
               <div>
                 <strong>{highlight.comment.text}</strong>
                 {highlight.content.text ? (
