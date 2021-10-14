@@ -436,7 +436,7 @@ const PlanForm = () => {
                     {teachers &&
                       teachers.map((teacher, index) => (
                         <Option value={teacher.id} key={index}>
-                          {teacher.name}
+                          {teacher.name} {teacher.last_name}
                         </Option>
                       ))}
                   </Select>
@@ -456,7 +456,7 @@ const PlanForm = () => {
                   >
                     {careerStudents.map((student, index) => (
                       <Option value={student.id} key={index}>
-                        {student.user.name}
+                        {student.user.name} {student.user.last_name}
                       </Option>
                     ))}
                   </Select>

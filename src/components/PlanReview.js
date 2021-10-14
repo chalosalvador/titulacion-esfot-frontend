@@ -557,7 +557,9 @@ const PlanReview = ({ idPlan, user }) => {
     <>
       <Row>
         <Col>
-          <Title level={4}>{plan.student_name}</Title>
+          <Title level={4}>
+            {plan.student_name} {plan.student_last_name}
+          </Title>
           <Title level={5}>{plan.title}</Title>
         </Col>
       </Row>

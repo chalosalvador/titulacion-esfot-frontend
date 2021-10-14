@@ -375,6 +375,14 @@ const ProjectReview = ({ idPlan, user }) => {
 
   return (
     <div>
+      <Row>
+        <Col>
+          <Title level={4}>
+            {plan.student_name} {plan.student_last_name}
+          </Title>
+          <Title level={5}>{plan.title}</Title>
+        </Col>
+      </Row>
       <div className="App" style={{ display: "flex", height: "100vh" }}>
         <Sidebar
           highlights={highlights}

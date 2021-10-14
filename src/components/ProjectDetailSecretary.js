@@ -164,6 +164,14 @@ const ProjectDetailSecretary = ({ id }) => {
 
   return (
     <>
+      <Row>
+        <Col>
+          <Title level={4}>
+            {plan.student_name} {plan.student_last_name}
+          </Title>
+          <Title level={5}>{plan.title}</Title>
+        </Col>
+      </Row>
       <Title
         level={4}
         style={{

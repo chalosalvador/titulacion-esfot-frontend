@@ -93,7 +93,7 @@ const CommitteePlansTable = () => {
         key: projectsList[i].id,
         title: projectsList[i].title,
         status: projectsList[i].status,
-        students: projectsList[i].student_name,
+        students: `${projectsList[i].student_name} ${projectsList[i].student_last_name}`,
         id: projectsList[i].id,
       });
     }

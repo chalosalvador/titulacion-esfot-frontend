@@ -27,6 +27,11 @@ const ProjectsList = (props) => {
 
   const columns = [
     {
+      title: "Estudiante(s)",
+      dataIndex: "student_name",
+      key: "student_name",
+    },
+    {
       title: "Título",
       dataIndex: "title",
       key: "title",
@@ -48,7 +53,8 @@ const ProjectsList = (props) => {
     return projects.map((project) => ({
       key: project.id,
       title: project.title,
-      teacher_name: project.teacher_name,
+      student_name: `${project.originalData.student_name} ${project.originalData.student_last_name}`,
+      teacher_name: `${project.teacher_name} ${project.originalData.teacher_lastName}`,
       created_at: project.created_at,
     }));
   };

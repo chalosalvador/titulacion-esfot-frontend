@@ -211,8 +211,8 @@ const SecretaryProjectsListPage = () => {
     return {
       key: index,
       id: project.id,
-      teacher_name: project.teacher_name,
-      student_name: project.student_name,
+      teacher_name: `${project.teacher_name} ${project.teacher_lastName}`,
+      student_name: `${project.student_name} ${project.student_last_name}`,
       title: project.title,
       status: project.status,
     };

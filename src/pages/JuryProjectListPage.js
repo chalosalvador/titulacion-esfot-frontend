@@ -27,7 +27,8 @@ const JuryProjectsListPage = () => {
         project = {
           originalData: jury.project,
           title: jury.project.title,
-          teacher_name: jury.project.teacher_name,
+          student_name: `${jury.project.student_name} ${jury.project.student_last_name}`,
+          teacher_name: `${jury.project.teacher_name} ${jury.project.teacher_lastName}`,
           created_at: jury.project.created_at,
           status: jury.project.status,
         };

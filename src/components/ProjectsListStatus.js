@@ -63,8 +63,9 @@ const ProjectsList = ({
         project.status === "san_curriculum_2" && {
           key: index,
           originalData: project,
+          student_name: `${project.student_name} ${project.student_last_name}`,
           title: project.title,
-          teacher_name: project.teacher_name,
+          teacher_name: `${project.teacher_name} ${project.teacher_lastName}`,
           created_at: project.created_at,
           status: project.status,
         }
@@ -77,8 +78,9 @@ const ProjectsList = ({
         project.status === "test_defense_apt" && {
           key: index,
           originalData: project,
+          student_name: `${project.student_name} ${project.student_last_name}`,
           title: project.title,
-          teacher_name: project.teacher_name,
+          teacher_name: `${project.teacher_name} ${project.teacher_lastName}`,
           created_at: project.created_at,
           status: project.status,
         }
@@ -89,8 +91,9 @@ const ProjectsList = ({
     .map((project, index) => ({
       key: index,
       originalData: project,
+      student_name: `${project.student_name} ${project.student_last_name}`,
       title: project.title,
-      teacher_name: project.teacher_name,
+      teacher_name: `${project.teacher_name} ${project.teacher_lastName}`,
       created_at: project.created_at,
       status: project.status,
       career: project.teacher_career,
@@ -103,6 +106,7 @@ const ProjectsList = ({
         project.status === "tribunal_assigned" && {
           key: index,
           originalData: project.originalData,
+          student_name: project.student_name,
           title: project.title,
           teacher_name: project.teacher_name,
           created_at: project.created_at,
@@ -113,6 +117,16 @@ const ProjectsList = ({
 
   const columns = [
     {
+      title: "Estudiante(s)",
+      dataIndex: "student_name",
+      key: "student_name",
+    },
+    {
+      title: "Profesor",
+      dataIndex: "teacher_name",
+      key: "teacher_name",
+    },
+    {
       title: "Título",
       dataIndex: "title",
       key: "title",
@@ -122,16 +136,6 @@ const ProjectsList = ({
         ) : (
           <Typography>{title}</Typography>
         ),
-    },
-    {
-      title: "Fecha de creación",
-      dataIndex: "created_at",
-      key: "created_at",
-    },
-    {
-      title: "Profesor",
-      dataIndex: "teacher_name",
-      key: "teacher_name",
     },
     {
       title: "Estado",
