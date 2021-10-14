@@ -72,19 +72,6 @@ const ProjectReview = ({ idPlan, user }) => {
     plan && plan.highlights ? JSON.parse(plan.highlights) : []
   );
 
-  const url = plan.report_pdf;
-
-  useEffect(() => {
-    if (plan && plan.highlights) {
-      setHighlights(JSON.parse(plan.highlights));
-    }
-  }, [plan]);
-
-  if (isLoading || isLoading1) {
-    return <h1>Loading...</h1>;
-  }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const getHighlightById = useCallback(
     (id) => {
       return highlights.find((highlight) => highlight.id === id);
@@ -92,7 +79,6 @@ const ProjectReview = ({ idPlan, user }) => {
     [highlights]
   );
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const scrollToHighlightFromHash = useCallback(() => {
     const highlight = getHighlightById(parseIdFromHash());
 
@@ -101,13 +87,24 @@ const ProjectReview = ({ idPlan, user }) => {
     }
   }, [getHighlightById]);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    if (plan && plan.highlights) {
+      setHighlights(JSON.parse(plan.highlights));
+    }
+  }, [plan]);
+
   useEffect(() => {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false);
     return () => {
       window.removeEventListener("hashchange", scrollToHighlightFromHash);
     };
   }, [scrollToHighlightFromHash]);
+
+  if (isLoading || isLoading1) {
+    return <h1>Loading...</h1>;
+  }
+
+  const url = plan.report_pdf;
 
   const resetHighlights = () => {
     setHighlights([]);
