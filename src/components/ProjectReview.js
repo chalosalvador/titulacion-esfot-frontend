@@ -68,6 +68,7 @@ const ProjectReview = ({ idPlan, user }) => {
   const { plan, isLoading } = usePlanContent(idPlan);
   const { isLoading1 } = useGetProjectPDF(idPlan);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   let highlights = [];
 
   const getHighlightById = useCallback(
@@ -92,16 +93,16 @@ const ProjectReview = ({ idPlan, user }) => {
     };
   }, [scrollToHighlightFromHash]);
 
-  const resetHighlights = () => {
-    highlights = [];
-  };
-
   if (isLoading || isLoading1) {
     return <h1>Loading...</h1>;
   }
   const url = plan.report_pdf;
 
   highlights = JSON.parse(plan.highlights);
+
+  const resetHighlights = () => {
+    highlights = [];
+  };
 
   let scrollViewerTo = () => {};
 
@@ -113,10 +114,7 @@ const ProjectReview = ({ idPlan, user }) => {
     highlights = [{ ...highlight, id: getNextId() }, ...highlights];
 
     let dataToSent = {
-      highlights: JSON.stringify([
-        { ...highlight, id: getNextId() },
-        ...highlights,
-      ]),
+      highlights: highlights,
     };
     try {
       await API.post(`/projects/${plan.id}`, dataToSent);
@@ -396,7 +394,6 @@ const ProjectReview = ({ idPlan, user }) => {
                 pdfDocument={pdfDocument}
                 enableAreaSelection={(event) => event.altKey}
                 onScrollChange={resetHash}
-                // pdfScaleValue="page-width"
                 scrollRef={(scrollTo) => {
                   scrollViewerTo = scrollTo;
 
