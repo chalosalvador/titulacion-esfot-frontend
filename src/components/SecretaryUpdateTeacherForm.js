@@ -145,7 +145,7 @@ const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
       mutate();
       closeModal();
     } catch (e) {
-      message.error("No se pudo crear el profesor, intente de nuevo");
+      message.error("Ocurrió un error, intente de nuevo");
       setLoading(false);
     }
   };

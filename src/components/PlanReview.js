@@ -41,6 +41,7 @@ const PlanReview = ({ idPlan, user }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [sending, setSending] = useState(false);
   const [sendingPlan, setSendingPlan] = useState(false);
+  const [rejecting, setRejecting] = useState(false);
   const [checked, setChecked] = useState(false);
   const [approvePlan, setApprovePlan] = useState(false);
   const [showComments, showAddCommentsModal] = useState(false);
@@ -137,7 +138,7 @@ const PlanReview = ({ idPlan, user }) => {
     } catch (e) {
       console.log("ERROR", e);
       setSending(false);
-      message.error(`No se guardaron los datos:¨${e}`);
+      message.error("Ocurrió un error, intente de nuevo");
     }
   };
 
@@ -448,15 +449,16 @@ const PlanReview = ({ idPlan, user }) => {
       });
     } catch (e) {
       console.log("ERROR", e);
-      message.error(`No se guardaron los datos:¨${e}`);
+      message.error("Ocurrió un error, intente de nuevo");
       setSendingPlan(false);
     }
   };
 
   const onReject = async () => {
+    setRejecting(true);
     try {
       await API.post(`/projects/${plan.id}/plan-rejected`); // put data to server
-      setSending(false);
+      setRejecting(false);
       confirm({
         icon: <CheckCircleOutlined />,
         title: (
@@ -496,7 +498,8 @@ const PlanReview = ({ idPlan, user }) => {
       });
     } catch (e) {
       console.log("ERROR", e);
-      message.error(`No se guardaron los datos:¨${e}`);
+      message.error("Ocurrió un error, intente de nuevo");
+      setRejecting(false);
     }
   };
 
@@ -846,7 +849,11 @@ const PlanReview = ({ idPlan, user }) => {
                         <SendOutlined /> Aprobar Plan
                       </Button>
                       {user === "committee" && (
-                        <Button className={"submit"} onClick={modalReject}>
+                        <Button
+                          className={"submit"}
+                          onClick={modalReject}
+                          loading={rejecting}
+                        >
                           <CloseOutlined /> Rechazar Plan
                         </Button>
                       )}

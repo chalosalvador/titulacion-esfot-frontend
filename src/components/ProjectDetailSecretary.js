@@ -102,7 +102,7 @@ const ProjectDetailSecretary = ({ id }) => {
       }
     } catch (e) {
       console.log("ERROR", e);
-      message.error(`No se guardaron los datos:¨${e}`);
+      message.error("Ocurrió un error, intente de nuevo");
     }
   };
   const onChangeSwitchCurr1 = async (checked) => {
@@ -113,7 +113,7 @@ const ProjectDetailSecretary = ({ id }) => {
         message.success("Cambios guardados");
       } catch (e) {
         console.log("ERROR", e);
-        message.error(`No se guardaron los datos:¨${e.message}`);
+        message.error("Ocurrió un error, intente de nuevo");
       }
     }
   };
@@ -157,7 +157,7 @@ const ProjectDetailSecretary = ({ id }) => {
         await API.post(`/projects/${id}/test-defense-apt`);
         message.success("Estudiante declarado/a apto");
       } catch (e) {
-        message.error("Sucedió un error intente de nuevo");
+        message.error("Ocurrió un error, intente de nuevo");
       }
     }
   };

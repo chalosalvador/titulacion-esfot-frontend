@@ -46,8 +46,8 @@ const NewTribunalForm = ({
       loadingModal(false);
       closeModal();
     } catch (e) {
+      message.error("Ocurrió un error, intente de nuevo");
       loadingModal(false);
-      // message.error(e);
       console.log("error", e);
     }
   };
