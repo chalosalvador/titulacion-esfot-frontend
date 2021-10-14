@@ -72,8 +72,7 @@ const ProjectUpload = () => {
     return <h1>Loading...</h1>;
   }
 
-  const PRIMARY_PDF_URL = `${process.env.REACT_APP_API_BASE_URL}/project/getPDF/${projects[0].id}`;
-  const initialUrl = PRIMARY_PDF_URL;
+  const initialUrl = projects[0].report_pdf;
 
   const url = initialUrl;
 

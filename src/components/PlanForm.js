@@ -94,9 +94,7 @@ const PlanForm = () => {
 
   useEffect(() => {
     if (projects && projects[0] && projects[0].schedule) {
-      setImageUrl(
-        `${process.env.REACT_APP_API_BASE_URL}/project/getSchedule/${projects[0].id}`
-      );
+      setImageUrl(projects[0].schedule);
     }
     const updateOrCreateProject = async () => {
       if (projects) {

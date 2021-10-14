@@ -55,9 +55,7 @@ const PlanReview = ({ idPlan, user }) => {
 
   useEffect(() => {
     if (plan && plan.schedule) {
-      setImageUrl(
-        `${process.env.REACT_APP_API_BASE_URL}/project/getSchedule/${plan.id}`
-      );
+      setImageUrl(plan.schedule);
     }
   }, [plan]);
 

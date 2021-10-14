@@ -99,10 +99,7 @@ const ProjectReview = ({ idPlan, user }) => {
   if (isLoading || isLoading1) {
     return <h1>Loading...</h1>;
   }
-
-  const PRIMARY_PDF_URL = `${process.env.REACT_APP_API_BASE_URL}/project/getPDF/${plan.id}`;
-
-  const url = PRIMARY_PDF_URL;
+  const url = plan.report_pdf;
 
   highlights = JSON.parse(plan.highlights);
 
