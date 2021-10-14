@@ -11,6 +11,14 @@ const loadableOptions = { fallback: <Loading /> };
 
 const AsyncIndex = loadable(() => import("../pages/Index"), loadableOptions);
 const AsyncLogin = loadable(() => import("../pages/Login"), loadableOptions);
+const AsyncForgetPassword = loadable(
+  () => import("../pages/ForgetPassword"),
+  loadableOptions
+);
+const AsyncResetPassword = loadable(
+  () => import("../pages/ResetPassword"),
+  loadableOptions
+);
 
 const AsyncHome = loadable(() => import("../pages/HomePage"), loadableOptions);
 
@@ -43,6 +51,11 @@ const AuthRouter = () => (
   <Switch>
     <PublicRoute exact path={Routes.INDEX} component={AsyncIndex} />
     <PublicRoute path={Routes.LOGIN} component={AsyncLogin} />
+    <PublicRoute
+      path={Routes.FORGET_PASSWORD}
+      component={AsyncForgetPassword}
+    />
+    <PublicRoute path={Routes.RESET_PASSWORD} component={AsyncResetPassword} />
     <PublicRoute path={Routes.ABOUT} component={AsyncAbout} />
     <PrivateRoute path={Routes.LOGOUT} component={AsyncLogout} />
 

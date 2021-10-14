@@ -10,6 +10,8 @@ const publicRoutes = {
   ABOUT: "/acerca-de",
   TEACHERS_IDEAS: "/ideas-profesores",
   REGISTER: "/registrar",
+  FORGET_PASSWORD: "/olvide-mi-clave",
+  RESET_PASSWORD: "/restablecer-clave",
 };
 
 const privateRoutes = {

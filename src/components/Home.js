@@ -9,6 +9,7 @@ import {
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import Routes from "../constants/routes";
+import withoutAuth from "../hocs/withoutAuth";
 
 const { Title } = Typography;
 
@@ -194,4 +195,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default withoutAuth(HomePage);
