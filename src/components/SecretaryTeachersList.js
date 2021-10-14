@@ -111,7 +111,7 @@ const SecretaryTeachersList = () => {
             event.stopPropagation();
             setVisibleEdit(true);
             setUpdateTeacher(record.originalData);
-            setUpdateTeacherId(record.key);
+            setUpdateTeacherId(record.id);
           },
         };
       }}
