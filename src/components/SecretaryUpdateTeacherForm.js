@@ -43,6 +43,7 @@ const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
   const formSuccess = async (datos) => {
     const {
       name,
+      last_name,
       email,
       career_id,
       monday,
@@ -63,11 +64,13 @@ const SecretaryUpdateTeacherForm = ({ teacher, teacherId, closeModal }) => {
     setLoading(true);
     const teacher = {
       name: name,
+      last_name: last_name,
       career_id: career_id,
       email: email,
       schedule: textSchedule,
     };
     try {
+      console.log("OJO", teacher);
       await API.put(`/teachers/${teacherId}`, teacher);
       message.success("¡Cambios guardados correctamente!");
       setLoading(false);
