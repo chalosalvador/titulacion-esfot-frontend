@@ -66,11 +66,25 @@ const ProjectReview = ({ idPlan, user }) => {
   const [sendingProject, setSendingProject] = useState(false);
   const [checked, setChecked] = useState(false);
   const { plan, isLoading } = usePlanContent(idPlan);
-  const { isLoading1 } = useGetProjectPDF(idPlan);
+  const { pdf, isLoading1 } = useGetProjectPDF(idPlan);
+  console.log("plan", idPlan);
+  const [highlights, setHighlights] = useState(
+    plan && plan.highlights ? JSON.parse(plan.highlights) : []
+  );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  let highlights = [];
+  const url = plan.report_pdf;
 
+  useEffect(() => {
+    if (plan && plan.highlights) {
+      setHighlights(JSON.parse(plan.highlights));
+    }
+  }, [plan]);
+
+  if (isLoading || isLoading1) {
+    return <h1>Loading...</h1>;
+  }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const getHighlightById = useCallback(
     (id) => {
       return highlights.find((highlight) => highlight.id === id);
@@ -78,6 +92,7 @@ const ProjectReview = ({ idPlan, user }) => {
     [highlights]
   );
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const scrollToHighlightFromHash = useCallback(() => {
     const highlight = getHighlightById(parseIdFromHash());
 
@@ -86,6 +101,7 @@ const ProjectReview = ({ idPlan, user }) => {
     }
   }, [getHighlightById]);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false);
     return () => {
@@ -93,15 +109,8 @@ const ProjectReview = ({ idPlan, user }) => {
     };
   }, [scrollToHighlightFromHash]);
 
-  if (isLoading || isLoading1) {
-    return <h1>Loading...</h1>;
-  }
-  const url = plan.report_pdf;
-
-  highlights = JSON.parse(plan.highlights);
-
   const resetHighlights = () => {
-    highlights = [];
+    setHighlights([]);
   };
 
   let scrollViewerTo = () => {};
@@ -111,10 +120,13 @@ const ProjectReview = ({ idPlan, user }) => {
       "highlights",
       JSON.stringify([{ ...highlight, id: getNextId() }, ...highlights])
     );
-    highlights = [{ ...highlight, id: getNextId() }, ...highlights];
+    setHighlights([{ ...highlight, id: getNextId() }, ...highlights]);
 
     let dataToSent = {
-      highlights: highlights,
+      highlights: JSON.stringify([
+        { ...highlight, id: getNextId() },
+        ...highlights,
+      ]),
     };
     try {
       await API.post(`/projects/${plan.id}`, dataToSent);
@@ -125,22 +137,24 @@ const ProjectReview = ({ idPlan, user }) => {
   };
 
   const updateHighlight = (highlightId, position, content) => {
-    highlights = highlights.map((h) => {
-      const {
-        id,
-        position: originalPosition,
-        content: originalContent,
-        ...rest
-      } = h;
-      return id === highlightId
-        ? {
-            id,
-            position: { ...originalPosition, ...position },
-            content: { ...originalContent, ...content },
-            ...rest,
-          }
-        : h;
-    });
+    setHighlights(
+      highlights.map((h) => {
+        const {
+          id,
+          position: originalPosition,
+          content: originalContent,
+          ...rest
+        } = h;
+        return id === highlightId
+          ? {
+              id,
+              position: { ...originalPosition, ...position },
+              content: { ...originalContent, ...content },
+              ...rest,
+            }
+          : h;
+      })
+    );
   };
 
   const modal = async () => {
@@ -148,9 +162,7 @@ const ProjectReview = ({ idPlan, user }) => {
       icon: <ExclamationCircleOutlined />,
       title: "¿Estás seguro de mandar el proyecto?",
       content:
-        plan.status === "project_corrections_done"
-          ? "Una vez aprobado se enviará a secretaria para asignar a un tribunal."
-          : "Una vez aprobado se enviará a secretaria.",
+        "Una vez aprobado se enviará a secretaria para asignar a un tribunal.",
       okText: "Si",
       cancelText: "No",
       onOk() {
@@ -207,7 +219,7 @@ const ProjectReview = ({ idPlan, user }) => {
         cancelButtonProps: { hidden: true },
       });
     } catch (e) {
-      message.error("Ocurrió un error, intente de nuevo");
+      message.error(`No se guardaron los datos:¨${e}`);
     }
   };
 
@@ -216,11 +228,7 @@ const ProjectReview = ({ idPlan, user }) => {
     const dataToSent = { highlights: null };
     try {
       await API.post(`/projects/${plan.id}`, dataToSent); //put data to server
-      if (plan.status === "project_corrections_done") {
-        await API.post(`/projects/${plan.id}/project-approved-director`);
-      } else {
-        await API.post(`/projects/${plan.id}/project-approved-send`);
-      }
+      await API.post(`/projects/${plan.id}/project-approved-director`); // change status
       setSendingProject(false);
       confirm({
         icon: <CheckCircleOutlined />,
@@ -243,13 +251,9 @@ const ProjectReview = ({ idPlan, user }) => {
                 <p style={{ color: "#034c70" }}>
                   Gracias por tu esfuerzo en revisar el proyecto de titulación,
                   <br />
-                  {plan.status === "project_corrections_done_2" ? (
-                    <strong>el proyecto ha sido enviado a secretaría</strong>
-                  ) : (
-                    <strong>
-                      ha sido enviado a secretaria para asignación de tribunal
-                    </strong>
-                  )}
+                  <strong>
+                    ha sido enviado a secretaria para asignación de tribunal
+                  </strong>
                   .
                 </p>
               </Col>
@@ -267,8 +271,7 @@ const ProjectReview = ({ idPlan, user }) => {
         cancelButtonProps: { hidden: true },
       });
     } catch (e) {
-      message.error("Ocurrió un error, intente de nuevo");
-      setSendingProject(false);
+      message.error("No se pudo enviar la información, intente de nuevo");
     }
   };
   const onChange = (checkedValue) => {
@@ -394,6 +397,7 @@ const ProjectReview = ({ idPlan, user }) => {
                 pdfDocument={pdfDocument}
                 enableAreaSelection={(event) => event.altKey}
                 onScrollChange={resetHash}
+                // pdfScaleValue="page-width"
                 scrollRef={(scrollTo) => {
                   scrollViewerTo = scrollTo;
 
@@ -500,8 +504,7 @@ const ProjectReview = ({ idPlan, user }) => {
                 disabled={
                   !(
                     plan.status === "project_uploaded" ||
-                    plan.status === "project_corrections_done" ||
-                    plan.status === "project_corrections_done_2"
+                    plan.status === "project_corrections_done"
                   )
                 }
               >
