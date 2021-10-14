@@ -509,7 +509,8 @@ const ProjectReview = ({ idPlan, user }) => {
                 disabled={
                   !(
                     plan.status === "project_uploaded" ||
-                    plan.status === "project_corrections_done"
+                    plan.status === "project_corrections_done" ||
+                    plan.status === "project_corrections_done_2"
                   )
                 }
               >
