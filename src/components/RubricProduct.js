@@ -38,6 +38,14 @@ const RubricProduct = ({ onChange, form }) => {
     grade5: 0,
   });
 
+  const normalizeGrade = (value, prevValue) => {
+    const newValue = Number(value);
+    if (isNaN(newValue) || newValue < 0 || newValue > 10) {
+      return prevValue;
+    }
+    return value;
+  };
+
   const dataSource = [
     {
       key: "0",
@@ -57,6 +65,7 @@ const RubricProduct = ({ onChange, form }) => {
       grade: (
         <Form.Item
           name="grade1"
+          normalize={normalizeGrade}
           rules={[{ required: true, message: "Ingrese la nota" }]}
         >
           <Input />
@@ -83,6 +92,7 @@ const RubricProduct = ({ onChange, form }) => {
       grade: (
         <Form.Item
           name="grade2"
+          normalize={normalizeGrade}
           rules={[{ required: true, message: "Ingrese la nota" }]}
         >
           <Input />
@@ -110,6 +120,7 @@ const RubricProduct = ({ onChange, form }) => {
       grade: (
         <Form.Item
           name="grade3"
+          normalize={normalizeGrade}
           rules={[{ required: true, message: "Ingrese la nota" }]}
         >
           <Input />
@@ -136,6 +147,7 @@ const RubricProduct = ({ onChange, form }) => {
       grade: (
         <Form.Item
           name="grade4"
+          normalize={normalizeGrade}
           rules={[{ required: true, message: "Ingrese la nota" }]}
         >
           <Input />
