@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Button,
   Card,
   Col,
   Form,
@@ -103,7 +104,8 @@ const ProjectsList = ({
   const dataTribunalAssigned = projectsList
     .map(
       (project, index) =>
-        project.status === "tribunal_assigned" && {
+        project.status === "tribunal_assigned" ||
+        (project.status === "date_defense_assigned" && {
           key: index,
           originalData: project.originalData,
           student_name: project.student_name,
@@ -111,7 +113,7 @@ const ProjectsList = ({
           teacher_name: project.teacher_name,
           created_at: project.created_at,
           status: project.status,
-        }
+        })
     )
     .filter(Boolean);
 
@@ -273,6 +275,11 @@ const ProjectsList = ({
         }
       },
     },
+    {
+      title: "Fecha de defensa",
+      key: "date_defense",
+      render: () => <Title level={5}>FECHA</Title>,
+    },
   ];
 
   titleModal = (
@@ -319,7 +326,7 @@ const ProjectsList = ({
     <>
       {assignTribunal && !allProjects && !assignDate ? (
         <Table
-          columns={columns}
+          columns={columns.filter((col) => col.key !== "date_defense")}
           dataSource={dataToAssignTribunal}
           rowKey={(dataTribunal) => dataTribunal.id}
           onRow={(record) => {
@@ -334,7 +341,7 @@ const ProjectsList = ({
         />
       ) : assignDate && showDefenseSchedule === false ? (
         <Table
-          columns={columns}
+          columns={columns.filter((col) => col.key !== "date_defense")}
           dataSource={dataDate}
           rowKey={(dataDate) => dataDate.id}
           onRow={(record) => {
@@ -350,7 +357,11 @@ const ProjectsList = ({
       ) : assignDate && showDefenseSchedule === true ? (
         <OralDefenseSchedule project={defenseProjectData} />
       ) : !assignTribunal && allProjects ? (
-        <Table columns={columns} dataSource={data} rowKey={(data) => data.id} />
+        <Table
+          columns={columns.filter((col) => col.key !== "date_defense")}
+          dataSource={data}
+          rowKey={(data) => data.id}
+        />
       ) : (
         isTribunal && (
           <Table

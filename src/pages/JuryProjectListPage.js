@@ -19,6 +19,8 @@ const JuryProjectsListPage = () => {
     return <ShowError />;
   }
 
+  console.log("J", juries);
+
   let project = {};
   let juriesList = [];
   juriesList = juries.map((jury) => {
