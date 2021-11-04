@@ -21,7 +21,7 @@ import OralDefenseSchedule from "./OralDefenseSchedule";
 
 const { Link } = Typography;
 
-const ProjectsList = ({
+const ProjectsListStatus = ({
   projectsList,
   assignTribunal,
   assignDate,
@@ -112,6 +112,7 @@ const ProjectsList = ({
           title: project.title,
           teacher_name: project.teacher_name,
           created_at: project.created_at,
+          date_defense: project.tribunalSchedule,
           status: project.status,
         })
     )
@@ -277,8 +278,9 @@ const ProjectsList = ({
     },
     {
       title: "Fecha de defensa",
+      dataIndex: "date_defense",
       key: "date_defense",
-      render: () => <Title level={5}>FECHA</Title>,
+      // render: () => <Title level={5}>FECHA</Title>,
     },
   ];
 
@@ -371,12 +373,20 @@ const ProjectsList = ({
             onRow={(record) => {
               return {
                 onClick: (event) => {
-                  event.stopPropagation();
-                  setProjectData(record.originalData);
-                  history.push({
-                    pathname: Routes.JURY_PROJECT_REVIEW,
-                    state: { idPlan: record.originalData.id, user: "tribunal" },
+                  console.log({
+                    project: record.originalData,
+                    tribunalSchedule: record.date_defense,
                   });
+                  event.stopPropagation();
+                  setProjectData({
+                    ...projectData,
+                    project: record.originalData,
+                    tribunalSchedule: record.date_defense,
+                  });
+                  // history.push({
+                  //   pathname: Routes.JURY_PROJECT_REVIEW,
+                  //   state: { idPlan: record.originalData.id, user: "tribunal" },
+                  // });
                 },
               };
             }}
@@ -398,4 +408,4 @@ const ProjectsList = ({
   );
 };
 
-export default ProjectsList;
+export default ProjectsListStatus;

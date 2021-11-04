@@ -19,8 +19,6 @@ const JuryProjectsListPage = () => {
     return <ShowError />;
   }
 
-  console.log("J", juries);
-
   let project = {};
   let juriesList = [];
   juriesList = juries.map((jury) => {
@@ -33,6 +31,7 @@ const JuryProjectsListPage = () => {
           teacher_name: `${jury.project.teacher_name} ${jury.project.teacher_lastName}`,
           created_at: jury.project.created_at,
           status: jury.project.status,
+          tribunalSchedule: jury.tribunalSchedule,
         };
       }
     }
