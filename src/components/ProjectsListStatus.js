@@ -15,7 +15,6 @@ import Title from "antd/es/typography/Title";
 import { useCareersList } from "../data/useCareersList";
 import NewTribunalForm from "./NewTribunalForm";
 import { useHistory } from "react-router-dom";
-import Routes from "../constants/routes";
 import OralDefenseSchedule from "./OralDefenseSchedule";
 
 const { Link } = Typography;
